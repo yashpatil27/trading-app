@@ -72,10 +72,11 @@ export default function BuyModal({
   const inrValue = parseInt(inrAmount) || 0
   const isValidAmount = inrValue > 0 && inrValue <= roundedBalance
 
-  // Format BTC display to remove trailing zeros
+  // Format BTC display with Bitcoin symbol
   const formatBtc = (amount: number) => {
-    if (amount === 0) return '0'
-    return amount.toFixed(8).replace(/\.?0+$/, '')
+    if (amount === 0) return ₿0
+    return `₿${amount.toFixed(8).replace(/\.?0+$/, )}`
+  }
   }
 
   if (!isOpen) return null
@@ -109,7 +110,7 @@ export default function BuyModal({
           <div className="text-center p-4 bg-gray-800 rounded-lg">
             <div className="text-sm text-gray-400">Buy Rate</div>
             <div className="text-lg font-bold text-green-400">₹{formatCash(buyRate)}</div>
-            <div className="text-xs text-gray-500">per BTC</div>
+            <div className="text-xs text-gray-500">per ₿</div>
           </div>
 
           {/* Amount Input */}
@@ -125,7 +126,7 @@ export default function BuyModal({
             />
             {inrAmount && (
               <div className="text-sm text-gray-400 mt-2">
-                You will receive: <span className="text-orange-400 font-semibold">{formatBtc(btcAmount)} BTC</span>
+                You will receive: <span className="text-orange-400 font-semibold">{formatBtc(btcAmount)}</span>
               </div>
             )}
           </div>

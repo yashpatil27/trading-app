@@ -78,7 +78,7 @@ export default function TradeDetailModal({ isOpen, onClose, trade }: TradeDetail
                 <BitcoinIcon style={{height: "20px", width: "20px", color: "#F7931A"}} />
                 <div>
                   <div className="text-sm text-gray-400">Bitcoin Amount</div>
-                  <div className="font-semibold text-white">{trade.amount.toFixed(8).replace(/\.?0+$/, '')} BTC</div>
+                  <div className="font-semibold text-white">{trade.amount.toFixed(8).replace(/\.?0+$/, '')} ₿</div>
                 </div>
               </div>
             </div>
@@ -88,7 +88,7 @@ export default function TradeDetailModal({ isOpen, onClose, trade }: TradeDetail
               <div className="flex items-center gap-3">
                 <DollarSign className="text-green-500" size={20} />
                 <div>
-                  <div className="text-sm text-gray-400">Rate (INR per BTC)</div>
+                  <div className="text-sm text-gray-400">Rate (INR per ₿)</div>
                   <div className="font-semibold text-white">₹{formatCash(trade.price)}</div>
                 </div>
               </div>
@@ -110,7 +110,7 @@ export default function TradeDetailModal({ isOpen, onClose, trade }: TradeDetail
               <div className="flex items-center gap-3">
                 <BitcoinIcon style={{height: "20px", width: "20px", color: "#EAB308"}} />
                 <div>
-                  <div className="text-sm text-gray-400">BTC/USD Price (at time of trade)</div>
+                  <div className="text-sm text-gray-400">₿/USD Price (at time of trade)</div>
                   <div className="font-semibold text-white">${trade.btcPrice.toLocaleString('en-US')}</div>
                 </div>
               </div>
@@ -133,8 +133,8 @@ export default function TradeDetailModal({ isOpen, onClose, trade }: TradeDetail
             <div className="text-sm text-gray-400 mb-2">Transaction Summary</div>
             <div className="text-sm text-white">
               {trade.type === 'BUY' 
-                ? `You bought ${trade.amount.toFixed(8).replace(/\.?0+$/, '')} BTC for ₹${formatCash(trade.total)} at a rate of ₹${formatCash(trade.price)} per BTC.`
-                : `You sold ${trade.amount.toFixed(8).replace(/\.?0+$/, '')} BTC for ₹${formatCash(trade.total)} at a rate of ₹${formatCash(trade.price)} per BTC.`
+                ? `You bought ${trade.amount.toFixed(8).replace(/\.?0+$/, '')} ₿ for ₹${formatCash(trade.total)} at a rate of ₹${formatCash(trade.price)} per ₿.`
+                : `You sold ${trade.amount.toFixed(8).replace(/\.?0+$/, '')} ₿ for ₹${formatCash(trade.total)} at a rate of ₹${formatCash(trade.price)} per ₿.`
               }
             </div>
           </div>

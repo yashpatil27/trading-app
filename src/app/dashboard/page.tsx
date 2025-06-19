@@ -154,8 +154,13 @@ export default function Dashboard() {
 
   // Format BTC amount (remove trailing zeros, show 0 for zero amounts)
   const formatBtc = (amount: number) => {
-    if (amount === 0) return '0'
-    return amount.toFixed(8).replace(/\.?0+$/, '')
+    if (amount === 0) return '₿0'
+    return `₿${amount.toFixed(8).replace(/\.?0+$/, '')}`
+  }
+
+  // Format USD price with thousand separators
+  const formatUSD = (amount: number) => {
+    return amount.toLocaleString('en-US', { maximumFractionDigits: 0 })
   }
 
   const getTransactionIcon = (transaction: Transaction) => {
@@ -274,7 +279,7 @@ export default function Dashboard() {
                   <span className="text-white font-bold">Bitcoin</span>
                 </div>
                 <div className="text-xl font-bold">{formatBtc(user?.btcAmount || 0)}</div>
-                <div className="text-xs text-gray-500">BTC</div>
+                
               </div>
             </div>
 
@@ -286,7 +291,7 @@ export default function Dashboard() {
                     <span className="text-white font-bold text-lg">Bitcoin Price</span>
                   </div>
                   <div className="text-2xl font-bold text-orange-500">
-                    ${btcPrice.btcUSD.toFixed(0)}
+                    ${formatUSD(btcPrice.btcUSD)}
                   </div>
                   {btcPrice.note && (
                     <div className="text-xs text-yellow-400 mt-1">{btcPrice.note}</div>
@@ -358,7 +363,7 @@ export default function Dashboard() {
                             </span>
                             {transaction.category === 'TRADE' && (
                               <span className="text-sm text-gray-400">
-                                {formatBtc(transaction.amount)} BTC
+                                {formatBtc(transaction.amount)}
                               </span>
                             )}
                           </div>
@@ -424,7 +429,7 @@ export default function Dashboard() {
                           </span>
                           {transaction.category === 'TRADE' && (
                             <span className="text-sm text-gray-400">
-                              {formatBtc(transaction.amount)} BTC
+                              {formatBtc(transaction.amount)}
                             </span>
                           )}
                         </div>

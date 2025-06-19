@@ -78,10 +78,11 @@ export default function SellModal({
   // Use a small tolerance for floating point comparison
   const isValidAmount = btcValue > 0 && btcValue <= (availableBtc + 0.00000001)
 
-  // Format BTC display to remove trailing zeros
+  // Format BTC display with Bitcoin symbol
   const formatBtc = (amount: number) => {
-    if (amount === 0) return '0'
-    return amount.toFixed(8).replace(/\.?0+$/, '')
+    if (amount === 0) return ₿0
+    return `₿${amount.toFixed(8).replace(/\.?0+$/, )}`
+  }
   }
 
   if (!isOpen) return null
@@ -107,7 +108,7 @@ export default function SellModal({
             <BitcoinIcon style={{height: "20px", width: "20px", color: "#F7931A"}} />
             <div>
               <div className="text-sm text-gray-400">Available Bitcoin</div>
-              <div className="font-semibold text-white">{formatBtc(availableBtc)} BTC</div>
+              <div className="font-semibold text-white">{formatBtc(availableBtc)}</div>
             </div>
           </div>
 
@@ -115,12 +116,12 @@ export default function SellModal({
           <div className="text-center p-4 bg-gray-800 rounded-lg">
             <div className="text-sm text-gray-400">Sell Rate</div>
             <div className="text-lg font-bold text-red-400">₹{formatCash(sellRate)}</div>
-            <div className="text-xs text-gray-500">per BTC</div>
+            <div className="text-xs text-gray-500">per ₿</div>
           </div>
 
           {/* Amount Input */}
           <div>
-            <label className="block text-sm text-gray-400 mb-2">Enter Amount (BTC)</label>
+            <label className="block text-sm text-gray-400 mb-2">Enter Amount (₿)</label>
             <input
               type="text"
               value={btcAmount}
@@ -163,7 +164,7 @@ export default function SellModal({
           {/* Error Message */}
           {btcAmount && btcValue > availableBtc && (
             <div className="text-red-400 text-sm text-center">
-              Insufficient Bitcoin. Maximum: {formatBtc(availableBtc)} BTC
+              Insufficient Bitcoin. Maximum: {formatBtc(availableBtc)}
             </div>
           )}
 
@@ -179,7 +180,7 @@ export default function SellModal({
             disabled={!isValidAmount || loading || availableBtc === 0}
             className="w-full bg-red-600 hover:bg-red-700 disabled:bg-gray-700 text-white font-bold py-4 rounded-lg transition-colors"
           >
-            {loading ? 'Processing...' : `Sell ${btcAmount || '0'} BTC`}
+            {loading ? 'Processing...' : `Sell ₿${btcAmount || '0'}`}
           </button>
         </div>
       </div>
