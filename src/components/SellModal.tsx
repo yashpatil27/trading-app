@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { X } from 'lucide-react'
-import { Circle } from 'lucide-react'
+import { BitcoinIcon } from '@bitcoin-design/bitcoin-icons-react/filled'
 
 interface SellModalProps {
   isOpen: boolean
@@ -104,7 +104,7 @@ export default function SellModal({
         <div className="p-6 space-y-6">
           {/* Available Bitcoin */}
           <div className="flex items-center gap-3 p-4 bg-gray-800 rounded-lg">
-            <Circle className="text-orange-500" width={20} height={20} />
+            <BitcoinIcon style={{height: "20px", width: "20px", color: "#F7931A"}} />
             <div>
               <div className="text-sm text-gray-400">Available Bitcoin</div>
               <div className="font-semibold text-white">{formatBtc(availableBtc)} BTC</div>

@@ -3,8 +3,7 @@
 import { useSession } from 'next-auth/react'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { TrendingUp, TrendingDown, History, LogOut, Home, Plus, Minus, ArrowDownLeft, ArrowUpRight, ArrowUp, ArrowDown, Wallet } from 'lucide-react'
-import { BitcoinIcon } from '@bitcoin-design/bitcoin-icons-react/filled'
+import { TrendingUp, TrendingDown, History, LogOut, Home, Plus, Minus, ArrowDownLeft, ArrowUpRight, ArrowUp, ArrowDown, Wallet, Circle } from 'lucide-react'
 import { signOut } from 'next-auth/react'
 import { useBitcoinPrice } from '@/hooks/useBitcoinPrice'
 import BuyModal from '@/components/BuyModal'
@@ -270,7 +269,7 @@ export default function Dashboard() {
               {/* Bitcoin Holdings */}
               <div className="bg-gray-900 rounded-2xl p-4">
                 <div className="flex items-center gap-2 mb-2">
-                  <BitcoinIcon style={{height: "20px", width: "20px", color: "#F7931A"}} />
+                  <Circle className="text-orange-500" width={20} height={20} />
                   <span className="text-white font-bold">Bitcoin</span>
                 </div>
                 <div className="text-xl font-bold">{formatBtc(user?.btcAmount || 0)}</div>
@@ -337,7 +336,7 @@ export default function Dashboard() {
               <div className="space-y-3">
                 {recentTransactions.length === 0 ? (
                   <div className="text-gray-400 text-center py-8">
-                    <BitcoinIcon style={{height: "48px", width: "48px", color: "#6B7280"}} />
+                    <Circle className="text-gray-600 mx-auto mb-2" width={48} height={48} />
                     <div>No activity yet</div>
                     <div className="text-sm">Start trading to see your history</div>
                   </div>
@@ -397,7 +396,7 @@ export default function Dashboard() {
             <div className="space-y-3">
               {transactions.length === 0 ? (
                 <div className="text-gray-400 text-center py-12">
-                  <BitcoinIcon style={{height: "64px", width: "64px", color: "#6B7280"}} />
+                  <Circle className="text-gray-600 mx-auto mb-4" width={64} height={64} />
                   <div className="text-lg mb-2">No transactions yet</div>
                   <div className="text-sm">Your transaction history will appear here</div>
                   <button

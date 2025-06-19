@@ -1,6 +1,7 @@
 'use client'
 
-import { X, TrendingUp, TrendingDown, Calendar, DollarSign, Circle } from 'lucide-react'
+import { X, TrendingUp, TrendingDown, Calendar, DollarSign } from 'lucide-react'
+import { BitcoinIcon } from '@bitcoin-design/bitcoin-icons-react/filled'
 
 interface Trade {
   id: string
@@ -74,7 +75,7 @@ export default function TradeDetailModal({ isOpen, onClose, trade }: TradeDetail
             {/* Bitcoin Amount */}
             <div className="flex items-center justify-between p-4 bg-gray-800 rounded-lg">
               <div className="flex items-center gap-3">
-                <Circle className="text-orange-500 fill-current" size={20} />
+                <BitcoinIcon style={{height: "20px", width: "20px", color: "#F7931A"}} />
                 <div>
                   <div className="text-sm text-gray-400">Bitcoin Amount</div>
                   <div className="font-semibold text-white">{trade.amount.toFixed(8).replace(/\.?0+$/, '')} BTC</div>
@@ -107,7 +108,7 @@ export default function TradeDetailModal({ isOpen, onClose, trade }: TradeDetail
             {/* Original BTC Price */}
             <div className="flex items-center justify-between p-4 bg-gray-800 rounded-lg">
               <div className="flex items-center gap-3">
-                <Circle className="text-yellow-500 fill-current" size={20} />
+                <BitcoinIcon style={{height: "20px", width: "20px", color: "#EAB308"}} />
                 <div>
                   <div className="text-sm text-gray-400">BTC/USD Price (at time of trade)</div>
                   <div className="font-semibold text-white">${trade.btcPrice.toLocaleString('en-US')}</div>
