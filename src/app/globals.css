@@ -24,3 +24,44 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* Modal animations */
+@keyframes slide-up {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.animate-slide-up {
+  animation: slide-up 0.3s ease-out;
+}
+
+/* Tab styles */
+.tab-active {
+  border-bottom: 2px solid #f97316;
+  color: #f97316;
+}
+
+.tab-inactive {
+  color: #9ca3af;
+}
+
+/* Updated tab styles for bottom navigation */
+.tab-active {
+  color: #f97316;
+}
+
+.tab-active svg {
+  color: #f97316;
+}
+
+.tab-inactive {
+  color: #ffffff;
+}
+
+.tab-inactive:hover {
+  color: #f97316;
+}
