@@ -80,9 +80,8 @@ export default function SellModal({
 
   // Format BTC display with Bitcoin symbol
   const formatBtc = (amount: number) => {
-    if (amount === 0) return ₿0
-    return `₿${amount.toFixed(8).replace(/\.?0+$/, )}`
-  }
+    if (amount === 0) return '₿0'
+    return `₿${amount.toFixed(8).replace(/\.?0+$/, '')}`
   }
 
   if (!isOpen) return null
