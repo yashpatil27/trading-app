@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
+import { BalanceCache } from '@/lib/balanceCache'
 
 export async function POST(request: NextRequest) {
   try {
@@ -24,41 +25,47 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 })
     }
 
-    const adjustedAmount = type === 'CREDIT' ? Math.abs(amount) : -Math.abs(amount)
-    const newBalance = user.balance + adjustedAmount
+    // Get current balances from cache/latest transaction
+    const { inrBalance: currentInrBalance, btcBalance: currentBtcBalance } = 
+      await BalanceCache.getUserBalances(userId)
 
-    if (newBalance < 0) {
+    const adjustedAmount = type === 'CREDIT' ? Math.abs(amount) : -Math.abs(amount)
+    const newInrBalance = currentInrBalance + adjustedAmount
+
+    if (newInrBalance < 0) {
       return NextResponse.json({ error: 'Insufficient balance' }, { status: 400 })
     }
 
-    // Update user balance
-    const updatedUser = await prisma.user.update({
-      where: { id: userId },
-      data: { balance: newBalance }
-    })
+    // Determine transaction type based on operation
+    const transactionType = type === 'CREDIT' ? 'DEPOSIT' : 'WITHDRAWAL'
+    const defaultReason = type === 'CREDIT' ? 'Admin deposit' : 'Admin withdrawal'
 
-    // Determine if it's a self-transaction
-    const isSelfTransaction = userId === session.user.id
-    let defaultReason = `Admin ${type.toLowerCase()}`
-    
-    if (isSelfTransaction) {
-      defaultReason = type === 'CREDIT' ? 'Self Deposit' : 'Self Withdrawal'
-    }
-
-    // Create balance history
-    await prisma.balanceHistory.create({
+    // Create transaction record
+    const transaction = await prisma.transaction.create({
       data: {
         userId,
-        type,
-        amount: adjustedAmount,
-        balance: newBalance,
+        type: transactionType,
+        inrAmount: Math.abs(adjustedAmount),
+        inrBalanceAfter: newInrBalance,
+        btcBalanceAfter: currentBtcBalance,
         reason: reason || defaultReason
       }
     })
 
+    // Update cache with new balance
+    await BalanceCache.setUserBalances(userId, newInrBalance, currentBtcBalance)
+
+    console.log(`💰 Admin ${type}: ${user.email} balance updated to ₹${newInrBalance}`)
+
     return NextResponse.json({ 
       message: 'Balance updated successfully',
-      newBalance: updatedUser.balance 
+      newBalance: newInrBalance,
+      transaction: {
+        id: transaction.id,
+        type: transaction.type,
+        amount: Math.abs(adjustedAmount),
+        reason: transaction.reason
+      }
     })
   } catch (error) {
     console.error('Error updating balance:', error)
