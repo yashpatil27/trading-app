@@ -8,7 +8,16 @@ A modern, full-stack Bitcoin trading application built with Next.js 15, featurin
 ![Prisma](https://img.shields.io/badge/Prisma-6.10.1-2D3748?style=for-the-badge&logo=prisma)
 ![Redis](https://img.shields.io/badge/Redis-7-DC382D?style=for-the-badge&logo=redis)
 
-## 🆕 Latest Updates (v3.0 - Enterprise Edition)
+## 🆕 Latest Updates (v3.1 - Enterprise Edition)
+
+### 🔐 **PIN Security Feature (v3.1) - NEW!**
+- **4-Digit PIN Confirmation**: All trades now require PIN confirmation for enhanced security
+- **Mobile Banking UX**: Professional PIN input with auto-focus and smooth navigation
+- **Error Handling**: Shake animations and clear feedback for incorrect PINs
+- **No Account Lockout**: Users can retry incorrect PINs without being locked out
+- **Secure API**: Session-based PIN verification with proper error handling
+- **Default PIN**: All users start with PIN '1234' (easily changeable)
+- **Seamless Integration**: PIN modal appears after trade details without disrupting UX
 
 ### 🏦 **Bank-Grade Financial Precision (v3.0)**
 - **Integer-Based Calculations**: Eliminated all floating-point errors with satoshi-level precision
@@ -40,6 +49,7 @@ A modern, full-stack Bitcoin trading application built with Next.js 15, featurin
 - [🛠️ Tech Stack](#️-tech-stack)
 - [📦 Installation](#-installation)
 - [🚀 Quick Start](#-quick-start)
+- [🔐 PIN Security](#-pin-security)
 - [🔢 Financial Precision](#-financial-precision)
 - [🔧 Configuration](#-configuration)
 - [📖 API Documentation](#-api-documentation)
@@ -66,11 +76,18 @@ A modern, full-stack Bitcoin trading application built with Next.js 15, featurin
 - **Bank-Grade Standards** - Financial industry compliance for regulatory requirements
 - **Audit Trail Integrity** - Every transaction recorded with exact precision
 
-### 👤 User Management
+### 🔐 Security Features
+- **PIN Trade Confirmation** - 4-digit PIN required for all buy/sell transactions
 - **Secure Authentication** - NextAuth.js with credential-based login
+- **Session-Based Verification** - PIN verification tied to user sessions
+- **No Account Lockout** - User-friendly error handling without lockouts
+- **Mobile Banking UX** - Professional PIN input with auto-focus navigation
+
+### 👤 User Management
 - **User Dashboard** - Personalized trading interface with formatted balances
 - **Real-time Balance Updates** - Instant balance updates with Redis caching
 - **Session Management** - Secure session handling with JWT
+- **PIN Management** - Each user has a secure 4-digit trading PIN
 
 ### 🛡️ Admin Panel
 - **Complete User Administration** - View and manage all users with bulk operations
