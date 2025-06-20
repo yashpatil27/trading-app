@@ -26,15 +26,24 @@ model Transaction {
   id               String          @id @default(cuid())
   userId           String
   type             TransactionType
+  
+  // === EXISTING FLOAT FIELDS (keep for compatibility) ===
   btcAmount        Float?          // Amount in BTC (null for pure INR deposits/withdrawals)
   btcPriceUsd      Float?          // BTC/USD price at time (null for deposits/withdrawals)
   btcPriceInr      Float?          // BTC/INR price at time (null for deposits/withdrawals)
   usdInrRate       Float?          // The specific USD/INR rate used (91 for BUY, 88 for SELL)
   inrAmount        Float           // INR amount (always present)
-  
-  // Balances after this transaction
   inrBalanceAfter  Float           // INR balance after this transaction
   btcBalanceAfter  Float           // BTC balance after this transaction
+  
+  // === NEW INTEGER FIELDS (for precision and performance) ===
+  btcAmountSatoshi   BigInt?       // Amount in satoshis (1 BTC = 100,000,000 satoshis)
+  btcPriceUsdInt     Int?          // BTC/USD price in whole dollars (rounded)
+  btcPriceInrInt     Int?          // BTC/INR price in whole rupees 
+  usdInrRateInt      Int?          // USD/INR rate * 100 (e.g., 91.50 → 9150)
+  inrAmountInt       Int?          // INR amount in whole rupees
+  inrBalanceAfterInt Int?          // INR balance after transaction in whole rupees
+  btcBalanceAfterSat BigInt?       // BTC balance after transaction in satoshis
   
   reason           String?         // For admin actions, notes
   createdAt        DateTime        @default(now())
@@ -44,7 +53,8 @@ model Transaction {
 
 model BtcPrice {
   id        String   @id @default(cuid())
-  priceUsd  Float    // BTC/USD price
+  priceUsd  Float    // BTC/USD price (keep existing)
+  priceUsdInt Int?   // BTC/USD price in whole dollars (new)
   createdAt DateTime @default(now())
 }
 

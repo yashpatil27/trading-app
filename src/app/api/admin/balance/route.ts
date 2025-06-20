@@ -3,6 +3,7 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 import { BalanceCache } from '@/lib/balanceCache'
+import { createDualModeTransactionData } from '@/lib/currencyUtils'
 
 export async function POST(request: NextRequest) {
   try {
@@ -40,14 +41,18 @@ export async function POST(request: NextRequest) {
     const transactionType = type === 'CREDIT' ? 'DEPOSIT' : 'WITHDRAWAL'
     const defaultReason = type === 'CREDIT' ? 'Admin deposit' : 'Admin withdrawal'
 
-    // Create transaction record
+    // Create transaction record with both float and integer fields
+    const transactionData = createDualModeTransactionData({
+      inrAmount: Math.abs(adjustedAmount),
+      inrBalanceAfter: newInrBalance,
+      btcBalanceAfter: currentBtcBalance
+    })
+
     const transaction = await prisma.transaction.create({
       data: {
         userId,
         type: transactionType,
-        inrAmount: Math.abs(adjustedAmount),
-        inrBalanceAfter: newInrBalance,
-        btcBalanceAfter: currentBtcBalance,
+        ...transactionData,
         reason: reason || defaultReason
       }
     })
@@ -55,7 +60,7 @@ export async function POST(request: NextRequest) {
     // Update cache with new balance
     await BalanceCache.setUserBalances(userId, newInrBalance, currentBtcBalance)
 
-    console.log(`💰 Admin ${type}: ${user.email} balance updated to ₹${newInrBalance}`)
+    console.log(`💰 Admin ${type}: ${user.email} balance updated to ₹${newInrBalance} (using integer fields)`)
 
     return NextResponse.json({ 
       message: 'Balance updated successfully',

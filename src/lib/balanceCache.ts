@@ -1,5 +1,6 @@
 import { redis } from './redis'
 import { prisma } from './prisma'
+import { getBalanceFromTransaction } from './currencyUtils'
 
 export class BalanceCache {
   private static readonly INR_BALANCE_PREFIX = 'balance:inr:'
@@ -8,11 +9,13 @@ export class BalanceCache {
 
   /**
    * Get user balances (INR and BTC) with Redis caching
+   * Now prefers integer fields when available for better precision
    */
   static async getUserBalances(userId: string): Promise<{
     inrBalance: number
     btcBalance: number
     fromCache: boolean
+    usingIntegers?: boolean
   }> {
     const keys = [
       this.INR_BALANCE_PREFIX + userId,
@@ -37,12 +40,15 @@ export class BalanceCache {
       orderBy: { createdAt: 'desc' },
       select: {
         inrBalanceAfter: true,
-        btcBalanceAfter: true
+        btcBalanceAfter: true,
+        // Include new integer fields
+        inrBalanceAfterInt: true,
+        btcBalanceAfterSat: true
       }
     })
 
-    const inrBalance = latestTransaction?.inrBalanceAfter || 0
-    const btcBalance = Number(latestTransaction?.btcBalanceAfter) || 0
+    // Use helper to get balance from either integer or float fields
+    const { inrBalance, btcBalance, usingIntegers } = getBalanceFromTransaction(latestTransaction)
 
     // Store in cache for next time
     await this.setUserBalances(userId, inrBalance, btcBalance)
@@ -50,22 +56,29 @@ export class BalanceCache {
     return {
       inrBalance,
       btcBalance,
-      fromCache: false
+      fromCache: false,
+      usingIntegers
     }
   }
 
   /**
    * Get balances for multiple users efficiently (bulk operation)
-   * Fixes N+1 query by fetching all balances in a single operation
+   * Updated to support integer fields during migration
    */
   static async getBulkUserBalances(userIds: string[]): Promise<Map<string, {
     inrBalance: number
     btcBalance: number
     fromCache: boolean
+    usingIntegers?: boolean
   }>> {
     if (userIds.length === 0) return new Map()
 
-    const result = new Map<string, { inrBalance: number; btcBalance: number; fromCache: boolean }>()
+    const result = new Map<string, { 
+      inrBalance: number; 
+      btcBalance: number; 
+      fromCache: boolean;
+      usingIntegers?: boolean;
+    }>()
     
     // Build all cache keys for bulk Redis lookup
     const cacheKeys: string[] = []
@@ -101,7 +114,7 @@ export class BalanceCache {
 
     // Bulk fetch cache misses from database
     if (cacheMisses.length > 0) {
-      // Use a more compatible query approach
+      // Updated query to include integer fields
       const latestTransactions = await prisma.transaction.findMany({
         where: {
           userId: { in: cacheMisses }
@@ -110,6 +123,8 @@ export class BalanceCache {
           userId: true,
           inrBalanceAfter: true,
           btcBalanceAfter: true,
+          inrBalanceAfterInt: true,
+          btcBalanceAfterSat: true,
           createdAt: true
         },
         orderBy: {
@@ -130,13 +145,13 @@ export class BalanceCache {
       
       for (const userId of cacheMisses) {
         const transaction = latestByUser.get(userId)
-        const inrBalance = transaction?.inrBalanceAfter || 0
-        const btcBalance = Number(transaction?.btcBalanceAfter) || 0
+        const { inrBalance, btcBalance, usingIntegers } = getBalanceFromTransaction(transaction)
 
         result.set(userId, {
           inrBalance,
           btcBalance,
-          fromCache: false
+          fromCache: false,
+          usingIntegers
         })
 
         // Cache the result for future requests
