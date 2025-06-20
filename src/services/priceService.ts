@@ -1,8 +1,10 @@
 import { prisma } from '@/lib/prisma'
+import { usdToInt } from '@/lib/currencyUtils'
 import cron from 'node-cron'
 
 interface PriceData {
   btcUSD: number
+  btcUSDInt: number
   buyRate: number
   sellRate: number
   timestamp: string
@@ -65,27 +67,34 @@ class PriceService {
             btcPrice = altData.bitcoin.usd
           }
         } catch (altError) {
-          // Get last known price from database
+          // Get last known price from database (prefer integer field)
           const lastPrice = await prisma.btcPrice.findFirst({
             orderBy: { createdAt: 'desc' }
           })
           
           if (lastPrice) {
-            btcPrice = lastPrice.priceUsd
+            btcPrice = lastPrice.priceUsdInt || lastPrice.priceUsd
           }
         }
       }
 
-      // Store in database
+      // Convert to integer for storage
+      const btcPriceInt = usdToInt(btcPrice)
+
+      // Store in database with both formats (dual-mode)
       await prisma.btcPrice.create({
-        data: { priceUsd: btcPrice }
+        data: { 
+          priceUsd: btcPrice,      // Keep for compatibility 
+          priceUsdInt: btcPriceInt // New integer field
+        }
       })
 
-      // Update current price
+      // Update current price with integer precision
       this.currentPrice = {
         btcUSD: btcPrice,
-        buyRate: btcPrice * 91,
-        sellRate: btcPrice * 88,
+        btcUSDInt: btcPriceInt,
+        buyRate: btcPriceInt * 91,  // Use integer price for rate calculation
+        sellRate: btcPriceInt * 88,
         timestamp: new Date().toISOString()
       }
 

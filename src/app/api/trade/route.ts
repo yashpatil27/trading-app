@@ -3,6 +3,15 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 import { BalanceCache } from '@/lib/balanceCache'
+import { 
+  btcToSatoshi, 
+  satoshiToBtc, 
+  inrToInt, 
+  usdToInt,
+  usdInrRateToInt,
+  createDualModeTransactionData,
+  SATOSHI_PER_BTC
+} from '@/lib/currencyUtils'
 
 export async function POST(request: NextRequest) {
   try {
@@ -29,103 +38,134 @@ export async function POST(request: NextRequest) {
     const { inrBalance: currentInrBalance, btcBalance: currentBtcBalance } = 
       await BalanceCache.getUserBalances(user.id)
 
-    if (type === 'BUY') {
-      // Amount is INR (already whole number from frontend)
-      const inrTotal = Math.floor(amount) // Ensure whole number
-      const usdInrRate = 91 // Buy rate
-      const buyRate = btcPrice * usdInrRate
-      const btcAmount = inrTotal / buyRate
-      // Round to nearest satoshi (8 decimal places)
-      const roundedBtcAmount = Math.round(btcAmount * 100000000) / 100000000
+    // Convert to precise integer values for calculations
+    const currentInrSatoshi = inrToInt(currentInrBalance)
+    const currentBtcSatoshi = btcToSatoshi(currentBtcBalance)
+    const btcPriceInt = usdToInt(btcPrice)
 
-      // Use rounded balance for comparison
-      const userBalance = Math.floor(currentInrBalance)
+    if (type === 'BUY') {
+      // Amount is INR (whole rupees)
+      const inrTotalInt = inrToInt(amount)
+      const usdInrRateInt = usdInrRateToInt(91) // Buy rate 91.00 → 9100
       
-      if (userBalance < inrTotal) {
+      // Calculate BTC amount in satoshis using integer math
+      // inrTotal = btcSatoshi * btcPriceUsd * usdInrRate / (SATOSHI_PER_BTC * 100)
+      // btcSatoshi = inrTotal * SATOSHI_PER_BTC * 100 / (btcPriceUsd * usdInrRate)
+      const btcSatoshi = BigInt(Math.floor(
+        (inrTotalInt * Number(SATOSHI_PER_BTC) * 100) / (btcPriceInt * usdInrRateInt)
+      ))
+
+      if (currentInrSatoshi < inrTotalInt) {
         return NextResponse.json({ error: 'Insufficient balance' }, { status: 400 })
       }
 
-      if (roundedBtcAmount <= 0) {
+      if (btcSatoshi <= 0n) {
         return NextResponse.json({ error: 'Invalid amount' }, { status: 400 })
       }
 
-      // Calculate new balances
-      const newInrBalance = currentInrBalance - inrTotal
-      const newBtcBalance = currentBtcBalance + roundedBtcAmount
+      // Calculate new balances using integer arithmetic
+      const newInrBalanceInt = currentInrSatoshi - inrTotalInt
+      const newBtcSatoshi = currentBtcSatoshi + btcSatoshi
 
-      // Create transaction in database
+      // Convert back to decimals for compatibility
+      const btcAmountDecimal = satoshiToBtc(btcSatoshi)
+      const buyRateDecimal = (btcPriceInt * usdInrRateInt) / 100
+
+      // Create transaction with dual-mode data
+      const transactionData = createDualModeTransactionData({
+        btcAmount: btcAmountDecimal,
+        btcPriceUsd: btcPrice,
+        btcPriceInr: buyRateDecimal,
+        usdInrRate: 91,
+        inrAmount: inrTotalInt,
+        inrBalanceAfter: newInrBalanceInt,
+        btcBalanceAfter: satoshiToBtc(newBtcSatoshi)
+      })
+
       const transaction = await prisma.transaction.create({
         data: {
           userId: user.id,
           type,
-          btcAmount: roundedBtcAmount,
-          btcPriceUsd: btcPrice,
-          btcPriceInr: buyRate,
-          usdInrRate: usdInrRate,
-          inrAmount: inrTotal,
-          inrBalanceAfter: newInrBalance,
-          btcBalanceAfter: newBtcBalance,
-          reason: `Bought ${roundedBtcAmount.toFixed(8)} BTC`
+          ...transactionData,
+          reason: `Bought ${btcAmountDecimal.toFixed(8)} BTC`
         }
       })
 
-      // Immediately update Redis cache
-      await BalanceCache.setUserBalances(user.id, newInrBalance, newBtcBalance)
+      // Update cache with new balances
+      await BalanceCache.setUserBalances(user.id, newInrBalanceInt, satoshiToBtc(newBtcSatoshi))
       
-      console.log(`💸 BUY: ${user.email} bought ₿${roundedBtcAmount.toFixed(8)} for ₹${inrTotal} | Cache updated`)
+      console.log(`💸 BUY: ${user.email} bought ₿${btcAmountDecimal.toFixed(8)} for ₹${inrTotalInt} | Precise integer math`)
 
-      return NextResponse.json({ message: 'Trade successful' })
+      return NextResponse.json({ 
+        message: 'Trade successful',
+        btcAmount: btcAmountDecimal,
+        inrAmount: inrTotalInt,
+        precision: 'integer'
+      })
 
     } else if (type === 'SELL') {
-      // Amount is BTC amount
-      const btcAmount = parseFloat(amount)
-      // Round to nearest satoshi
-      const roundedBtcAmount = Math.round(btcAmount * 100000000) / 100000000
+      // Amount is BTC amount - convert to satoshis for precise calculation
+      const btcAmountDecimal = parseFloat(amount)
+      const btcSatoshi = btcToSatoshi(btcAmountDecimal)
       
-      const availableBtc = currentBtcBalance
-      
-      // Use tolerance for floating point comparison (1 satoshi tolerance)
-      const tolerance = 0.00000001
-      
-      if (availableBtc < roundedBtcAmount && Math.abs(availableBtc - roundedBtcAmount) > tolerance) {
-        return NextResponse.json({ error: 'Insufficient Bitcoin' }, { status: 400 })
+      if (currentBtcSatoshi < btcSatoshi) {
+        // Check if difference is within 1 satoshi tolerance
+        const tolerance = 1n
+        if (currentBtcSatoshi + tolerance >= btcSatoshi) {
+          // Use available amount (within tolerance)
+          const actualBtcSatoshi = currentBtcSatoshi
+        } else {
+          return NextResponse.json({ error: 'Insufficient Bitcoin' }, { status: 400 })
+        }
       }
 
-      // If the difference is within tolerance, use the available amount
-      const finalBtcAmount = Math.abs(availableBtc - roundedBtcAmount) <= tolerance ? availableBtc : roundedBtcAmount
-
-      const usdInrRate = 88 // Sell rate
-      const sellRate = btcPrice * usdInrRate
-      const inrTotal = finalBtcAmount * sellRate
-      // Round up to next whole INR (user gets rounded up amount)
-      const roundedInrTotal = Math.ceil(inrTotal)
+      const actualBtcSatoshi = btcSatoshi > currentBtcSatoshi ? currentBtcSatoshi : btcSatoshi
+      const usdInrRateInt = usdInrRateToInt(88) // Sell rate 88.00 → 8800
+      
+      // Calculate INR amount using integer math
+      // inrTotal = btcSatoshi * btcPriceUsd * usdInrRate / (SATOSHI_PER_BTC * 100)
+      const inrTotalRaw = (Number(actualBtcSatoshi) * btcPriceInt * usdInrRateInt) / (Number(SATOSHI_PER_BTC) * 100)
+      const inrTotalInt = Math.ceil(inrTotalRaw) // Round up in user's favor
 
       // Calculate new balances
-      const newInrBalance = currentInrBalance + roundedInrTotal
-      const newBtcBalance = currentBtcBalance - finalBtcAmount
+      const newInrBalanceInt = currentInrSatoshi + inrTotalInt
+      const newBtcSatoshi = currentBtcSatoshi - actualBtcSatoshi
 
-      // Create transaction in database
+      // Convert for compatibility
+      const actualBtcDecimal = satoshiToBtc(actualBtcSatoshi)
+      const sellRateDecimal = (btcPriceInt * usdInrRateInt) / 100
+
+      // Create transaction with dual-mode data
+      const transactionData = createDualModeTransactionData({
+        btcAmount: actualBtcDecimal,
+        btcPriceUsd: btcPrice,
+        btcPriceInr: sellRateDecimal,
+        usdInrRate: 88,
+        inrAmount: inrTotalInt,
+        inrBalanceAfter: newInrBalanceInt,
+        btcBalanceAfter: satoshiToBtc(newBtcSatoshi)
+      })
+
       const transaction = await prisma.transaction.create({
         data: {
           userId: user.id,
           type,
-          btcAmount: finalBtcAmount,
-          btcPriceUsd: btcPrice,
-          btcPriceInr: sellRate,
-          usdInrRate: usdInrRate,
-          inrAmount: roundedInrTotal,
-          inrBalanceAfter: newInrBalance,
-          btcBalanceAfter: newBtcBalance,
-          reason: `Sold ${finalBtcAmount.toFixed(8)} BTC`
+          ...transactionData,
+          reason: `Sold ${actualBtcDecimal.toFixed(8)} BTC`
         }
       })
 
-      // Immediately update Redis cache
-      await BalanceCache.setUserBalances(user.id, newInrBalance, newBtcBalance)
+      // Update cache with new balances
+      await BalanceCache.setUserBalances(user.id, newInrBalanceInt, satoshiToBtc(newBtcSatoshi))
       
-      console.log(`💰 SELL: ${user.email} sold ₿${finalBtcAmount.toFixed(8)} for ₹${roundedInrTotal} | Cache updated`)
+      console.log(`💰 SELL: ${user.email} sold ₿${actualBtcDecimal.toFixed(8)} for ₹${inrTotalInt} | Precise integer math`)
 
-      return NextResponse.json({ message: 'Trade successful' })
+      return NextResponse.json({ 
+        message: 'Trade successful',
+        btcAmount: actualBtcDecimal,
+        inrAmount: inrTotalInt,
+        precision: 'integer'
+      })
 
     } else {
       return NextResponse.json({ error: 'Invalid trade type' }, { status: 400 })
@@ -149,9 +189,34 @@ export async function GET() {
         type: { in: ['BUY', 'SELL'] }
       },
       orderBy: { createdAt: 'desc' },
+      select: {
+        id: true,
+        type: true,
+        createdAt: true,
+        reason: true,
+        // Prefer integer fields when available
+        btcAmountSatoshi: true,
+        btcAmount: true,
+        inrAmountInt: true,
+        inrAmount: true,
+        btcPriceUsdInt: true,
+        btcPriceUsd: true
+      }
     })
 
-    return NextResponse.json(transactions)
+    // Transform to use integer fields primarily
+    const transformedTransactions = transactions.map(tx => ({
+      id: tx.id,
+      type: tx.type,
+      createdAt: tx.createdAt,
+      reason: tx.reason,
+      btcAmount: tx.btcAmountSatoshi ? satoshiToBtc(tx.btcAmountSatoshi) : (tx.btcAmount || 0),
+      inrAmount: tx.inrAmountInt || tx.inrAmount || 0,
+      btcPriceUsd: tx.btcPriceUsdInt || tx.btcPriceUsd || 0,
+      usingIntegers: !!(tx.btcAmountSatoshi && tx.inrAmountInt)
+    }))
+
+    return NextResponse.json(transformedTransactions)
   } catch (error) {
     console.error('Error fetching trades:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })

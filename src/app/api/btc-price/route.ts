@@ -1,34 +1,33 @@
 import { NextResponse } from 'next/server'
 import PriceService from '@/services/priceService'
+import { intToUsd } from '@/lib/currencyUtils'
 
 export async function GET() {
   try {
     const priceService = PriceService.getInstance()
     const currentPrice = priceService.getCurrentPrice()
-    
-    if (currentPrice) {
-      return NextResponse.json(currentPrice)
-    } else {
-      // If service is still initializing, return fallback
-      const fallbackPrice = 95000
-      return NextResponse.json({
-        btcUSD: fallbackPrice,
-        buyRate: fallbackPrice * 91,
-        sellRate: fallbackPrice * 88,
-        timestamp: new Date().toISOString(),
-        note: 'Service initializing, using fallback price'
-      })
+
+    if (!currentPrice) {
+      return NextResponse.json({ error: 'Price not available' }, { status: 503 })
     }
-  } catch (error) {
-    console.error('Error in BTC price route:', error)
-    
-    const fallbackPrice = 95000
+
+    // Return both float and integer representations
     return NextResponse.json({
-      btcUSD: fallbackPrice,
-      buyRate: fallbackPrice * 91,
-      sellRate: fallbackPrice * 88,
-      timestamp: new Date().toISOString(),
-      note: 'Service error, using fallback price'
+      // Original float format (for compatibility)
+      btcUSD: currentPrice.btcUSD,
+      buyRate: currentPrice.btcUSD * 91,
+      sellRate: currentPrice.btcUSD * 88,
+      
+      // New integer format (for precision)
+      btcUSDInt: currentPrice.btcUSDInt,
+      buyRateInt: currentPrice.btcUSDInt * 91,
+      sellRateInt: currentPrice.btcUSDInt * 88,
+      
+      timestamp: currentPrice.timestamp,
+      precision: 'dual-mode'
     })
+  } catch (error) {
+    console.error('Error fetching BTC price:', error)
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }
