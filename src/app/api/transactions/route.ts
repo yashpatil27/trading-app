@@ -21,13 +21,21 @@ export async function GET() {
       const isTradeTransaction = ['BUY', 'SELL'].includes(transaction.type)
       const isDepositWithdrawal = ['DEPOSIT', 'WITHDRAWAL', 'ADMIN_CREDIT', 'ADMIN_DEBIT'].includes(transaction.type)
 
+      // Calculate the signed amount for deposits/withdrawals
+      let signedAmount = transaction.inrAmount
+      if (transaction.type === 'WITHDRAWAL' || transaction.type === 'ADMIN_DEBIT') {
+        signedAmount = -Math.abs(transaction.inrAmount) // Make withdrawal amounts negative
+      } else if (transaction.type === 'DEPOSIT' || transaction.type === 'ADMIN_CREDIT') {
+        signedAmount = Math.abs(transaction.inrAmount) // Make deposit amounts positive
+      }
+
       return {
         id: transaction.id,
-        type: transaction.type as 'BUY' | 'SELL' | 'CREDIT' | 'DEBIT',
+        type: transaction.type as 'BUY' | 'SELL' | 'DEPOSIT' | 'WITHDRAWAL' | 'ADMIN_CREDIT' | 'ADMIN_DEBIT',
         category: isTradeTransaction ? 'TRADE' as const : 'BALANCE' as const,
         amount: transaction.btcAmount || 0,
         price: transaction.btcPriceInr,
-        total: Math.abs(transaction.inrAmount),
+        total: signedAmount, // Use signed amount instead of Math.abs
         btcPrice: transaction.btcPriceUsd,
         reason: transaction.reason || `${transaction.type} ${transaction.btcAmount ? transaction.btcAmount.toFixed(8) + ' BTC' : ''}`,
         balance: transaction.inrBalanceAfter,

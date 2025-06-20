@@ -171,7 +171,7 @@ export default function Dashboard() {
         <ArrowDown className="text-red-500" width={20} height={20} />
       )
     } else {
-      return transaction.type === 'CREDIT' ? (
+      return transaction.type === 'DEPOSIT' ? (
         <ArrowDownLeft className="text-blue-500" size={20} />
       ) : (
         <ArrowUpRight className="text-yellow-500" size={20} />
@@ -183,7 +183,7 @@ export default function Dashboard() {
     if (transaction.category === 'TRADE') {
       return transaction.type === 'BUY' ? 'text-green-400' : 'text-red-400'
     } else {
-      return transaction.type === 'CREDIT' ? 'text-blue-400' : 'text-yellow-400'
+      return transaction.type === 'DEPOSIT' ? 'text-blue-400' : 'text-yellow-400'
     }
   }
 
@@ -359,7 +359,7 @@ export default function Dashboard() {
                           <div className="flex items-center gap-2">
                             <span className={`font-semibold ${getTransactionColor(transaction)}`}>
                               {transaction.category === 'TRADE' ? transaction.type : 
-                               transaction.type === 'CREDIT' ? 'DEPOSIT' : 'WITHDRAWAL'}
+                               transaction.type}
                             </span>
                             {transaction.category === 'TRADE' && (
                               <span className="text-sm text-gray-400">
@@ -377,7 +377,7 @@ export default function Dashboard() {
                       </div>
                       <div className="text-right">
                         <div className="font-semibold">
-                          {transaction.category === 'BALANCE' && transaction.type === 'DEBIT' ? '-' : ''}
+                          {transaction.category === 'BALANCE' && transaction.type === 'WITHDRAWAL' ? '-' : ''}
                           ₹{formatCash(transaction.total)}
                         </div>
                         {transaction.category === 'TRADE' && transaction.price && (
@@ -425,7 +425,7 @@ export default function Dashboard() {
                         <div className="flex items-center gap-2">
                           <span className={`font-semibold ${getTransactionColor(transaction)}`}>
                             {transaction.category === 'TRADE' ? transaction.type : 
-                             transaction.type === 'CREDIT' ? 'DEPOSIT' : 'WITHDRAWAL'}
+                             transaction.type}
                           </span>
                           {transaction.category === 'TRADE' && (
                             <span className="text-sm text-gray-400">
@@ -443,7 +443,7 @@ export default function Dashboard() {
                     </div>
                     <div className="text-right">
                       <div className="font-semibold">
-                        {transaction.category === 'BALANCE' && transaction.type === 'DEBIT' ? '-' : ''}
+                        {transaction.category === 'BALANCE' && transaction.type === 'WITHDRAWAL' ? '-' : ''}
                         ₹{formatCash(transaction.total)}
                       </div>
                       {transaction.category === 'TRADE' && transaction.price && (
