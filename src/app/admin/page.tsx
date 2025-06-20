@@ -171,7 +171,7 @@ export default function AdminDashboard() {
                     <div className="grid grid-cols-3 gap-4 text-sm">
                       <div>
                         <span className="text-gray-400">Balance: </span>
-                        <span className="font-semibold">₹{user.balance.toFixed(2)}</span>
+                        <span className="font-semibold">₹{Math.floor(user.balance).toLocaleString('en-IN')}</span>
                       </div>
                       <div>
                         <span className="text-gray-400">Trades: </span>
@@ -271,7 +271,7 @@ export default function AdminDashboard() {
           <div className="bg-gray-900 rounded-2xl p-6 w-full max-w-md">
             <h3 className="text-xl font-semibold mb-4">Adjust Balance</h3>
             <p className="text-gray-400 mb-4">
-              {showBalanceModal.name} - Current Balance: ₹{showBalanceModal.balance.toFixed(2)}
+              {showBalanceModal.name} - Current Balance: ₹{Math.floor(showBalanceModal.balance).toLocaleString('en-IN')}
             </p>
             <div className="space-y-4">
               <div>
