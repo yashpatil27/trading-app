@@ -138,26 +138,16 @@ export default function SellModal({
 
           {/* Percentage Buttons */}
           <div className="grid grid-cols-4 gap-2">
-            {[25, 50, 75, 100].map((percentage) => {
-              let amount = availableBtc * percentage / 100
-              if (percentage === 100) {
-                amount = availableBtc
-              } else {
-                amount = Math.round(amount * 100000000) / 100000000
-              }
-              
-              return (
-                <button
-                  key={percentage}
-                  onClick={() => handlePercentageClick(percentage)}
-                  disabled={loading || availableBtc === 0}
-                  className="bg-gray-800 hover:bg-gray-700 disabled:bg-gray-800 text-white py-2 px-3 rounded-lg font-medium transition-colors text-sm"
-                >
-                  {percentage === 100 ? 'Max' : `${percentage}%`}
-                  <div className="text-xs text-gray-400">{formatBtc(amount)}</div>
-                </button>
-              )
-            })}
+            {[25, 50, 75, 100].map((percentage) => (
+              <button
+                key={percentage}
+                onClick={() => handlePercentageClick(percentage)}
+                disabled={loading || availableBtc === 0}
+                className="bg-gray-800 hover:bg-gray-700 disabled:bg-gray-800 text-white py-3 px-3 rounded-lg font-medium transition-colors text-sm"
+              >
+                {percentage === 100 ? 'Max' : `${percentage}%`}
+              </button>
+            ))}
           </div>
 
           {/* Error Message */}

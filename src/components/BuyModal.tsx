@@ -132,20 +132,16 @@ export default function BuyModal({
 
           {/* Percentage Buttons */}
           <div className="grid grid-cols-4 gap-2">
-            {[25, 50, 75, 100].map((percentage) => {
-              const amount = Math.floor(roundedBalance * percentage / 100)
-              return (
-                <button
-                  key={percentage}
-                  onClick={() => handlePercentageClick(percentage)}
-                  disabled={loading || roundedBalance === 0}
-                  className="bg-gray-800 hover:bg-gray-700 disabled:bg-gray-800 text-white py-2 px-3 rounded-lg font-medium transition-colors text-sm"
-                >
-                  {percentage === 100 ? 'Max' : `${percentage}%`}
-                  <div className="text-xs text-gray-400">₹{formatCash(amount)}</div>
-                </button>
-              )
-            })}
+            {[25, 50, 75, 100].map((percentage) => (
+              <button
+                key={percentage}
+                onClick={() => handlePercentageClick(percentage)}
+                disabled={loading || roundedBalance === 0}
+                className="bg-gray-800 hover:bg-gray-700 disabled:bg-gray-800 text-white py-3 px-3 rounded-lg font-medium transition-colors text-sm"
+              >
+                {percentage === 100 ? 'Max' : `${percentage}%`}
+              </button>
+            ))}
           </div>
 
           {/* Error Message */}
