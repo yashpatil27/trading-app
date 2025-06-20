@@ -26,7 +26,7 @@ export class BalanceCache {
       // Cache hit - return cached values
       return {
         inrBalance: parseFloat(cachedInrBalance),
-        btcBalance: parseFloat(cachedBtcBalance),
+        btcBalance: Number(cachedBtcBalance),
         fromCache: true
       }
     }
@@ -42,7 +42,7 @@ export class BalanceCache {
     })
 
     const inrBalance = latestTransaction?.inrBalanceAfter || 0
-    const btcBalance = latestTransaction?.btcBalanceAfter || 0
+    const btcBalance = Number(latestTransaction?.btcBalanceAfter) || 0
 
     // Store in cache for next time
     await this.setUserBalances(userId, inrBalance, btcBalance)
@@ -52,6 +52,102 @@ export class BalanceCache {
       btcBalance,
       fromCache: false
     }
+  }
+
+  /**
+   * Get balances for multiple users efficiently (bulk operation)
+   * Fixes N+1 query by fetching all balances in a single operation
+   */
+  static async getBulkUserBalances(userIds: string[]): Promise<Map<string, {
+    inrBalance: number
+    btcBalance: number
+    fromCache: boolean
+  }>> {
+    if (userIds.length === 0) return new Map()
+
+    const result = new Map<string, { inrBalance: number; btcBalance: number; fromCache: boolean }>()
+    
+    // Build all cache keys for bulk Redis lookup
+    const cacheKeys: string[] = []
+    
+    userIds.forEach(userId => {
+      cacheKeys.push(this.INR_BALANCE_PREFIX + userId)
+      cacheKeys.push(this.BTC_BALANCE_PREFIX + userId)
+    })
+
+    // Bulk fetch from Redis
+    const cachedValues = await redis.mget(cacheKeys)
+    
+    const cacheMisses: string[] = []
+    
+    // Process cached results
+    for (let i = 0; i < userIds.length; i++) {
+      const userId = userIds[i]
+      const inrValue = cachedValues[i * 2]     // INR balance
+      const btcValue = cachedValues[i * 2 + 1] // BTC balance
+      
+      if (inrValue !== null && btcValue !== null) {
+        // Cache hit
+        result.set(userId, {
+          inrBalance: parseFloat(inrValue),
+          btcBalance: Number(btcValue),
+          fromCache: true
+        })
+      } else {
+        // Cache miss - need to fetch from database
+        cacheMisses.push(userId)
+      }
+    }
+
+    // Bulk fetch cache misses from database
+    if (cacheMisses.length > 0) {
+      // Use a more compatible query approach
+      const latestTransactions = await prisma.transaction.findMany({
+        where: {
+          userId: { in: cacheMisses }
+        },
+        select: {
+          userId: true,
+          inrBalanceAfter: true,
+          btcBalanceAfter: true,
+          createdAt: true
+        },
+        orderBy: {
+          createdAt: 'desc'
+        }
+      })
+
+      // Get the latest transaction for each user
+      const latestByUser = new Map<string, typeof latestTransactions[0]>()
+      latestTransactions.forEach(tx => {
+        if (!latestByUser.has(tx.userId)) {
+          latestByUser.set(tx.userId, tx)
+        }
+      })
+
+      // Update results and cache for cache misses
+      const cacheUpdates: Promise<void>[] = []
+      
+      for (const userId of cacheMisses) {
+        const transaction = latestByUser.get(userId)
+        const inrBalance = transaction?.inrBalanceAfter || 0
+        const btcBalance = Number(transaction?.btcBalanceAfter) || 0
+
+        result.set(userId, {
+          inrBalance,
+          btcBalance,
+          fromCache: false
+        })
+
+        // Cache the result for future requests
+        cacheUpdates.push(this.setUserBalances(userId, inrBalance, btcBalance))
+      }
+
+      // Update cache in parallel
+      await Promise.all(cacheUpdates)
+    }
+
+    return result
   }
 
   /**
@@ -113,7 +209,7 @@ export class BalanceCache {
     const cachedBalance = await redis.get(this.BTC_BALANCE_PREFIX + userId)
     
     if (cachedBalance !== null) {
-      return parseFloat(cachedBalance)
+      return Number(cachedBalance)
     }
 
     // Fallback to full balance fetch

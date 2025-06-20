@@ -29,20 +29,27 @@ export async function GET() {
       orderBy: { createdAt: 'desc' }
     })
 
-    // Get balance for each user from cache (which falls back to latest transaction)
-    const usersWithBalances = await Promise.all(
-      users.map(async (user) => {
-        const { inrBalance, btcBalance } = await BalanceCache.getUserBalances(user.id)
-        return {
-          ...user,
-          balance: inrBalance,
-          btcAmount: btcBalance,
-          _count: {
-            trades: user._count.transactions // Keep the frontend interface
-          }
+    // Bulk fetch balances for all users (fixes N+1 query)
+    const userIds = users.map(user => user.id)
+    const balanceMap = await BalanceCache.getBulkUserBalances(userIds)
+
+    // Combine user data with their balances
+    const usersWithBalances = users.map(user => {
+      const balanceData = balanceMap.get(user.id)
+      return {
+        ...user,
+        balance: balanceData?.inrBalance || 0,
+        btcAmount: balanceData?.btcBalance || 0,
+        _count: {
+          trades: user._count.transactions // Keep the frontend interface
+        },
+        _debug: {
+          fromCache: balanceData?.fromCache || false
         }
-      })
-    )
+      }
+    })
+
+    console.log(`👥 Admin users API: Fetched ${users.length} users with bulk balance lookup`)
 
     return NextResponse.json(usersWithBalances)
   } catch (error) {
