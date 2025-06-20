@@ -19,6 +19,7 @@ export async function GET() {
         email: true,
         name: true,
         role: true,
+        tradingPin: true,
         createdAt: true,
         _count: {
           select: {

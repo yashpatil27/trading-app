@@ -10,6 +10,7 @@ interface User {
   email: string
   name: string
   role: string
+  tradingPin: string
   balance: number
   createdAt: string
   _count: {
@@ -25,6 +26,8 @@ export default function AdminDashboard() {
   const [showBalanceModal, setShowBalanceModal] = useState<User | null>(null)
   const [balanceAmount, setBalanceAmount] = useState('')
   const [balanceReason, setBalanceReason] = useState('')
+  const [showPinModal, setShowPinModal] = useState<User | null>(null)
+  const [newPin, setNewPin] = useState('')
   const [newUser, setNewUser] = useState({
     email: '',
     name: '',
@@ -109,6 +112,35 @@ export default function AdminDashboard() {
     }
   }
 
+
+  const resetPin = async () => {
+    if (!showPinModal || !newPin) return
+
+    try {
+      const response = await fetch('/api/admin/pin', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          userId: showPinModal.id,
+          newPin: newPin
+        })
+      })
+
+      if (response.ok) {
+        const result = await response.json()
+        setShowPinModal(null)
+        setNewPin('')
+        fetchUsers()
+        alert(result.message)
+      } else {
+        const error = await response.json()
+        alert(error.error)
+      }
+    } catch (error) {
+      console.error('Error resetting PIN:', error)
+      alert('Failed to reset PIN')
+    }
+  }
   if (status === 'loading') {
     return (
       <div className="min-h-screen bg-black flex items-center justify-center">
@@ -168,7 +200,7 @@ export default function AdminDashboard() {
                         {user.role}
                       </span>
                     </div>
-                    <div className="grid grid-cols-3 gap-4 text-sm">
+                    <div className="grid grid-cols-2 gap-4 text-sm mb-3">
                       <div>
                         <span className="text-gray-400">Balance: </span>
                         <span className="font-semibold">₹{Math.floor(user.balance).toLocaleString('en-IN')}</span>
@@ -176,6 +208,12 @@ export default function AdminDashboard() {
                       <div>
                         <span className="text-gray-400">Trades: </span>
                         <span>{user._count.trades}</span>
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-4 text-sm">
+                      <div>
+                        <span className="text-gray-400">PIN: </span>
+                        <span className="font-mono text-orange-400">•••{user.tradingPin.slice(-1)}</span>
                       </div>
                       <div>
                         <span className="text-gray-400">Joined: </span>
@@ -189,6 +227,12 @@ export default function AdminDashboard() {
                       className="bg-blue-600 hover:bg-blue-700 px-3 py-1 rounded text-sm"
                     >
                       Adjust Balance
+                    </button>
+                    <button
+                      onClick={() => setShowPinModal(user)}
+                      className="bg-purple-600 hover:bg-purple-700 px-3 py-1 rounded text-sm"
+                    >
+                      Reset PIN
                     </button>
                   </div>
                 </div>
@@ -315,6 +359,55 @@ export default function AdminDashboard() {
                 <button
                   onClick={() => setShowBalanceModal(null)}
                   className="bg-gray-700 hover:bg-gray-600 py-2 rounded-lg"
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      {/* PIN Reset Modal */}
+      {showPinModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-gray-900 rounded-2xl p-6 w-full max-w-md">
+            <h3 className="text-xl font-semibold mb-4">Reset Trading PIN</h3>
+            <p className="text-gray-400 mb-4">
+              Reset PIN for: <span className="text-white font-semibold">{showPinModal.name}</span>
+            </p>
+            <p className="text-sm text-gray-500 mb-4">
+              Current PIN: <span className="font-mono text-orange-400">•••{showPinModal.tradingPin.slice(-1)}</span>
+            </p>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm text-gray-400 mb-2">New 4-Digit PIN</label>
+                <input
+                  type="text"
+                  maxLength={4}
+                  value={newPin}
+                  onChange={(e) => {
+                    const value = e.target.value.replace(/\D/g, '').slice(0, 4)
+                    setNewPin(value)
+                  }}
+                  className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-white font-mono text-center text-lg tracking-widest"
+                  placeholder="1234"
+                />
+                <p className="text-xs text-gray-500 mt-1">Enter exactly 4 digits</p>
+              </div>
+              <div className="flex gap-3">
+                <button
+                  onClick={resetPin}
+                  disabled={newPin.length !== 4}
+                  className="flex-1 bg-purple-600 hover:bg-purple-700 disabled:bg-gray-600 py-2 rounded-lg transition-colors"
+                >
+                  Reset PIN
+                </button>
+                <button
+                  onClick={() => {
+                    setShowPinModal(null)
+                    setNewPin('')
+                  }}
+                  className="flex-1 bg-gray-700 hover:bg-gray-600 py-2 rounded-lg"
                 >
                   Cancel
                 </button>
