@@ -71,14 +71,14 @@ class PriceService {
           })
           
           if (lastPrice) {
-            btcPrice = lastPrice.price
+            btcPrice = lastPrice.priceUsd
           }
         }
       }
 
       // Store in database
       await prisma.btcPrice.create({
-        data: { price: btcPrice }
+        data: { priceUsd: btcPrice }
       })
 
       // Update current price

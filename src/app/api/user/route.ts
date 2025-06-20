@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
+import { BalanceCache } from '@/lib/balanceCache'
 
 export async function GET() {
   try {
@@ -11,22 +12,30 @@ export async function GET() {
     }
 
     const user = await prisma.user.findUnique({
-      where: { id: session.user.id },
-      include: { holding: true }
+      where: { id: session.user.id }
     })
 
     if (!user) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 })
     }
 
+    // Get balances from Redis cache (with database fallback)
+    const { inrBalance, btcBalance, fromCache } = await BalanceCache.getUserBalances(user.id)
+
+    console.log(`💰 Balance lookup for ${user.email}: ${fromCache ? '⚡ Redis cache' : '🐌 Database'}`)
+
     return NextResponse.json({
       id: user.id,
       email: user.email,
       name: user.name,
-      balance: user.balance,
+      balance: inrBalance,
       role: user.role,
       createdAt: user.createdAt,
-      btcAmount: user.holding?.btcAmount || 0
+      btcAmount: btcBalance,
+      _debug: {
+        fromCache,
+        source: fromCache ? 'redis' : 'database'
+      }
     })
   } catch (error) {
     console.error('Error fetching user:', error)

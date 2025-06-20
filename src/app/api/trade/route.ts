@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
+import { BalanceCache } from '@/lib/balanceCache'
 
 export async function POST(request: NextRequest) {
   try {
@@ -17,24 +18,28 @@ export async function POST(request: NextRequest) {
     }
 
     const user = await prisma.user.findUnique({
-      where: { id: session.user.id },
-      include: { holding: true },
+      where: { id: session.user.id }
     })
 
     if (!user) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 })
     }
 
+    // Get current balances from cache (fast!)
+    const { inrBalance: currentInrBalance, btcBalance: currentBtcBalance } = 
+      await BalanceCache.getUserBalances(user.id)
+
     if (type === 'BUY') {
       // Amount is INR (already whole number from frontend)
       const inrTotal = Math.floor(amount) // Ensure whole number
-      const buyRate = btcPrice * 91
+      const usdInrRate = 91 // Buy rate
+      const buyRate = btcPrice * usdInrRate
       const btcAmount = inrTotal / buyRate
       // Round to nearest satoshi (8 decimal places)
       const roundedBtcAmount = Math.round(btcAmount * 100000000) / 100000000
 
       // Use rounded balance for comparison
-      const userBalance = Math.floor(user.balance)
+      const userBalance = Math.floor(currentInrBalance)
       
       if (userBalance < inrTotal) {
         return NextResponse.json({ error: 'Insufficient balance' }, { status: 400 })
@@ -44,48 +49,30 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ error: 'Invalid amount' }, { status: 400 })
       }
 
-      await prisma.trade.create({
+      // Calculate new balances
+      const newInrBalance = currentInrBalance - inrTotal
+      const newBtcBalance = currentBtcBalance + roundedBtcAmount
+
+      // Create transaction in database
+      const transaction = await prisma.transaction.create({
         data: {
           userId: user.id,
           type,
-          amount: roundedBtcAmount,
-          price: buyRate,
-          total: inrTotal,
-          btcPrice
-        }
-      })
-
-      // Update balance with exact INR amount
-      const newBalance = user.balance - inrTotal
-
-      await prisma.user.update({
-        where: { id: user.id },
-        data: { balance: newBalance }
-      })
-
-      await prisma.balanceHistory.create({
-        data: {
-          userId: user.id,
-          type: 'TRADE_BUY',
-          amount: -inrTotal,
-          balance: newBalance,
+          btcAmount: roundedBtcAmount,
+          btcPriceUsd: btcPrice,
+          btcPriceInr: buyRate,
+          usdInrRate: usdInrRate,
+          inrAmount: inrTotal,
+          inrBalanceAfter: newInrBalance,
+          btcBalanceAfter: newBtcBalance,
           reason: `Bought ${roundedBtcAmount.toFixed(8)} BTC`
         }
       })
 
-      if (user.holding) {
-        await prisma.userHolding.update({
-          where: { userId: user.id },
-          data: { btcAmount: user.holding.btcAmount + roundedBtcAmount }
-        })
-      } else {
-        await prisma.userHolding.create({
-          data: {
-            userId: user.id,
-            btcAmount: roundedBtcAmount
-          }
-        })
-      }
+      // Immediately update Redis cache
+      await BalanceCache.setUserBalances(user.id, newInrBalance, newBtcBalance)
+      
+      console.log(`💸 BUY: ${user.email} bought ₿${roundedBtcAmount.toFixed(8)} for ₹${inrTotal} | Cache updated`)
 
       return NextResponse.json({ message: 'Trade successful' })
 
@@ -95,56 +82,48 @@ export async function POST(request: NextRequest) {
       // Round to nearest satoshi
       const roundedBtcAmount = Math.round(btcAmount * 100000000) / 100000000
       
-      const availableBtc = user.holding?.btcAmount || 0
+      const availableBtc = currentBtcBalance
       
       // Use tolerance for floating point comparison (1 satoshi tolerance)
       const tolerance = 0.00000001
       
-      if (!user.holding || (availableBtc < roundedBtcAmount && Math.abs(availableBtc - roundedBtcAmount) > tolerance)) {
+      if (availableBtc < roundedBtcAmount && Math.abs(availableBtc - roundedBtcAmount) > tolerance) {
         return NextResponse.json({ error: 'Insufficient Bitcoin' }, { status: 400 })
       }
 
       // If the difference is within tolerance, use the available amount
       const finalBtcAmount = Math.abs(availableBtc - roundedBtcAmount) <= tolerance ? availableBtc : roundedBtcAmount
 
-      const sellRate = btcPrice * 88
+      const usdInrRate = 88 // Sell rate
+      const sellRate = btcPrice * usdInrRate
       const inrTotal = finalBtcAmount * sellRate
       // Round up to next whole INR (user gets rounded up amount)
       const roundedInrTotal = Math.ceil(inrTotal)
 
-      await prisma.trade.create({
+      // Calculate new balances
+      const newInrBalance = currentInrBalance + roundedInrTotal
+      const newBtcBalance = currentBtcBalance - finalBtcAmount
+
+      // Create transaction in database
+      const transaction = await prisma.transaction.create({
         data: {
           userId: user.id,
           type,
-          amount: finalBtcAmount,
-          price: sellRate,
-          total: roundedInrTotal,
-          btcPrice
-        }
-      })
-
-      // Add rounded up INR amount to balance
-      const newBalance = user.balance + roundedInrTotal
-
-      await prisma.user.update({
-        where: { id: user.id },
-        data: { balance: newBalance }
-      })
-
-      await prisma.balanceHistory.create({
-        data: {
-          userId: user.id,
-          type: 'TRADE_SELL',
-          amount: roundedInrTotal,
-          balance: newBalance,
+          btcAmount: finalBtcAmount,
+          btcPriceUsd: btcPrice,
+          btcPriceInr: sellRate,
+          usdInrRate: usdInrRate,
+          inrAmount: roundedInrTotal,
+          inrBalanceAfter: newInrBalance,
+          btcBalanceAfter: newBtcBalance,
           reason: `Sold ${finalBtcAmount.toFixed(8)} BTC`
         }
       })
 
-      await prisma.userHolding.update({
-        where: { userId: user.id },
-        data: { btcAmount: availableBtc - finalBtcAmount }
-      })
+      // Immediately update Redis cache
+      await BalanceCache.setUserBalances(user.id, newInrBalance, newBtcBalance)
+      
+      console.log(`💰 SELL: ${user.email} sold ₿${finalBtcAmount.toFixed(8)} for ₹${roundedInrTotal} | Cache updated`)
 
       return NextResponse.json({ message: 'Trade successful' })
 
@@ -164,12 +143,15 @@ export async function GET() {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const trades = await prisma.trade.findMany({
-      where: { userId: session.user.id },
+    const transactions = await prisma.transaction.findMany({
+      where: { 
+        userId: session.user.id,
+        type: { in: ['BUY', 'SELL'] }
+      },
       orderBy: { createdAt: 'desc' },
     })
 
-    return NextResponse.json(trades)
+    return NextResponse.json(transactions)
   } catch (error) {
     console.error('Error fetching trades:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })

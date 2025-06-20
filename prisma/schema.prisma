@@ -16,53 +16,36 @@ model User {
   name      String
   password  String
   role      Role     @default(USER)
-  balance   Float    @default(0)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   
-  trades    Trade[]
-  balanceHistory BalanceHistory[]
-  holding   UserHolding?
+  transactions Transaction[]
 }
 
-model Trade {
-  id        String    @id @default(cuid())
-  userId    String
-  type      TradeType
-  amount    Float     // Amount in BTC
-  price     Float     // Price in INR per BTC
-  total     Float     // Total in INR
-  btcPrice  Float     // Original BTC/USD price
-  createdAt DateTime  @default(now())
+model Transaction {
+  id               String          @id @default(cuid())
+  userId           String
+  type             TransactionType
+  btcAmount        Float?          // Amount in BTC (null for pure INR deposits/withdrawals)
+  btcPriceUsd      Float?          // BTC/USD price at time (null for deposits/withdrawals)
+  btcPriceInr      Float?          // BTC/INR price at time (null for deposits/withdrawals)
+  usdInrRate       Float?          // The specific USD/INR rate used (91 for BUY, 88 for SELL)
+  inrAmount        Float           // INR amount (always present)
   
-  user      User      @relation(fields: [userId], references: [id])
-}
-
-model BalanceHistory {
-  id        String      @id @default(cuid())
-  userId    String
-  type      BalanceType
-  amount    Float
-  balance   Float       // Balance after this transaction
-  reason    String?
-  createdAt DateTime    @default(now())
+  // Balances after this transaction
+  inrBalanceAfter  Float           // INR balance after this transaction
+  btcBalanceAfter  Float           // BTC balance after this transaction
   
-  user      User        @relation(fields: [userId], references: [id])
+  reason           String?         // For admin actions, notes
+  createdAt        DateTime        @default(now())
+  
+  user             User            @relation(fields: [userId], references: [id])
 }
 
 model BtcPrice {
   id        String   @id @default(cuid())
-  price     Float    // BTC/USD price
+  priceUsd  Float    // BTC/USD price
   createdAt DateTime @default(now())
-}
-
-model UserHolding {
-  id        String   @id @default(cuid())
-  userId    String   @unique
-  btcAmount Float    @default(0)
-  updatedAt DateTime @updatedAt
-  
-  user      User     @relation(fields: [userId], references: [id])
 }
 
 enum Role {
@@ -70,14 +53,11 @@ enum Role {
   ADMIN
 }
 
-enum TradeType {
+enum TransactionType {
   BUY
   SELL
-}
-
-enum BalanceType {
-  CREDIT
-  DEBIT
-  TRADE_BUY
-  TRADE_SELL
+  DEPOSIT
+  WITHDRAWAL
+  ADMIN_CREDIT
+  ADMIN_DEBIT
 }

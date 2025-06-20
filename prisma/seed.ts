@@ -14,8 +14,19 @@ async function main() {
       email: 'admin@bittrade.com',
       name: 'Admin User',
       password: hashedPassword,
-      role: 'ADMIN',
-      balance: 0
+      role: 'ADMIN'
+    }
+  })
+
+  // Create admin initial deposit transaction
+  await prisma.transaction.create({
+    data: {
+      userId: admin.id,
+      type: 'ADMIN_CREDIT',
+      inrAmount: 0,
+      inrBalanceAfter: 0,
+      btcBalanceAfter: 0,
+      reason: 'Initial admin account setup'
     }
   })
 
@@ -29,12 +40,23 @@ async function main() {
       email: 'user@bittrade.com',
       name: 'Demo User',
       password: userPassword,
-      role: 'USER',
-      balance: 100000
+      role: 'USER'
     }
   })
 
-  console.log('Seeded users:', { admin, user })
+  // Create user initial deposit transaction
+  await prisma.transaction.create({
+    data: {
+      userId: user.id,
+      type: 'DEPOSIT',
+      inrAmount: 100000,
+      inrBalanceAfter: 100000,
+      btcBalanceAfter: 0,
+      reason: 'Initial demo balance'
+    }
+  })
+
+  console.log('Seeded users and initial transactions:', { admin, user })
 }
 
 main()
