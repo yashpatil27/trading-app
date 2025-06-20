@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
+import { satoshiToBtc, formatBtc, formatInr } from '@/lib/currencyUtils'
 
 export async function GET() {
   try {
@@ -10,36 +11,85 @@ export async function GET() {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    // Get all transactions
+    // Get all transactions with both float and integer fields
     const transactions = await prisma.transaction.findMany({
       where: { userId: session.user.id },
-      orderBy: { createdAt: 'desc' }
+      orderBy: { createdAt: 'desc' },
+      select: {
+        id: true,
+        type: true,
+        createdAt: true,
+        reason: true,
+        // Integer fields (preferred)
+        btcAmountSatoshi: true,
+        inrAmountInt: true,
+        inrBalanceAfterInt: true,
+        btcBalanceAfterSat: true,
+        btcPriceUsdInt: true,
+        btcPriceInrInt: true,
+        // Float fields (fallback)
+        btcAmount: true,
+        inrAmount: true,
+        inrBalanceAfter: true,
+        btcBalanceAfter: true,
+        btcPriceUsd: true,
+        btcPriceInr: true
+      }
     })
 
-    // Transform into unified format for UI compatibility
+    // Transform to use integer fields primarily with proper formatting
     const allTransactions = transactions.map(transaction => {
       const isTradeTransaction = ['BUY', 'SELL'].includes(transaction.type)
       const isDepositWithdrawal = ['DEPOSIT', 'WITHDRAWAL', 'ADMIN_CREDIT', 'ADMIN_DEBIT'].includes(transaction.type)
 
+      // Prefer integer fields when available
+      const usingIntegers = !!(transaction.inrAmountInt !== null && 
+                             (transaction.btcAmountSatoshi !== null || !isTradeTransaction))
+
+      let btcAmount = 0
+      let inrAmount = 0
+      let btcPrice = 0
+      let balance = 0
+
+      if (usingIntegers) {
+        // Use integer fields with proper conversion
+        btcAmount = transaction.btcAmountSatoshi ? satoshiToBtc(transaction.btcAmountSatoshi) : 0
+        inrAmount = transaction.inrAmountInt || 0
+        btcPrice = transaction.btcPriceUsdInt || 0
+        balance = transaction.inrBalanceAfterInt || 0
+      } else {
+        // Fallback to float fields
+        btcAmount = transaction.btcAmount || 0
+        inrAmount = transaction.inrAmount || 0
+        btcPrice = transaction.btcPriceUsd || 0
+        balance = transaction.inrBalanceAfter || 0
+      }
+
       // Calculate the signed amount for deposits/withdrawals
-      let signedAmount = transaction.inrAmount
+      let signedAmount = inrAmount
       if (transaction.type === 'WITHDRAWAL' || transaction.type === 'ADMIN_DEBIT') {
-        signedAmount = -Math.abs(transaction.inrAmount) // Make withdrawal amounts negative
+        signedAmount = -Math.abs(inrAmount)
       } else if (transaction.type === 'DEPOSIT' || transaction.type === 'ADMIN_CREDIT') {
-        signedAmount = Math.abs(transaction.inrAmount) // Make deposit amounts positive
+        signedAmount = Math.abs(inrAmount)
       }
 
       return {
         id: transaction.id,
         type: transaction.type as 'BUY' | 'SELL' | 'DEPOSIT' | 'WITHDRAWAL' | 'ADMIN_CREDIT' | 'ADMIN_DEBIT',
         category: isTradeTransaction ? 'TRADE' as const : 'BALANCE' as const,
-        amount: transaction.btcAmount || 0,
-        price: transaction.btcPriceInr,
-        total: signedAmount, // Use signed amount instead of Math.abs
-        btcPrice: transaction.btcPriceUsd,
-        reason: transaction.reason || `${transaction.type} ${transaction.btcAmount ? transaction.btcAmount.toFixed(8) + ' BTC' : ''}`,
-        balance: transaction.inrBalanceAfter,
-        createdAt: transaction.createdAt
+        amount: btcAmount,
+        price: transaction.btcPriceInrInt || transaction.btcPriceInr || 0,
+        total: signedAmount,
+        btcPrice: btcPrice,
+        reason: transaction.reason || `${transaction.type} ${btcAmount ? formatBtc(BigInt(Math.round(btcAmount * 100000000))) : ''}`,
+        balance: balance,
+        createdAt: transaction.createdAt,
+        
+        // Debug info
+        _meta: {
+          usingIntegers,
+          precision: usingIntegers ? 'integer' : 'float'
+        }
       }
     })
 

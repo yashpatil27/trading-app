@@ -1,0 +1,73 @@
+// Phase 3 Final Schema - Integer fields are primary, float fields removed
+// This is the target schema after Phase 3 completion
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String
+  password  String
+  role      Role     @default(USER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  transactions Transaction[]
+}
+
+model Transaction {
+  id                 String          @id @default(cuid())
+  userId             String
+  type               TransactionType
+  
+  // === PRIMARY INTEGER FIELDS (required) ===
+  btcAmountSatoshi   BigInt?         // Amount in satoshis (1 BTC = 100,000,000 satoshis)
+  btcPriceUsdInt     Int?            // BTC/USD price in whole dollars
+  btcPriceInrInt     Int?            // BTC/INR price in whole rupees 
+  usdInrRateInt      Int?            // USD/INR rate * 100 (e.g., 91.50 → 9150)
+  inrAmountInt       Int             // INR amount in whole rupees (NOT NULL)
+  inrBalanceAfterInt Int             // INR balance after transaction (NOT NULL)
+  btcBalanceAfterSat BigInt          // BTC balance in satoshis (NOT NULL)
+  
+  // === DEPRECATED FLOAT FIELDS (to be removed) ===
+  // btcAmount        Float?          // DEPRECATED - use btcAmountSatoshi
+  // btcPriceUsd      Float?          // DEPRECATED - use btcPriceUsdInt
+  // btcPriceInr      Float?          // DEPRECATED - use btcPriceInrInt
+  // usdInrRate       Float?          // DEPRECATED - use usdInrRateInt
+  // inrAmount        Float           // DEPRECATED - use inrAmountInt
+  // inrBalanceAfter  Float           // DEPRECATED - use inrBalanceAfterInt
+  // btcBalanceAfter  Float           // DEPRECATED - use btcBalanceAfterSat
+  
+  reason           String?         // For admin actions, notes
+  createdAt        DateTime        @default(now())
+  
+  user             User            @relation(fields: [userId], references: [id])
+}
+
+model BtcPrice {
+  id           String   @id @default(cuid())
+  priceUsdInt  Int      // BTC/USD price in whole dollars (primary)
+  // priceUsd  Float    // DEPRECATED - use priceUsdInt
+  createdAt    DateTime @default(now())
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum TransactionType {
+  BUY
+  SELL
+  DEPOSIT
+  WITHDRAWAL
+  ADMIN_CREDIT
+  ADMIN_DEBIT
+}
