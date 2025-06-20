@@ -15,6 +15,7 @@ model User {
   email     String   @unique
   name      String
   password  String
+  tradingPin String  @default("1234")  // 4-digit PIN for trade confirmation
   role      Role     @default(USER)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -23,9 +24,9 @@ model User {
 }
 
 model Transaction {
-  id               String          @id @default(cuid())
-  userId           String
-  type             TransactionType
+  id                 String          @id @default(cuid())
+  userId             String
+  type               TransactionType
   
   // === EXISTING FLOAT FIELDS (keep for compatibility) ===
   btcAmount        Float?          // Amount in BTC (null for pure INR deposits/withdrawals)

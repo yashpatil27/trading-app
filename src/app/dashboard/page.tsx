@@ -3,7 +3,7 @@
 import { useSession } from 'next-auth/react'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { TrendingUp, TrendingDown, History, LogOut, Home, Plus, Minus, ArrowDownLeft, ArrowUpRight, ArrowUp, ArrowDown, Wallet } from 'lucide-react'
+import { History, LogOut, Home, Plus, Minus, ArrowDownLeft, ArrowUpRight, ArrowUp, ArrowDown, Wallet } from 'lucide-react'
 import { BitcoinIcon } from '@bitcoin-design/bitcoin-icons-react/filled'
 import { signOut } from 'next-auth/react'
 import { useBitcoinPrice } from '@/hooks/useBitcoinPrice'
@@ -11,6 +11,7 @@ import BuyModal from '@/components/BuyModal'
 import SellModal from '@/components/SellModal'
 import TradeDetailModal from '@/components/TradeDetailModal'
 import DepositDetailModal from '@/components/DepositDetailModal'
+import PinConfirmationModal from '@/components/PinConfirmationModal'
 
 // Use standard Lucide icons instead of bitcoin design icons
 
@@ -49,6 +50,10 @@ export default function Dashboard() {
   const [selectedTrade, setSelectedTrade] = useState<any>(null)
   const [selectedDeposit, setSelectedDeposit] = useState<any>(null)
 
+  // PIN modal states
+  const [showPinModal, setShowPinModal] = useState(false)
+  const [pendingTrade, setPendingTrade] = useState<{ type: 'BUY' | 'SELL', amount: number, btcAmount: number } | null>(null)
+
   useEffect(() => {
     if (status === 'unauthenticated') {
       router.push('/login')
@@ -82,8 +87,8 @@ export default function Dashboard() {
     }
   }
 
-  const handleBuy = async (inrAmount: number, btcAmount: number) => {
-    if (!btcPrice) return
+  const handleTrade = async () => {
+    if (!pendingTrade || !btcPrice) return
 
     setLoading(true)
     try {
@@ -91,8 +96,8 @@ export default function Dashboard() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          type: 'BUY',
-          amount: inrAmount,
+          type: pendingTrade.type,
+          amount: pendingTrade.amount,
           btcPrice: btcPrice.btcUSD
         })
       })
@@ -101,50 +106,59 @@ export default function Dashboard() {
       
       if (response.ok) {
         setShowBuyModal(false)
+        setShowSellModal(false)
+        setShowPinModal(false)
+        setPendingTrade(null)
         fetchUserData()
         fetchTransactions()
       } else {
         alert(result.error)
       }
     } catch (error) {
-      console.error('Buy error:', error)
+      console.error('Trade error:', error)
       alert('Trade failed')
     } finally {
       setLoading(false)
     }
   }
 
-  const handleSell = async (btcAmount: number, inrAmount: number) => {
-    if (!btcPrice) return
-
-    setLoading(true)
+  const handlePinConfirm = async (pin: string) => {
     try {
-      const response = await fetch('/api/trade', {
+      const response = await fetch('/api/verify-pin', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          type: 'SELL',
-          amount: btcAmount,
-          btcPrice: btcPrice.btcUSD
-        })
+        body: JSON.stringify({ pin })
       })
 
       const result = await response.json()
-      
-      if (response.ok) {
-        setShowSellModal(false)
-        fetchUserData()
-        fetchTransactions()
+
+      if (result.valid) {
+        await handleTrade()
+        return true
       } else {
-        alert(result.error)
+        return false
       }
     } catch (error) {
-      console.error('Sell error:', error)
-      alert('Trade failed')
-    } finally {
-      setLoading(false)
+      console.error('PIN confirmation error:', error)
+      return false
     }
   }
+
+  const initiateBuy = (inrAmount: number, btcAmount: number) => {
+    setPendingTrade({ type: 'BUY', amount: inrAmount, btcAmount })
+    setShowBuyModal(false)
+    setShowPinModal(true)
+  }
+
+  const initiateSell = (btcAmount: number, inrAmount: number) => {
+    setPendingTrade({ type: 'SELL', amount: btcAmount, btcAmount })
+    setShowSellModal(false)
+    setShowPinModal(true)
+  }
+
+  // Legacy handleBuy function removed - now using PIN confirmation flow
+
+  // Legacy handleSell function removed - now using PIN confirmation flow
 
   // Format cash balance with Indian comma system (lakhs, crores)
   const formatCash = (amount: number) => {
@@ -490,7 +504,7 @@ export default function Dashboard() {
           <BuyModal
             isOpen={showBuyModal}
             onClose={() => setShowBuyModal(false)}
-            onBuy={handleBuy}
+            onBuy={initiateBuy}
             availableBalance={user?.balance || 0}
             btcPrice={btcPrice.btcUSD}
             buyRate={btcPrice.buyRate}
@@ -500,7 +514,7 @@ export default function Dashboard() {
           <SellModal
             isOpen={showSellModal}
             onClose={() => setShowSellModal(false)}
-            onSell={handleSell}
+            onSell={initiateSell}
             availableBtc={user?.btcAmount || 0}
             btcPrice={btcPrice.btcUSD}
             sellRate={btcPrice.sellRate}
@@ -508,6 +522,18 @@ export default function Dashboard() {
           />
         </>
       )}
+
+      <PinConfirmationModal
+        isOpen={showPinModal}
+        onClose={() => {
+          setShowPinModal(false)
+          setPendingTrade(null)
+        }}
+        onConfirm={handlePinConfirm}
+        title="Confirm Your Trade"
+        description="Please enter your 4-digit PIN to proceed with the trade."
+        isLoading={loading}
+      />
 
       <TradeDetailModal
         isOpen={!!selectedTrade}

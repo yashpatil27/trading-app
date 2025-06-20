@@ -157,7 +157,7 @@ export default function BuyModal({
 
           {roundedBalance === 0 && (
             <div className="text-yellow-400 text-sm text-center">
-              You don't have any cash to buy Bitcoin
+              You don&apos;t have any cash to buy Bitcoin
             </div>
           )}
 

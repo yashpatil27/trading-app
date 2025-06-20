@@ -3,7 +3,8 @@
 import { useSession } from 'next-auth/react'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { TrendingUp, TrendingDown, History, LogOut, Home, Plus, Minus, ArrowDownLeft, ArrowUpRight } from 'lucide-react'
+import { TrendingUp, TrendingDown, History, LogOut, Home, Plus, Minus, ArrowDownLeft, ArrowUpRight, ArrowUp, ArrowDown, Wallet } from 'lucide-react'
+import { BitcoinIcon } from '@bitcoin-design/bitcoin-icons-react/filled'
 import { signOut } from 'next-auth/react'
 import { useBitcoinPrice } from '@/hooks/useBitcoinPrice'
 import BuyModal from '@/components/BuyModal'
@@ -11,14 +12,7 @@ import SellModal from '@/components/SellModal'
 import TradeDetailModal from '@/components/TradeDetailModal'
 import DepositDetailModal from '@/components/DepositDetailModal'
 
-// Bitcoin Icons
-import { 
-  BitcoinCircle, 
-  Wallet, 
-  ArrowUp, 
-  ArrowDown,
-  Bitcoin
-} from '@bitcoin-design/bitcoin-icons-react'
+// Use standard Lucide icons instead of bitcoin design icons
 
 interface Transaction {
   id: string
@@ -160,8 +154,13 @@ export default function Dashboard() {
 
   // Format BTC amount (remove trailing zeros, show 0 for zero amounts)
   const formatBtc = (amount: number) => {
-    if (amount === 0) return '0'
-    return amount.toFixed(8).replace(/\.?0+$/, '')
+    if (amount === 0) return '₿0'
+    return `₿${amount.toFixed(8).replace(/\.?0+$/, '')}`
+  }
+
+  // Format USD price with thousand separators
+  const formatUSD = (amount: number) => {
+    return amount.toLocaleString('en-US', { maximumFractionDigits: 0 })
   }
 
   const getTransactionIcon = (transaction: Transaction) => {
@@ -172,7 +171,7 @@ export default function Dashboard() {
         <ArrowDown className="text-red-500" width={20} height={20} />
       )
     } else {
-      return transaction.type === 'CREDIT' ? (
+      return transaction.type === 'DEPOSIT' ? (
         <ArrowDownLeft className="text-blue-500" size={20} />
       ) : (
         <ArrowUpRight className="text-yellow-500" size={20} />
@@ -184,7 +183,7 @@ export default function Dashboard() {
     if (transaction.category === 'TRADE') {
       return transaction.type === 'BUY' ? 'text-green-400' : 'text-red-400'
     } else {
-      return transaction.type === 'CREDIT' ? 'text-blue-400' : 'text-yellow-400'
+      return transaction.type === 'DEPOSIT' ? 'text-blue-400' : 'text-yellow-400'
     }
   }
 
@@ -276,11 +275,11 @@ export default function Dashboard() {
               {/* Bitcoin Holdings */}
               <div className="bg-gray-900 rounded-2xl p-4">
                 <div className="flex items-center gap-2 mb-2">
-                  <BitcoinCircle className="text-orange-500" width={20} height={20} />
+                  <BitcoinIcon style={{height: "20px", width: "20px", color: "#F7931A"}} />
                   <span className="text-white font-bold">Bitcoin</span>
                 </div>
                 <div className="text-xl font-bold">{formatBtc(user?.btcAmount || 0)}</div>
-                <div className="text-xs text-gray-500">BTC</div>
+                
               </div>
             </div>
 
@@ -292,7 +291,7 @@ export default function Dashboard() {
                     <span className="text-white font-bold text-lg">Bitcoin Price</span>
                   </div>
                   <div className="text-2xl font-bold text-orange-500">
-                    ${btcPrice.btcUSD.toFixed(0)}
+                    ${formatUSD(btcPrice.btcUSD)}
                   </div>
                   {btcPrice.note && (
                     <div className="text-xs text-yellow-400 mt-1">{btcPrice.note}</div>
@@ -343,7 +342,7 @@ export default function Dashboard() {
               <div className="space-y-3">
                 {recentTransactions.length === 0 ? (
                   <div className="text-gray-400 text-center py-8">
-                    <BitcoinCircle className="text-gray-600 mx-auto mb-2" width={48} height={48} />
+                    <BitcoinIcon style={{height: "48px", width: "48px", color: "#6B7280"}} />
                     <div>No activity yet</div>
                     <div className="text-sm">Start trading to see your history</div>
                   </div>
@@ -360,11 +359,11 @@ export default function Dashboard() {
                           <div className="flex items-center gap-2">
                             <span className={`font-semibold ${getTransactionColor(transaction)}`}>
                               {transaction.category === 'TRADE' ? transaction.type : 
-                               transaction.type === 'CREDIT' ? 'DEPOSIT' : 'WITHDRAWAL'}
+                               transaction.type}
                             </span>
                             {transaction.category === 'TRADE' && (
                               <span className="text-sm text-gray-400">
-                                {formatBtc(transaction.amount)} BTC
+                                {formatBtc(transaction.amount)}
                               </span>
                             )}
                           </div>
@@ -378,7 +377,7 @@ export default function Dashboard() {
                       </div>
                       <div className="text-right">
                         <div className="font-semibold">
-                          {transaction.category === 'BALANCE' && transaction.type === 'DEBIT' ? '-' : ''}
+                          {transaction.category === 'BALANCE' && transaction.type === 'WITHDRAWAL' ? '-' : ''}
                           ₹{formatCash(transaction.total)}
                         </div>
                         {transaction.category === 'TRADE' && transaction.price && (
@@ -403,7 +402,7 @@ export default function Dashboard() {
             <div className="space-y-3">
               {transactions.length === 0 ? (
                 <div className="text-gray-400 text-center py-12">
-                  <BitcoinCircle className="text-gray-600 mx-auto mb-4" width={64} height={64} />
+                  <BitcoinIcon style={{height: "64px", width: "64px", color: "#6B7280"}} />
                   <div className="text-lg mb-2">No transactions yet</div>
                   <div className="text-sm">Your transaction history will appear here</div>
                   <button
@@ -426,11 +425,11 @@ export default function Dashboard() {
                         <div className="flex items-center gap-2">
                           <span className={`font-semibold ${getTransactionColor(transaction)}`}>
                             {transaction.category === 'TRADE' ? transaction.type : 
-                             transaction.type === 'CREDIT' ? 'DEPOSIT' : 'WITHDRAWAL'}
+                             transaction.type}
                           </span>
                           {transaction.category === 'TRADE' && (
                             <span className="text-sm text-gray-400">
-                              {formatBtc(transaction.amount)} BTC
+                              {formatBtc(transaction.amount)}
                             </span>
                           )}
                         </div>
@@ -444,7 +443,7 @@ export default function Dashboard() {
                     </div>
                     <div className="text-right">
                       <div className="font-semibold">
-                        {transaction.category === 'BALANCE' && transaction.type === 'DEBIT' ? '-' : ''}
+                        {transaction.category === 'BALANCE' && transaction.type === 'WITHDRAWAL' ? '-' : ''}
                         ₹{formatCash(transaction.total)}
                       </div>
                       {transaction.category === 'TRADE' && transaction.price && (

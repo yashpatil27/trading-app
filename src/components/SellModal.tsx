@@ -169,7 +169,7 @@ export default function SellModal({
 
           {availableBtc === 0 && (
             <div className="text-yellow-400 text-sm text-center">
-              You don't have any Bitcoin to sell
+              You don&apos;t have any Bitcoin to sell
             </div>
           )}
 
