@@ -21,6 +21,11 @@ model User {
   updatedAt DateTime @updatedAt
   
   transactions Transaction[]
+  
+  // Performance indexes
+  @@index([email])
+  @@index([role])
+  @@index([createdAt])
 }
 
 model Transaction {
@@ -50,6 +55,13 @@ model Transaction {
   createdAt        DateTime        @default(now())
   
   user             User            @relation(fields: [userId], references: [id])
+  
+  // Performance indexes for common queries
+  @@index([userId, createdAt])     // Most important: user transactions ordered by date
+  @@index([userId, type])          // Filter by user and transaction type
+  @@index([type, createdAt])       // Admin queries by type and date
+  @@index([createdAt])             // General date-based queries
+  @@index([userId])                // User-specific queries (fallback)
 }
 
 model BtcPrice {
@@ -57,6 +69,9 @@ model BtcPrice {
   priceUsd  Float    // BTC/USD price (keep existing)
   priceUsdInt Int?   // BTC/USD price in whole dollars (new)
   createdAt DateTime @default(now())
+  
+  // Performance index for price history queries
+  @@index([createdAt])
 }
 
 enum Role {
