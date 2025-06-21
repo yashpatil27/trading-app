@@ -3,7 +3,7 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 import { BalanceCache } from '@/lib/balanceCache'
-import { createDualModeTransactionData, satoshiToBtc, btcToSatoshi } from '@/lib/currencyUtils'
+import { createCompleteTransactionData, satoshiToBtc, btcToSatoshi } from '@/lib/currencyUtils'
 
 export async function POST(request: NextRequest) {
   try {
@@ -62,7 +62,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Create transaction record with dual-mode support
-    const transactionData = createDualModeTransactionData({
+    const transactionData = createCompleteTransactionData({
       userId,
       type: transactionType as any,
       inrAmount: currency === 'INR' ? transactionAmount : 0,
@@ -84,7 +84,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ 
       success: true, 
-      transaction,
+      // transaction, // Excluded due to BigInt serialization issues
       newBalances: {
         inr: newInrBalance,
         btc: newBtcBalance

@@ -136,3 +136,45 @@ export const getBalanceFromTransaction = (transaction: any): {
     usingIntegers: false
   }
 }
+
+/**
+ * Enhanced dual-mode transaction helper with all required fields
+ * Populates both float and integer fields during transition period
+ */
+export const createCompleteTransactionData = (data: {
+  userId: string
+  type: string
+  btcAmount?: number
+  btcPriceUsd?: number
+  btcPriceInr?: number
+  usdInrRate?: number
+  inrAmount: number
+  inrBalanceAfter: number
+  btcBalanceAfter: number
+  reason?: string
+}) => {
+  return {
+    // Required fields
+    userId: data.userId,
+    type: data.type,
+    reason: data.reason || null,
+    
+    // Original float fields (for compatibility)
+    btcAmount: data.btcAmount || null,
+    btcPriceUsd: data.btcPriceUsd || null,
+    btcPriceInr: data.btcPriceInr || null,
+    usdInrRate: data.usdInrRate || null,
+    inrAmount: data.inrAmount,
+    inrBalanceAfter: data.inrBalanceAfter,
+    btcBalanceAfter: data.btcBalanceAfter,
+    
+    // New integer fields (for precision)
+    btcAmountSatoshi: data.btcAmount ? btcToSatoshi(data.btcAmount) : null,
+    btcPriceUsdInt: data.btcPriceUsd ? usdToInt(data.btcPriceUsd) : null,
+    btcPriceInrInt: data.btcPriceInr ? inrToInt(data.btcPriceInr) : null,
+    usdInrRateInt: data.usdInrRate ? usdInrRateToInt(data.usdInrRate) : null,
+    inrAmountInt: inrToInt(data.inrAmount),
+    inrBalanceAfterInt: inrToInt(data.inrBalanceAfter),
+    btcBalanceAfterSat: btcToSatoshi(data.btcBalanceAfter)
+  }
+}
