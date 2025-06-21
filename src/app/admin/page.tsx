@@ -142,13 +142,16 @@ export default function AdminDashboard() {
     }
   }
 
-  const formatCash = (amount: number) => {
+  const formatCash = (amount: number | undefined) => {
+    if (amount === undefined || amount === null || isNaN(amount)) return "0"
     return Math.floor(amount).toLocaleString('en-IN')
   }
 
-  const formatBitcoin = (amount: number) => {
+  const formatBitcoin = (amount: number | undefined) => {
+    if (amount === undefined || amount === null || isNaN(amount)) return "0.00000000"
     return amount.toFixed(8)
   }
+
 
   if (status === 'loading') {
     return (
@@ -210,7 +213,7 @@ export default function AdminDashboard() {
               <span className="text-gray-400 text-sm">Total Cash</span>
             </div>
             <div className="text-lg sm:text-2xl font-bold">
-              ₹{formatCash(users.reduce((sum, user) => sum + user.balance, 0))}
+              ₹{formatCash(users.reduce((sum, user) => sum + (user.balance || 0), 0))}
             </div>
           </div>
 
@@ -282,7 +285,7 @@ export default function AdminDashboard() {
                           {user.role}
                         </span>
                       </td>
-                      <td className="p-4 font-medium">₹{formatCash(user.balance)}</td>
+                      <td className="p-4 font-medium">₹{formatCash(user.balance || 0)}</td>
                       <td className="p-4 font-medium">₿{formatBitcoin(user.btcAmount || 0)}</td>
                       <td className="p-4">{user._count.trades}</td>
                       <td className="p-4 font-mono">{user.tradingPin}</td>
@@ -340,7 +343,7 @@ export default function AdminDashboard() {
                       <Wallet size={14} className="text-green-500" />
                       <span className="text-xs text-gray-400">Cash Balance</span>
                     </div>
-                    <div className="font-semibold text-white">₹{formatCash(user.balance)}</div>
+                    <div className="font-semibold text-white">₹{formatCash(user.balance || 0)}</div>
                   </div>
                   <div className="bg-gray-900 rounded-lg p-3">
                     <div className="flex items-center gap-2 mb-1">
@@ -409,7 +412,7 @@ export default function AdminDashboard() {
                 <div>
                   <div className="font-semibold">{showBalanceModal.name}</div>
                   <div className="text-sm text-gray-400">
-                    Cash: ₹{formatCash(showBalanceModal.balance)} | 
+                    Cash: ₹{formatCash(showBalanceModal.balance || 0)} | 
                     Bitcoin: ₿{formatBitcoin(showBalanceModal.btcAmount || 0)}
                   </div>
                 </div>
