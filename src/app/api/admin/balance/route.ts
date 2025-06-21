@@ -3,7 +3,7 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 import { BalanceCache } from '@/lib/balanceCache'
-import { createDualModeTransactionData } from '@/lib/currencyUtils'
+import { createDualModeTransactionData, satoshiToBtc, btcToSatoshi } from '@/lib/currencyUtils'
 
 export async function POST(request: NextRequest) {
   try {
@@ -12,9 +12,9 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const { userId, amount, reason, type } = await request.json()
+    const { userId, amount, reason, type, currency = 'INR' } = await request.json()
     
-    if (!userId || amount === undefined || !type) {
+    if (!userId || amount === undefined || !type || !currency) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
     }
 
@@ -30,50 +30,75 @@ export async function POST(request: NextRequest) {
     const { inrBalance: currentInrBalance, btcBalance: currentBtcBalance } = 
       await BalanceCache.getUserBalances(userId)
 
-    const adjustedAmount = type === 'CREDIT' ? Math.abs(amount) : -Math.abs(amount)
-    const newInrBalance = currentInrBalance + adjustedAmount
+    let newInrBalance = currentInrBalance
+    let newBtcBalance = currentBtcBalance
+    let transactionType: string
+    let transactionAmount: number
 
-    if (newInrBalance < 0) {
-      return NextResponse.json({ error: 'Insufficient balance' }, { status: 400 })
+    if (currency === 'INR') {
+      // INR balance adjustment
+      const adjustmentAmount = type === 'CREDIT' ? amount : -amount
+      newInrBalance = currentInrBalance + adjustmentAmount
+      
+      if (newInrBalance < 0) {
+        return NextResponse.json({ error: 'Insufficient INR balance' }, { status: 400 })
+      }
+      
+      transactionType = type === 'CREDIT' ? 'ADMIN_CREDIT' : 'ADMIN_DEBIT'
+      transactionAmount = Math.abs(amount)
+    } else if (currency === 'BTC') {
+      // Bitcoin balance adjustment
+      const adjustmentAmount = type === 'CREDIT' ? amount : -amount
+      newBtcBalance = currentBtcBalance + adjustmentAmount
+      
+      if (newBtcBalance < 0) {
+        return NextResponse.json({ error: 'Insufficient Bitcoin balance' }, { status: 400 })
+      }
+      
+      transactionType = type === 'CREDIT' ? 'ADMIN_CREDIT' : 'ADMIN_DEBIT'
+      transactionAmount = Math.abs(amount)
+    } else {
+      return NextResponse.json({ error: 'Invalid currency' }, { status: 400 })
     }
 
-    // Determine transaction type based on operation
-    const transactionType = type === 'CREDIT' ? 'DEPOSIT' : 'WITHDRAWAL'
-    const defaultReason = type === 'CREDIT' ? 'Admin deposit' : 'Admin withdrawal'
-
-    // Create transaction record with both float and integer fields
+    // Create transaction record with dual-mode support
     const transactionData = createDualModeTransactionData({
-      inrAmount: Math.abs(adjustedAmount),
+      userId,
+      type: transactionType as any,
+      inrAmount: currency === 'INR' ? transactionAmount : 0,
+      btcAmount: currency === 'BTC' ? transactionAmount : 0,
       inrBalanceAfter: newInrBalance,
-      btcBalanceAfter: currentBtcBalance
+      btcBalanceAfter: newBtcBalance,
+      reason: reason || `Admin ${type.toLowerCase()} - ${currency} adjustment`
     })
 
     const transaction = await prisma.transaction.create({
-      data: {
-        userId,
-        type: transactionType,
-        ...transactionData,
-        reason: reason || defaultReason
-      }
+      data: transactionData
     })
 
-    // Update cache with new balance
-    await BalanceCache.setUserBalances(userId, newInrBalance, currentBtcBalance)
+    // Update cache
+    await BalanceCache.setUserBalances(userId, newInrBalance, newBtcBalance)
 
-    console.log(`💰 Admin ${type}: ${user.email} balance updated to ₹${newInrBalance} (using integer fields)`)
+    // Log the admin action
+    console.log(`💰 Admin ${type}: ${session.user.email} ${type.toLowerCase()}ed ${currency === 'INR' ? '₹' : '₿'}${transactionAmount} ${currency} ${type === 'CREDIT' ? 'to' : 'from'} ${user.email} | Using integer fields`)
 
     return NextResponse.json({ 
-      message: 'Balance updated successfully',
-      newBalance: newInrBalance,
-      transaction: {
-        id: transaction.id,
-        type: transaction.type,
-        amount: Math.abs(adjustedAmount),
-        reason: transaction.reason
-      }
+      success: true, 
+      transaction,
+      newBalances: {
+        inr: newInrBalance,
+        btc: newBtcBalance
+      },
+      currency,
+      amount: transactionAmount,
+      type
     })
+
   } catch (error) {
-    console.error('Error updating balance:', error)
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    console.error('Admin balance adjustment error:', error)
+    return NextResponse.json(
+      { error: 'Failed to adjust balance' },
+      { status: 500 }
+    )
   }
 }
