@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import { Eye, EyeOff, LogIn, UserPlus, User, Mail, Lock, Key } from 'lucide-react'
 import PinInput from '@/components/PinInput'
+import PinConfirmationModal from '@/components/PinConfirmationModal'
 
 export default function LoginPage() {
   const router = useRouter()
@@ -31,6 +32,10 @@ export default function LoginPage() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  
+  // PIN confirmation modal state
+  const [showPinModal, setShowPinModal] = useState(false)
+  const [isCreatingAccount, setIsCreatingAccount] = useState(false)
 
   useEffect(() => {
     if (status === 'authenticated' && session) {
@@ -62,24 +67,34 @@ export default function LoginPage() {
     }
   }
 
-  const handleRegister = async (e: React.FormEvent) => {
+  const handleRegisterSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setLoading(true)
     setError('')
 
     // Basic validation
     if (registerData.password !== registerData.confirmPassword) {
       setError('Passwords do not match')
-      setLoading(false)
       return
     }
 
     if (registerData.tradingPin.length !== 4) {
       setError('Trading PIN must be 4 digits')
-      setLoading(false)
       return
     }
 
+    // Show PIN confirmation modal instead of creating account immediately
+    setShowPinModal(true)
+  }
+
+  const handlePinConfirmation = async (enteredPin: string): Promise<boolean> => {
+    // Check if entered PIN matches the one from registration form
+    if (enteredPin !== registerData.tradingPin) {
+      return false // This will show error in the modal
+    }
+
+    // PIN matches, now create the account
+    setIsCreatingAccount(true)
+    
     try {
       const response = await fetch('/api/auth/register', {
         method: 'POST',
@@ -90,17 +105,27 @@ export default function LoginPage() {
       const data = await response.json()
 
       if (response.ok) {
+        // Success! Close modal and show success message
+        setShowPinModal(false)
         alert(`🎉 Welcome ${registerData.name}! Your account has been created successfully. You can now sign in.`)
+        
+        // Switch to login tab and pre-fill email
         setIsRegister(false)
         setCredentials({ email: registerData.email, password: '' })
         setRegisterData({ email: '', name: '', password: '', confirmPassword: '', tradingPin: '' })
+        
+        return true
       } else {
         setError(data.error || 'Registration failed')
+        setShowPinModal(false)
+        return false
       }
     } catch (err) {
       setError('Network error. Please try again.')
+      setShowPinModal(false)
+      return false
     } finally {
-      setLoading(false)
+      setIsCreatingAccount(false)
     }
   }
 
@@ -221,7 +246,7 @@ export default function LoginPage() {
 
         {/* Registration Form */}
         {isRegister && (
-          <form className="space-y-6" onSubmit={handleRegister}>
+          <form className="space-y-6" onSubmit={handleRegisterSubmit}>
             <div>
               <label className="block text-gray-300 text-sm font-medium mb-2">
                 <Mail className="h-4 w-4 inline mr-1" />
@@ -332,7 +357,7 @@ export default function LoginPage() {
               {loading ? (
                 <>
                   <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
-                  Creating Account...
+                  Processing...
                 </>
               ) : (
                 <>
@@ -351,6 +376,16 @@ export default function LoginPage() {
           </p>
         </div>
       </div>
+
+      {/* PIN Confirmation Modal */}
+      <PinConfirmationModal
+        isOpen={showPinModal}
+        onClose={() => setShowPinModal(false)}
+        onConfirm={handlePinConfirmation}
+        title="Confirm Your Trading PIN"
+        description={`Please re-enter your 4-digit PIN to create your account.\nThis PIN will be used to confirm all your future trades.`}
+        isLoading={isCreatingAccount}
+      />
     </div>
   )
 }
