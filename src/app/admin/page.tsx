@@ -3,7 +3,7 @@
 import { useSession } from 'next-auth/react'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { Users, Plus, Minus, ArrowLeft, User, Wallet, Calendar, TrendingUp, Shield, Key, CreditCard, Phone } from 'lucide-react'
+import { Users, Plus, Minus, ArrowLeft, User, Wallet, Calendar, TrendingUp, Shield, Key, CreditCard, Phone, Trash2 } from 'lucide-react'
 
 interface User {
   id: string
@@ -29,6 +29,7 @@ export default function AdminDashboard() {
   const [balanceReason, setBalanceReason] = useState('')
   const [balanceCurrency, setBalanceCurrency] = useState<'INR' | 'BTC'>('INR')
   const [showPinModal, setShowPinModal] = useState<User | null>(null)
+  const [showDeleteModal, setShowDeleteModal] = useState<User | null>(null)
   const [newPin, setNewPin] = useState('')
   const [newUser, setNewUser] = useState({
     email: '',
@@ -139,6 +140,28 @@ export default function AdminDashboard() {
     } catch (error) {
       console.error('Error resetting PIN:', error)
       alert('Failed to reset PIN')
+    }
+  }
+
+  const deleteUser = async () => {
+    if (!showDeleteModal) return
+
+    try {
+      const response = await fetch(`/api/admin/users?userId=${showDeleteModal.id}`, {
+        method: 'DELETE'
+      })
+
+      if (response.ok) {
+        setShowDeleteModal(null)
+        fetchUsers()
+        alert('User deleted successfully')
+      } else {
+        const error = await response.json()
+        alert(error.error)
+      }
+    } catch (error) {
+      console.error('Error deleting user:', error)
+      alert('Failed to delete user')
     }
   }
 
@@ -303,6 +326,12 @@ export default function AdminDashboard() {
                           >
                             Reset PIN
                           </button>
+                          <button
+                            onClick={() => setShowDeleteModal(user)}
+                            className="bg-red-600 hover:bg-red-700 px-3 py-1 rounded text-sm font-medium transition-colors"
+                          >
+                            Delete
+                          </button>
                         </div>
                       </td>
                     </tr>
@@ -367,7 +396,7 @@ export default function AdminDashboard() {
                 </div>
 
                 {/* Action Buttons */}
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-3 gap-3">
                   <button
                     onClick={() => setShowBalanceModal(user)}
                     className="bg-green-600 hover:bg-green-700 py-3 px-4 rounded-lg flex items-center justify-center gap-2 font-medium transition-colors text-sm"
@@ -381,6 +410,13 @@ export default function AdminDashboard() {
                   >
                     <Key size={16} />
                     Reset PIN
+                  </button>
+                  <button
+                    onClick={() => setShowDeleteModal(user)}
+                    className="bg-red-600 hover:bg-red-700 py-3 px-4 rounded-lg flex items-center justify-center gap-2 font-medium transition-colors text-sm"
+                  >
+                    <Trash2 size={16} />
+                    Delete
                   </button>
                 </div>
               </div>
@@ -556,6 +592,63 @@ export default function AdminDashboard() {
                     setShowPinModal(null)
                     setNewPin('')
                   }}
+                  className="bg-gray-600 hover:bg-gray-500 py-3 rounded-lg font-medium transition-colors"
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Delete User Confirmation Modal */}
+      {showDeleteModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-gray-900 rounded-2xl p-4 sm:p-6 w-full max-w-md border border-gray-700">
+            <h3 className="text-lg sm:text-xl font-semibold mb-4 flex items-center gap-2 text-red-400">
+              <Trash2 size={20} />
+              Delete User
+            </h3>
+            
+            <div className="bg-red-900/20 border border-red-800 rounded-lg p-4 mb-4">
+              <div className="flex items-center gap-3">
+                <User size={20} className="text-red-400" />
+                <div>
+                  <div className="font-semibold text-white">{showDeleteModal.name}</div>
+                  <div className="text-sm text-gray-400">{showDeleteModal.email}</div>
+                  <div className="text-sm text-red-400">
+                    Current balance: ₹{formatCash(showDeleteModal.balance || 0)} | 
+                    ₿{formatBitcoin(showDeleteModal.btcAmount || 0)}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              <div className="text-center">
+                <p className="text-red-400 font-medium mb-2">⚠️ This action cannot be undone!</p>
+                <p className="text-gray-300 text-sm">
+                  This will permanently delete the user and all their transaction history.
+                  {(showDeleteModal.balance > 0 || showDeleteModal.btcAmount > 0) && (
+                    <span className="block text-red-400 mt-2">
+                      User has active balance. Please adjust balance to zero first.
+                    </span>
+                  )}
+                </p>
+              </div>
+              
+              <div className="grid grid-cols-2 gap-3 pt-2">
+                <button
+                  onClick={deleteUser}
+                  disabled={showDeleteModal.balance > 0 || showDeleteModal.btcAmount > 0}
+                  className="bg-red-600 hover:bg-red-700 disabled:bg-gray-600 disabled:cursor-not-allowed py-3 rounded-lg flex items-center justify-center gap-2 font-medium transition-colors"
+                >
+                  <Trash2 size={16} />
+                  Delete User
+                </button>
+                <button
+                  onClick={() => setShowDeleteModal(null)}
                   className="bg-gray-600 hover:bg-gray-500 py-3 rounded-lg font-medium transition-colors"
                 >
                   Cancel

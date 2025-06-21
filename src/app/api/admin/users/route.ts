@@ -105,3 +105,81 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }
+export async function DELETE(request: NextRequest) {
+  try {
+    const session = await getServerSession(authOptions)
+    if (!session?.user || session.user.role !== "ADMIN") {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+    }
+
+    const { searchParams } = new URL(request.url)
+    const userId = searchParams.get("userId")
+
+    if (!userId) {
+      return NextResponse.json({ error: "User ID is required" }, { status: 400 })
+    }
+
+    // Prevent admin from deleting themselves
+    if (userId === session.user.id) {
+      return NextResponse.json({ error: "Cannot delete your own account" }, { status: 400 })
+    }
+
+    // Check if user exists and get their current balances
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      include: {
+        _count: {
+          select: {
+            transactions: true
+          }
+        }
+      }
+    })
+
+    if (!user) {
+      return NextResponse.json({ error: "User not found" }, { status: 404 })
+    }
+
+    // Get current balances from cache/database
+    const balanceData = await BalanceCache.getUserBalances(userId)
+    const inrBalance = balanceData?.inrBalance || 0
+    const btcBalance = balanceData?.btcBalance || 0
+
+    // Check if user has active balance
+    if (inrBalance > 0 || btcBalance > 0) {
+      return NextResponse.json({ 
+        error: `Cannot delete user with active balance. Current balance: ₹${inrBalance.toLocaleString("en-IN")} and ₿${btcBalance.toFixed(8)}. Please adjust balance to zero first.` 
+      }, { status: 400 })
+    }
+
+    // Delete user and related data in a transaction
+    await prisma.$transaction(async (tx) => {
+      // Delete all user transactions
+      await tx.transaction.deleteMany({
+        where: { userId: userId }
+      })
+
+      // Delete the user
+      await tx.user.delete({
+        where: { id: userId }
+      })
+    })
+
+    // Clear user from balance cache
+    await BalanceCache.invalidateUserBalances(userId)
+
+    console.log(`🗑️ Admin deleted user: ${user.email} (${user.name})`)
+
+    return NextResponse.json({ 
+      message: "User deleted successfully",
+      deletedUser: {
+        id: user.id,
+        email: user.email,
+        name: user.name
+      }
+    })
+  } catch (error) {
+    console.error("Error deleting user:", error)
+    return NextResponse.json({ error: "Failed to delete user" }, { status: 500 })
+  }
+}
