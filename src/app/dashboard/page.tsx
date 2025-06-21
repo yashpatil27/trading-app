@@ -161,20 +161,20 @@ export default function Dashboard() {
   // Legacy handleSell function removed - now using PIN confirmation flow
 
   // Format cash balance with Indian comma system (lakhs, crores)
-  const formatCash = (amount: number) => {
-    const rounded = Math.floor(amount)
+  const formatCash = (amount: number | undefined) => {
+    const rounded = Math.floor(amount || 0)
     return rounded.toLocaleString('en-IN')
   }
 
   // Format BTC amount (remove trailing zeros, show 0 for zero amounts)
-  const formatBtc = (amount: number) => {
-    if (amount === 0) return '₿0'
+  const formatBtc = (amount: number | undefined) => {
+    if (!amount || amount === 0) return '₿0'
     return `₿${amount.toFixed(8).replace(/\.?0+$/, '')}`
   }
 
   // Format USD price with thousand separators
-  const formatUSD = (amount: number) => {
-    return amount.toLocaleString('en-US', { maximumFractionDigits: 0 })
+  const formatUSD = (amount: number | undefined) => {
+    return (amount || 0).toLocaleString('en-US', { maximumFractionDigits: 0 })
   }
 
   const getTransactionIcon = (transaction: Transaction) => {

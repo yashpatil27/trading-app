@@ -2,8 +2,8 @@ import React from 'react'
 import { Wallet, TrendingUp } from 'lucide-react'
 
 interface User {
-  balance: number
-  btcAmount: number
+  balance?: number
+  btcAmount?: number
 }
 
 interface BalanceCardProps {
@@ -24,8 +24,8 @@ const BalanceCard = React.memo(({ user, btcPrice }: BalanceCardProps) => {
     )
   }
 
-  const btcValueInINR = btcPrice ? user.btcAmount * btcPrice : 0
-  const totalPortfolioValue = user.balance + btcValueInINR
+  const btcValueInINR = btcPrice ? (user.btcAmount || 0) * btcPrice : 0
+  const totalPortfolioValue = (user.balance || 0) + btcValueInINR
 
   return (
     <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-lg p-6">
@@ -39,7 +39,7 @@ const BalanceCard = React.memo(({ user, btcPrice }: BalanceCardProps) => {
         <div className="flex justify-between items-center">
           <span className="text-gray-600">INR Balance</span>
           <span className="text-xl font-bold text-blue-600">
-            ₹{user.balance.toLocaleString('en-IN')}
+            ₹{(user.balance || 0).toLocaleString('en-IN')}
           </span>
         </div>
         
@@ -48,7 +48,7 @@ const BalanceCard = React.memo(({ user, btcPrice }: BalanceCardProps) => {
           <span className="text-gray-600">Bitcoin Balance</span>
           <div className="text-right">
             <div className="text-lg font-semibold text-orange-600">
-              ₿{user.btcAmount.toFixed(8)}
+              ₿{(user.btcAmount || 0).toFixed(8)}
             </div>
             {btcPrice && (
               <div className="text-sm text-gray-500">
