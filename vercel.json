@@ -1,0 +1,15 @@
+{
+  "version": 2,
+  "name": "bittrade-frontend",
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "@vercel/next"
+    }
+  ],
+  "env": {
+    "NEXT_PUBLIC_API_BASE_URL": "https://bittrade-api.loca.lt",
+    "NEXTAUTH_URL": "https://bittrade.co.in",
+    "NODE_ENV": "production"
+  }
+}
