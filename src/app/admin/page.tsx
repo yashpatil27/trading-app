@@ -3,7 +3,7 @@
 import { useSession } from 'next-auth/react'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { Users, Plus, Minus, ArrowLeft, User, Wallet, Calendar, TrendingUp, Shield, Key } from 'lucide-react'
+import { Users, Plus, Minus, ArrowLeft, User, Wallet, Calendar, TrendingUp, Shield, Key, CreditCard, Phone } from 'lucide-react'
 
 interface User {
   id: string
@@ -167,9 +167,9 @@ export default function AdminDashboard() {
 
   return (
     <div className="min-h-screen bg-black text-white">
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 py-6 sm:py-8">
         {/* Header */}
-        <div className="flex items-center justify-between mb-8">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6 sm:mb-8">
           <div className="flex items-center gap-4">
             <button
               onClick={() => router.push('/dashboard')}
@@ -178,16 +178,16 @@ export default function AdminDashboard() {
               <ArrowLeft size={20} />
             </button>
             <div>
-              <h1 className="text-3xl font-bold flex items-center gap-3">
-                <Shield className="text-orange-500" size={32} />
+              <h1 className="text-2xl sm:text-3xl font-bold flex items-center gap-3">
+                <Shield className="text-orange-500" size={28} />
                 Admin Panel
               </h1>
-              <p className="text-gray-400">Manage users and system operations</p>
+              <p className="text-gray-400 text-sm sm:text-base">Manage users and system operations</p>
             </div>
           </div>
           <button
             onClick={() => setShowCreateUser(true)}
-            className="bg-orange-600 hover:bg-orange-700 px-4 py-2 rounded-lg flex items-center gap-2 font-medium transition-colors"
+            className="w-full sm:w-auto bg-orange-600 hover:bg-orange-700 px-4 py-3 sm:py-2 rounded-lg flex items-center justify-center gap-2 font-medium transition-colors"
           >
             <Plus size={16} />
             Create User
@@ -195,115 +195,200 @@ export default function AdminDashboard() {
         </div>
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <div className="bg-gray-900 rounded-xl p-6 border border-gray-800">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6 sm:mb-8">
+          <div className="bg-gray-900 rounded-xl p-4 sm:p-6 border border-gray-800">
             <div className="flex items-center gap-3 mb-2">
-              <Users className="text-blue-500" size={24} />
-              <span className="text-gray-400">Total Users</span>
+              <Users className="text-blue-500" size={20} />
+              <span className="text-gray-400 text-sm">Total Users</span>
             </div>
-            <div className="text-2xl font-bold">{users.length}</div>
+            <div className="text-xl sm:text-2xl font-bold">{users.length}</div>
           </div>
           
-          <div className="bg-gray-900 rounded-xl p-6 border border-gray-800">
+          <div className="bg-gray-900 rounded-xl p-4 sm:p-6 border border-gray-800">
             <div className="flex items-center gap-3 mb-2">
-              <Wallet className="text-green-500" size={24} />
-              <span className="text-gray-400">Total Cash</span>
+              <Wallet className="text-green-500" size={20} />
+              <span className="text-gray-400 text-sm">Total Cash</span>
             </div>
-            <div className="text-2xl font-bold">
+            <div className="text-lg sm:text-2xl font-bold">
               ₹{formatCash(users.reduce((sum, user) => sum + user.balance, 0))}
             </div>
           </div>
 
-          <div className="bg-gray-900 rounded-xl p-6 border border-gray-800">
+          <div className="bg-gray-900 rounded-xl p-4 sm:p-6 border border-gray-800">
             <div className="flex items-center gap-3 mb-2">
-              <TrendingUp className="text-orange-500" size={24} />
-              <span className="text-gray-400">Total Bitcoin</span>
+              <TrendingUp className="text-orange-500" size={20} />
+              <span className="text-gray-400 text-sm">Total Bitcoin</span>
             </div>
-            <div className="text-2xl font-bold">
+            <div className="text-lg sm:text-2xl font-bold">
               ₿{formatBitcoin(users.reduce((sum, user) => sum + (user.btcAmount || 0), 0))}
             </div>
           </div>
 
-          <div className="bg-gray-900 rounded-xl p-6 border border-gray-800">
+          <div className="bg-gray-900 rounded-xl p-4 sm:p-6 border border-gray-800">
             <div className="flex items-center gap-3 mb-2">
-              <Shield className="text-purple-500" size={24} />
-              <span className="text-gray-400">Admins</span>
+              <Shield className="text-purple-500" size={20} />
+              <span className="text-gray-400 text-sm">Admins</span>
             </div>
-            <div className="text-2xl font-bold">
+            <div className="text-xl sm:text-2xl font-bold">
               {users.filter(user => user.role === 'ADMIN').length}
             </div>
           </div>
         </div>
 
-        {/* Users Table */}
+        {/* Users Section */}
         <div className="bg-gray-900 rounded-xl border border-gray-800 overflow-hidden">
-          <div className="p-6 border-b border-gray-800">
-            <h2 className="text-xl font-semibold flex items-center gap-2">
+          <div className="p-4 sm:p-6 border-b border-gray-800">
+            <h2 className="text-lg sm:text-xl font-semibold flex items-center gap-2">
               <Users size={20} />
               User Management
             </h2>
           </div>
           
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead className="bg-gray-800">
-                <tr>
-                  <th className="text-left p-4 font-medium">User</th>
-                  <th className="text-left p-4 font-medium">Role</th>
-                  <th className="text-left p-4 font-medium">Cash Balance</th>
-                  <th className="text-left p-4 font-medium">Bitcoin Balance</th>
-                  <th className="text-left p-4 font-medium">Trades</th>
-                  <th className="text-left p-4 font-medium">PIN</th>
-                  <th className="text-right p-4 font-medium">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {users.map((user) => (
-                  <tr key={user.id} className="border-b border-gray-800 hover:bg-gray-800/50">
-                    <td className="p-4">
-                      <div className="flex items-center gap-3">
-                        <div className="bg-orange-600 rounded-full p-2">
-                          <User size={16} />
-                        </div>
-                        <div>
-                          <div className="font-medium">{user.name}</div>
-                          <div className="text-sm text-gray-400">{user.email}</div>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="p-4">
-                      <span className={`px-2 py-1 rounded text-xs font-medium ${
-                        user.role === 'ADMIN' 
-                          ? 'bg-purple-600/20 text-purple-400' 
-                          : 'bg-blue-600/20 text-blue-400'
-                      }`}>
-                        {user.role}
-                      </span>
-                    </td>
-                    <td className="p-4 font-medium">₹{formatCash(user.balance)}</td>
-                    <td className="p-4 font-medium">₿{formatBitcoin(user.btcAmount || 0)}</td>
-                    <td className="p-4">{user._count.trades}</td>
-                    <td className="p-4 font-mono">{user.tradingPin}</td>
-                    <td className="p-4">
-                      <div className="flex gap-2 justify-end">
-                        <button
-                          onClick={() => setShowBalanceModal(user)}
-                          className="bg-green-600 hover:bg-green-700 px-3 py-1 rounded text-sm font-medium transition-colors"
-                        >
-                          Adjust Balance
-                        </button>
-                        <button
-                          onClick={() => setShowPinModal(user)}
-                          className="bg-blue-600 hover:bg-blue-700 px-3 py-1 rounded text-sm font-medium transition-colors"
-                        >
-                          Reset PIN
-                        </button>
-                      </div>
-                    </td>
+          {/* Desktop Table View */}
+          <div className="hidden lg:block">
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead className="bg-gray-800">
+                  <tr>
+                    <th className="text-left p-4 font-medium">User</th>
+                    <th className="text-left p-4 font-medium">Role</th>
+                    <th className="text-left p-4 font-medium">Cash Balance</th>
+                    <th className="text-left p-4 font-medium">Bitcoin Balance</th>
+                    <th className="text-left p-4 font-medium">Trades</th>
+                    <th className="text-left p-4 font-medium">PIN</th>
+                    <th className="text-right p-4 font-medium">Actions</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {users.map((user) => (
+                    <tr key={user.id} className="border-b border-gray-800 hover:bg-gray-800/50">
+                      <td className="p-4">
+                        <div className="flex items-center gap-3">
+                          <div className="bg-orange-600 rounded-full p-2">
+                            <User size={16} />
+                          </div>
+                          <div>
+                            <div className="font-medium">{user.name}</div>
+                            <div className="text-sm text-gray-400">{user.email}</div>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="p-4">
+                        <span className={`px-2 py-1 rounded text-xs font-medium ${
+                          user.role === 'ADMIN' 
+                            ? 'bg-purple-600/20 text-purple-400' 
+                            : 'bg-blue-600/20 text-blue-400'
+                        }`}>
+                          {user.role}
+                        </span>
+                      </td>
+                      <td className="p-4 font-medium">₹{formatCash(user.balance)}</td>
+                      <td className="p-4 font-medium">₿{formatBitcoin(user.btcAmount || 0)}</td>
+                      <td className="p-4">{user._count.trades}</td>
+                      <td className="p-4 font-mono">{user.tradingPin}</td>
+                      <td className="p-4">
+                        <div className="flex gap-2 justify-end">
+                          <button
+                            onClick={() => setShowBalanceModal(user)}
+                            className="bg-green-600 hover:bg-green-700 px-3 py-1 rounded text-sm font-medium transition-colors"
+                          >
+                            Adjust Balance
+                          </button>
+                          <button
+                            onClick={() => setShowPinModal(user)}
+                            className="bg-blue-600 hover:bg-blue-700 px-3 py-1 rounded text-sm font-medium transition-colors"
+                          >
+                            Reset PIN
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          {/* Mobile Card View */}
+          <div className="lg:hidden p-4 space-y-4">
+            {users.map((user) => (
+              <div key={user.id} className="bg-gray-800 rounded-lg p-4 border border-gray-700">
+                {/* User Header */}
+                <div className="flex items-start justify-between mb-4">
+                  <div className="flex items-center gap-3">
+                    <div className="bg-orange-600 rounded-full p-2">
+                      <User size={16} />
+                    </div>
+                    <div>
+                      <div className="font-semibold text-white">{user.name}</div>
+                      <div className="text-sm text-gray-400">{user.email}</div>
+                    </div>
+                  </div>
+                  <span className={`px-2 py-1 rounded text-xs font-medium ${
+                    user.role === 'ADMIN' 
+                      ? 'bg-purple-600/20 text-purple-400' 
+                      : 'bg-blue-600/20 text-blue-400'
+                  }`}>
+                    {user.role}
+                  </span>
+                </div>
+
+                {/* Balances Grid */}
+                <div className="grid grid-cols-2 gap-4 mb-4">
+                  <div className="bg-gray-900 rounded-lg p-3">
+                    <div className="flex items-center gap-2 mb-1">
+                      <Wallet size={14} className="text-green-500" />
+                      <span className="text-xs text-gray-400">Cash Balance</span>
+                    </div>
+                    <div className="font-semibold text-white">₹{formatCash(user.balance)}</div>
+                  </div>
+                  <div className="bg-gray-900 rounded-lg p-3">
+                    <div className="flex items-center gap-2 mb-1">
+                      <TrendingUp size={14} className="text-orange-500" />
+                      <span className="text-xs text-gray-400">Bitcoin Balance</span>
+                    </div>
+                    <div className="font-semibold text-white">₿{formatBitcoin(user.btcAmount || 0)}</div>
+                  </div>
+                </div>
+
+                {/* Stats Row */}
+                <div className="flex items-center justify-between text-sm text-gray-400 mb-4">
+                  <div className="flex items-center gap-1">
+                    <TrendingUp size={14} />
+                    <span>{user._count.trades} trades</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <Key size={14} />
+                    <span className="font-mono">PIN: {user.tradingPin}</span>
+                  </div>
+                </div>
+
+                {/* Action Buttons */}
+                <div className="grid grid-cols-2 gap-3">
+                  <button
+                    onClick={() => setShowBalanceModal(user)}
+                    className="bg-green-600 hover:bg-green-700 py-3 px-4 rounded-lg flex items-center justify-center gap-2 font-medium transition-colors text-sm"
+                  >
+                    <Wallet size={16} />
+                    Adjust Balance
+                  </button>
+                  <button
+                    onClick={() => setShowPinModal(user)}
+                    className="bg-blue-600 hover:bg-blue-700 py-3 px-4 rounded-lg flex items-center justify-center gap-2 font-medium transition-colors text-sm"
+                  >
+                    <Key size={16} />
+                    Reset PIN
+                  </button>
+                </div>
+              </div>
+            ))}
+
+            {users.length === 0 && (
+              <div className="text-center py-12 text-gray-400">
+                <Users size={48} className="mx-auto mb-4 opacity-50" />
+                <p>No users found</p>
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -311,8 +396,8 @@ export default function AdminDashboard() {
       {/* Enhanced Balance Adjustment Modal */}
       {showBalanceModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-gray-900 rounded-2xl p-6 w-full max-w-md border border-gray-700">
-            <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
+          <div className="bg-gray-900 rounded-2xl p-4 sm:p-6 w-full max-w-md border border-gray-700">
+            <h3 className="text-lg sm:text-xl font-semibold mb-4 flex items-center gap-2">
               <Wallet size={20} />
               Adjust Balance
             </h3>
@@ -338,7 +423,7 @@ export default function AdminDashboard() {
                 <div className="grid grid-cols-2 gap-2">
                   <button
                     onClick={() => setBalanceCurrency('INR')}
-                    className={`py-2 px-4 rounded-lg font-medium transition-colors ${
+                    className={`py-3 px-4 rounded-lg font-medium transition-colors ${
                       balanceCurrency === 'INR' 
                         ? 'bg-orange-600 text-white' 
                         : 'bg-gray-800 text-gray-400 hover:bg-gray-700'
@@ -348,7 +433,7 @@ export default function AdminDashboard() {
                   </button>
                   <button
                     onClick={() => setBalanceCurrency('BTC')}
-                    className={`py-2 px-4 rounded-lg font-medium transition-colors ${
+                    className={`py-3 px-4 rounded-lg font-medium transition-colors ${
                       balanceCurrency === 'BTC' 
                         ? 'bg-orange-600 text-white' 
                         : 'bg-gray-800 text-gray-400 hover:bg-gray-700'
@@ -369,7 +454,7 @@ export default function AdminDashboard() {
                   step={balanceCurrency === 'INR' ? '0.01' : '0.00000001'}
                   value={balanceAmount}
                   onChange={(e) => setBalanceAmount(e.target.value)}
-                  className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-orange-500"
+                  className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-3 text-white focus:outline-none focus:ring-2 focus:ring-orange-500"
                   placeholder={balanceCurrency === 'INR' ? 'Enter INR amount' : 'Enter BTC amount (e.g., 0.001)'}
                 />
                 {balanceCurrency === 'BTC' && (
@@ -386,7 +471,7 @@ export default function AdminDashboard() {
                   type="text"
                   value={balanceReason}
                   onChange={(e) => setBalanceReason(e.target.value)}
-                  className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-orange-500"
+                  className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-3 text-white focus:outline-none focus:ring-2 focus:ring-orange-500"
                   placeholder={`Reason for ${balanceCurrency} adjustment`}
                 />
               </div>
@@ -429,8 +514,8 @@ export default function AdminDashboard() {
       {/* PIN Reset Modal */}
       {showPinModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-gray-900 rounded-2xl p-6 w-full max-w-md border border-gray-700">
-            <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
+          <div className="bg-gray-900 rounded-2xl p-4 sm:p-6 w-full max-w-md border border-gray-700">
+            <h3 className="text-lg sm:text-xl font-semibold mb-4 flex items-center gap-2">
               <Key size={20} />
               Reset Trading PIN
             </h3>
@@ -451,7 +536,7 @@ export default function AdminDashboard() {
                   maxLength={4}
                   value={newPin}
                   onChange={(e) => setNewPin(e.target.value.replace(/\D/g, ''))}
-                  className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-orange-500 text-center font-mono text-lg"
+                  className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-3 text-white focus:outline-none focus:ring-2 focus:ring-orange-500 text-center font-mono text-lg"
                   placeholder="0000"
                 />
               </div>
@@ -481,8 +566,8 @@ export default function AdminDashboard() {
       {/* Create User Modal */}
       {showCreateUser && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-gray-900 rounded-2xl p-6 w-full max-w-md border border-gray-700">
-            <h3 className="text-xl font-semibold mb-4">Create New User</h3>
+          <div className="bg-gray-900 rounded-2xl p-4 sm:p-6 w-full max-w-md border border-gray-700">
+            <h3 className="text-lg sm:text-xl font-semibold mb-4">Create New User</h3>
             <div className="space-y-4">
               <div>
                 <label className="block text-sm text-gray-400 mb-2">Email</label>
@@ -490,7 +575,7 @@ export default function AdminDashboard() {
                   type="email"
                   value={newUser.email}
                   onChange={(e) => setNewUser({...newUser, email: e.target.value})}
-                  className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-orange-500"
+                  className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-3 text-white focus:outline-none focus:ring-2 focus:ring-orange-500"
                   placeholder="user@example.com"
                 />
               </div>
@@ -500,7 +585,7 @@ export default function AdminDashboard() {
                   type="text"
                   value={newUser.name}
                   onChange={(e) => setNewUser({...newUser, name: e.target.value})}
-                  className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-orange-500"
+                  className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-3 text-white focus:outline-none focus:ring-2 focus:ring-orange-500"
                   placeholder="Full Name"
                 />
               </div>
@@ -510,7 +595,7 @@ export default function AdminDashboard() {
                   type="password"
                   value={newUser.password}
                   onChange={(e) => setNewUser({...newUser, password: e.target.value})}
-                  className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-orange-500"
+                  className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-3 text-white focus:outline-none focus:ring-2 focus:ring-orange-500"
                   placeholder="Password"
                 />
               </div>
@@ -519,7 +604,7 @@ export default function AdminDashboard() {
                 <select
                   value={newUser.role}
                   onChange={(e) => setNewUser({...newUser, role: e.target.value})}
-                  className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-orange-500"
+                  className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-3 text-white focus:outline-none focus:ring-2 focus:ring-orange-500"
                 >
                   <option value="USER">User</option>
                   <option value="ADMIN">Admin</option>
