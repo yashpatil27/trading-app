@@ -398,8 +398,25 @@ export default function Dashboard() {
                       </div>
                       <div className="text-right">
                         <div className="font-semibold">
-                          {transaction.category === 'BALANCE' && transaction.type === 'WITHDRAWAL' ? '-' : ''}
-                          ₹{formatCash(transaction.total)}
+                          {transaction.category === 'BALANCE' ? (
+                            // For balance transactions, check if it's Bitcoin or INR
+                            transaction.amount > 0 && transaction.total === 0 ? (
+                              // Bitcoin transaction
+                              <>
+                                {transaction.type === 'WITHDRAWAL' ? '-' : '+'}
+                                {formatBtc(Math.abs(transaction.amount))}
+                              </>
+                            ) : (
+                              // INR transaction
+                              <>
+                                {transaction.type === 'WITHDRAWAL' ? '-' : ''}
+                                ₹{formatCash(Math.abs(transaction.total))}
+                              </>
+                            )
+                          ) : (
+                            // Trade transactions show INR total
+                            `₹${formatCash(transaction.total)}`
+                          )}
                         </div>
                         {transaction.category === 'TRADE' && transaction.price && (
                           <div className="text-xs text-gray-400">
@@ -464,8 +481,25 @@ export default function Dashboard() {
                     </div>
                     <div className="text-right">
                       <div className="font-semibold">
-                        {transaction.category === 'BALANCE' && transaction.type === 'WITHDRAWAL' ? '-' : ''}
-                        ₹{formatCash(transaction.total)}
+                        {transaction.category === 'BALANCE' ? (
+                          // For balance transactions, check if it's Bitcoin or INR
+                          transaction.amount > 0 && transaction.total === 0 ? (
+                            // Bitcoin transaction
+                            <>
+                              {transaction.type === 'WITHDRAWAL' ? '-' : '+'}
+                              {formatBtc(Math.abs(transaction.amount))}
+                            </>
+                          ) : (
+                            // INR transaction
+                            <>
+                              {transaction.type === 'WITHDRAWAL' ? '-' : ''}
+                              ₹{formatCash(Math.abs(transaction.total))}
+                            </>
+                          )
+                        ) : (
+                          // Trade transactions show INR total
+                          `₹${formatCash(transaction.total)}`
+                        )}
                       </div>
                       {transaction.category === 'TRADE' && transaction.price && (
                         <div className="text-xs text-gray-400">
