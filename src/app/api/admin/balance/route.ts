@@ -44,7 +44,7 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ error: 'Insufficient INR balance' }, { status: 400 })
       }
       
-      transactionType = type === 'CREDIT' ? 'ADMIN_CREDIT' : 'ADMIN_DEBIT'
+      transactionType = type === 'CREDIT' ? 'DEPOSIT' : 'WITHDRAWAL'
       transactionAmount = Math.abs(amount)
     } else if (currency === 'BTC') {
       // Bitcoin balance adjustment
@@ -55,7 +55,7 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ error: 'Insufficient Bitcoin balance' }, { status: 400 })
       }
       
-      transactionType = type === 'CREDIT' ? 'ADMIN_CREDIT' : 'ADMIN_DEBIT'
+      transactionType = type === 'CREDIT' ? 'DEPOSIT' : 'WITHDRAWAL'
       transactionAmount = Math.abs(amount)
     } else {
       return NextResponse.json({ error: 'Invalid currency' }, { status: 400 })
