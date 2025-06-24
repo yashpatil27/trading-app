@@ -105,24 +105,6 @@ export default function DepositDetailModal({
               </div>
             )}
 
-            {/* Currency Type */}
-            <div className="flex items-center justify-between p-4 bg-gray-800 rounded-lg">
-              <div className="flex items-center gap-3">
-                {isBitcoinTransaction ? (
-                  <div className="w-5 h-5 bg-orange-500 rounded-full flex items-center justify-center">
-                    <span className="text-xs font-bold text-black">₿</span>
-                  </div>
-                ) : (
-                  <DollarSign className="text-green-500" size={20} />
-                )}
-                <div>
-                  <div className="text-sm text-gray-400">Currency</div>
-                  <div className="font-semibold text-white">
-                    {isBitcoinTransaction ? 'Bitcoin (BTC)' : 'Indian Rupee (INR)'}
-                  </div>
-                </div>
-              </div>
-            </div>
 
             {/* Amount */}
             <div className="flex items-center justify-between p-4 bg-gray-800 rounded-lg">
