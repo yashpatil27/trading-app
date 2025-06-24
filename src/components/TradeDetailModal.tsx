@@ -41,7 +41,7 @@ export default function TradeDetailModal({ isOpen, onClose, trade }: TradeDetail
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-end justify-center z-50">
       <div className="bg-gray-900 rounded-t-3xl w-full max-w-md mx-4 mb-0 animate-slide-up">
-        {/* Header */}
+        {/* Header with Trade Status */}
         <div className="flex justify-between items-center p-6 border-b border-gray-800">
           <div className="flex items-center gap-3">
             {trade.type === 'BUY' ? (
@@ -49,9 +49,12 @@ export default function TradeDetailModal({ isOpen, onClose, trade }: TradeDetail
             ) : (
               <TrendingDown className="text-red-500" size={24} />
             )}
-            <h2 className="text-xl font-bold text-white">
-              {trade.type} Order Details
-            </h2>
+            <div>
+              <h2 className="text-xl font-bold text-white">
+                {trade.type} Order Completed
+              </h2>
+              <div className="text-sm text-gray-400">Trade ID: {trade.id.slice(0, 8)}...</div>
+            </div>
           </div>
           <button
             onClick={onClose}
@@ -62,13 +65,6 @@ export default function TradeDetailModal({ isOpen, onClose, trade }: TradeDetail
         </div>
 
         <div className="p-6 space-y-6">
-          {/* Trade Status */}
-          <div className="text-center p-4 bg-gray-800 rounded-lg">
-            <div className={`text-lg font-bold ${trade.type === 'BUY' ? 'text-green-400' : 'text-red-400'}`}>
-              {trade.type} Order Completed
-            </div>
-            <div className="text-sm text-gray-400 mt-1">Trade ID: {trade.id.slice(0, 8)}...</div>
-          </div>
 
           {/* Trade Details */}
           <div className="space-y-4">
