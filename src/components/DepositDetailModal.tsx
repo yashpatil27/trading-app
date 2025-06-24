@@ -73,7 +73,7 @@ export default function DepositDetailModal({
               <h2 className="text-xl font-bold text-white">
                 {transaction.type} Completed
               </h2>
-              <div className="text-sm text-gray-400">Transaction ID: {transaction.id.slice(0, 8)}...</div>
+              <div className="text-sm text-gray-400">Transaction ID: {transaction.id}</div>
             </div>
           </div>
           <button

@@ -53,7 +53,7 @@ export default function TradeDetailModal({ isOpen, onClose, trade }: TradeDetail
               <h2 className="text-xl font-bold text-white">
                 {trade.type} Order Completed
               </h2>
-              <div className="text-sm text-gray-400">Trade ID: {trade.id.slice(0, 8)}...</div>
+              <div className="text-sm text-gray-400">Trade ID: {trade.id}</div>
             </div>
           </div>
           <button
