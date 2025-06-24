@@ -8,17 +8,17 @@ async function main() {
   const hashedPassword = await bcrypt.hash('admin123', 12)
   
   const admin = await prisma.user.upsert({
-    where: { email: 'admin@bittrade.com' },
+    where: { email: 'admin@bittrade.co.in' },
     update: {},
     create: {
-      email: 'admin@bittrade.com',
-      name: 'Admin User',
+      email: 'admin@bittrade.co.in',
+      name: 'John Smith',
       password: hashedPassword,
       role: 'ADMIN'
     }
   })
 
-  // Create admin initial deposit transaction
+  // Create admin initial setup transaction
   await prisma.transaction.create({
     data: {
       userId: admin.id,
@@ -30,33 +30,7 @@ async function main() {
     }
   })
 
-  // Create a demo user
-  const userPassword = await bcrypt.hash('user123', 12)
-  
-  const user = await prisma.user.upsert({
-    where: { email: 'user@bittrade.com' },
-    update: {},
-    create: {
-      email: 'user@bittrade.com',
-      name: 'Demo User',
-      password: userPassword,
-      role: 'USER'
-    }
-  })
-
-  // Create user initial deposit transaction
-  await prisma.transaction.create({
-    data: {
-      userId: user.id,
-      type: 'DEPOSIT',
-      inrAmount: 100000,
-      inrBalanceAfter: 100000,
-      btcBalanceAfter: 0,
-      reason: 'Initial demo balance'
-    }
-  })
-
-  console.log('Seeded users and initial transactions:', { admin, user })
+  console.log('Seeded admin user:', { admin })
 }
 
 main()
