@@ -61,7 +61,7 @@ export default function DepositDetailModal({
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-end justify-center z-50">
       <div className="bg-gray-900 rounded-t-3xl w-full max-w-md mx-4 mb-0 animate-slide-up">
-        {/* Header */}
+        {/* Header with Transaction Status */}
         <div className="flex justify-between items-center p-6 border-b border-gray-800">
           <div className="flex items-center gap-3">
             {isDeposit ? (
@@ -69,9 +69,12 @@ export default function DepositDetailModal({
             ) : (
               <ArrowUpRight className="text-yellow-500" size={24} />
             )}
-            <h2 className="text-xl font-bold text-white">
-              {transaction.type} Details
-            </h2>
+            <div>
+              <h2 className="text-xl font-bold text-white">
+                {transaction.type} Completed
+              </h2>
+              <div className="text-sm text-gray-400">Transaction ID: {transaction.id.slice(0, 8)}...</div>
+            </div>
           </div>
           <button
             onClick={onClose}
@@ -82,13 +85,6 @@ export default function DepositDetailModal({
         </div>
 
         <div className="p-6 space-y-6">
-          {/* Transaction Status */}
-          <div className="text-center p-4 bg-gray-800 rounded-lg">
-            <div className={`text-lg font-bold ${isDeposit ? 'text-blue-400' : 'text-yellow-400'}`}>
-              {transaction.type} Completed
-            </div>
-            <div className="text-sm text-gray-400 mt-1">Transaction ID: {transaction.id.slice(0, 8)}...</div>
-          </div>
 
           {/* Transaction Details */}
           <div className="space-y-4">
