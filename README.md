@@ -1,58 +1,54 @@
-# 🚀 Bitcoin Trading App - Enterprise Edition
+# ₿itTrade - Professional Bitcoin Trading Platform
 
-A modern, full-stack Bitcoin trading application built with Next.js 15, featuring **bank-grade financial precision**, real-time price tracking, secure authentication, Redis caching, and a professional admin panel. This application simulates Bitcoin trading with precise integer-based calculations and provides a complete enterprise-ready trading experience.
+> A modern, full-stack Bitcoin trading application with enterprise-grade security and precision
 
-![Bitcoin Trading App](https://img.shields.io/badge/Bitcoin-Trading-orange?style=for-the-badge&logo=bitcoin)
+**₿itTrade** is a complete Bitcoin trading simulator that provides a realistic trading experience with real-time price data, secure PIN authentication, and professional admin controls. Built with cutting-edge technologies for performance, security, and scalability.
+
 ![Next.js](https://img.shields.io/badge/Next.js-15.3.4-black?style=for-the-badge&logo=next.js)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?style=for-the-badge&logo=typescript)
-![Prisma](https://img.shields.io/badge/Prisma-6.10.1-2D3748?style=for-the-badge&logo=prisma)
+![Bitcoin](https://img.shields.io/badge/Bitcoin-₿-orange?style=for-the-badge&logo=bitcoin)
 ![Redis](https://img.shields.io/badge/Redis-7-DC382D?style=for-the-badge&logo=redis)
 ![Security](https://img.shields.io/badge/Security-PIN%20Protected-green?style=for-the-badge&logo=shield)
-![Performance](https://img.shields.io/badge/Performance-Optimized-brightgreen?style=for-the-badge&logo=speedtest)
 
-## 🆕 Latest Updates (v3.3 - Performance Optimization Edition)
+## ✨ Features Overview
 
-### ⚡ **Performance Optimization Overhaul (v3.3) - LATEST!**
-- **Database Indexes**: Added 8 performance indexes for 50-90% faster queries
-- **React.memo Optimization**: Memoized components reduce re-renders by 40-60%
-- **Professional Loading States**: Skeleton screens and proper loading management
-- **Query Performance**: Transaction history loads 85-95% faster
-- **Trading Speed**: Buy/sell operations now complete in ~17ms (vs 100-300ms)
-- **Memory Optimization**: Reduced component re-renders during price updates
-- **User Experience**: Immediate visual feedback with skeleton loading screens
-- **Cache Performance**: Optimized Redis integration with intelligent fallbacks
+### 🎯 **Core Trading Features**
 
-## 🔄 Previous Updates (v3.2 - Security & Performance Edition)
+| Feature | Description | Status |
+|---------|-------------|--------|
+| **Real-time Prices** | Live Bitcoin price updates every 30 seconds | ✅ Active |
+| **Buy/Sell Bitcoin** | Instant trading with INR currency | ✅ Active |
+| **PIN Security** | 4-digit PIN confirmation for all trades | ✅ Secure |
+| **Portfolio View** | Real-time balance and holdings display | ✅ Live |
+| **Transaction History** | Complete trading audit trail | ✅ Complete |
+| **Mobile Responsive** | Optimized for all screen sizes | ✅ Responsive |
 
-### 🔐 **Enhanced PIN Security System (v3.2)**
-- **4-Digit PIN Confirmation**: All trades now require PIN confirmation for enhanced security
-- **Mobile Banking UX**: Professional PIN input with auto-focus and smooth navigation  
-- **Visual Feedback**: Shake animations and clear error messages for incorrect PINs
-- **No Account Lockout**: Users can retry incorrect PINs without being locked out
-- **Secure API**: Session-based PIN verification with proper error handling
-- **Default PIN Management**: All users start with PIN '1234' (admin configurable)
-- **Seamless Integration**: PIN modal appears after trade confirmation without disrupting UX
-- **Production Ready**: Fully tested security implementation
+### 🔐 **Security & Authentication**
 
-### 🏦 **Bank-Grade Financial Precision (v3.1)**
-- **Integer-Based Calculations**: Eliminated all floating-point errors with satoshi-level precision
-- **Perfect Arithmetic**: 0.1 + 0.2 = 0.3 exactly (no more 0.30000000000000004)
-- **Enhanced Performance**: 10-20% faster calculations with integer arithmetic
-- **Regulatory Compliance**: Financial industry standard precision for enterprise use
-- **Zero Precision Loss**: 103,959 satoshis = exactly 0.00103959 BTC
-- **BigInt Support**: Bitcoin amounts stored in satoshis (1 BTC = 100,000,000 satoshis)
-- **INR Integers**: Rupee amounts stored as whole integers (no decimal places)
+- **OAuth Integration** - Secure login with GitHub/Google
+- **PIN Protection** - Mandatory 4-digit PIN for trading
+- **Session Management** - Secure user session handling
+- **Role-Based Access** - User and Admin permission levels
+- **Audit Trail** - Complete transaction logging
+- **Data Validation** - Server-side input sanitization
 
-### ⚡ **Performance Optimizations (v3.0-v3.3)**
-- **Database Indexes (v3.3)**: 8 strategic indexes for 50-90% faster database queries
-- **React Optimization (v3.3)**: Memoized components prevent 40-60% unnecessary re-renders
-- **Loading States (v3.3)**: Professional skeleton screens for better UX
-- **N+1 Query Elimination**: Bulk balance fetching reduces database queries by 50-98%
-- **Enhanced Redis Caching**: Optimized cache performance with integer field support
-- **Bulk Operations**: Admin dashboard loads user lists with optimal performance
-- **Smart Cache Management**: Prefers integer fields for better precision and speed
-- **Cache Warming**: Proactive cache warming for improved response times
-- **Optimized APIs**: Reduced database load with intelligent caching strategies
+### 👨‍💼 **Admin Management**
+
+- **User Dashboard** - View all registered users
+- **Balance Control** - Add/remove INR and Bitcoin funds
+- **PIN Management** - Reset user trading PINs
+- **Transaction Monitoring** - Oversee all platform activity
+- **System Health** - Performance metrics and status
+- **Bulk Operations** - Efficient user management tools
+
+### ⚡ **Performance & Architecture**
+
+- **Enterprise-Grade Precision** - Integer-based financial calculations
+- **Redis Caching** - High-performance balance caching
+- **Optimized Database** - Strategic indexes for 50-90% faster queries
+- **React Optimization** - Memoized components reduce re-renders by 40-60%
+- **Professional UX** - Skeleton loading states and smooth animations
+- **Scalable Design** - Built for production workloads
 
 ## 🌟 Key Features
 
