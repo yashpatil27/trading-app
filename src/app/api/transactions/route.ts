@@ -40,7 +40,7 @@ export async function GET() {
     // Transform to use integer fields primarily with proper formatting
     const allTransactions = transactions.map(transaction => {
       const isTradeTransaction = ['BUY', 'SELL'].includes(transaction.type)
-      const isDepositWithdrawal = ['DEPOSIT', 'WITHDRAWAL', 'ADMIN_CREDIT', 'ADMIN_DEBIT'].includes(transaction.type)
+      const isDepositWithdrawal = ['DEPOSIT', 'WITHDRAWAL'].includes(transaction.type)
 
       // Prefer integer fields when available
       const usingIntegers = !!(transaction.inrAmountInt !== null && 
@@ -65,17 +65,20 @@ export async function GET() {
         balance = transaction.inrBalanceAfter || 0
       }
 
+      // For admin transactions, determine if it's Bitcoin or INR based on amounts
+      const isBitcoinAdminTransaction = isDepositWithdrawal && btcAmount > 0 && inrAmount === 0
+      
       // Calculate the signed amount for deposits/withdrawals
       let signedAmount = inrAmount
-      if (transaction.type === 'WITHDRAWAL' || transaction.type === 'ADMIN_DEBIT') {
+      if (transaction.type === 'WITHDRAWAL') {
         signedAmount = -Math.abs(inrAmount)
-      } else if (transaction.type === 'DEPOSIT' || transaction.type === 'ADMIN_CREDIT') {
+      } else if (transaction.type === 'DEPOSIT') {
         signedAmount = Math.abs(inrAmount)
       }
 
       return {
         id: transaction.id,
-        type: transaction.type as 'BUY' | 'SELL' | 'DEPOSIT' | 'WITHDRAWAL' | 'ADMIN_CREDIT' | 'ADMIN_DEBIT',
+        type: transaction.type as 'BUY' | 'SELL' | 'DEPOSIT' | 'WITHDRAWAL',
         category: isTradeTransaction ? 'TRADE' as const : 'BALANCE' as const,
         amount: btcAmount,
         price: transaction.btcPriceInrInt || transaction.btcPriceInr || 0,

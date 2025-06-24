@@ -215,13 +215,20 @@ export default function Dashboard() {
       })
     } else {
       // Handle deposit/withdrawal transactions
+      // Determine if this is a Bitcoin or INR transaction based on transaction data
+      const isBitcoinTransaction = transaction.amount > 0 && transaction.total === 0
+      const currency = isBitcoinTransaction ? 'BTC' : 'INR'
+      
       setSelectedDeposit({
         id: transaction.id,
         type: transaction.type,
-        amount: transaction.total, // Use total as amount for deposits
+        amount: currency === 'INR' ? Math.abs(transaction.total) : 0,
+        btcAmount: currency === 'BTC' ? Math.abs(transaction.amount) : 0,
         reason: transaction.reason,
         balance: transaction.balance || 0,
-        createdAt: transaction.createdAt
+        btcBalance: user?.btcAmount || 0,
+        createdAt: transaction.createdAt,
+        currency: currency
       })
     }
   }

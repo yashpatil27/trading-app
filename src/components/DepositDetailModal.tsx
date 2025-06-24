@@ -4,11 +4,14 @@ import { X, ArrowDownLeft, ArrowUpRight, Calendar, DollarSign, User } from 'luci
 
 interface DepositTransaction {
   id: string
-  type: 'CREDIT' | 'DEBIT'
+  type: 'DEPOSIT' | 'WITHDRAWAL'
   amount: number
+  btcAmount?: number
   reason: string
   balance: number
+  btcBalance?: number
   createdAt: string
+  currency: 'INR' | 'BTC'
 }
 
 interface DepositDetailModalProps {
@@ -44,8 +47,16 @@ export default function DepositDetailModal({
     })
   }
 
-  const isDeposit = transaction.type === 'CREDIT'
-  const transactionType = isDeposit ? 'DEPOSIT' : 'WITHDRAWAL'
+  const formatBtc = (amount: number) => {
+    if (!amount || amount === 0) return '₿0'
+    return `₿${amount.toFixed(8).replace(/\.?0+$/, '')}`
+  }
+
+  const isDeposit = transaction.type === 'DEPOSIT'
+  const isBitcoinTransaction = transaction.currency === 'BTC'
+  const displayAmount = isBitcoinTransaction ? transaction.btcAmount || 0 : transaction.amount
+  const displaySymbol = isBitcoinTransaction ? '₿' : '₹'
+  const formatAmount = isBitcoinTransaction ? formatBtc : (amount: number) => formatCash(amount)
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-end justify-center z-50">
@@ -59,7 +70,7 @@ export default function DepositDetailModal({
               <ArrowUpRight className="text-yellow-500" size={24} />
             )}
             <h2 className="text-xl font-bold text-white">
-              {transactionType} Details
+              {transaction.type} Details
             </h2>
           </div>
           <button
@@ -74,7 +85,7 @@ export default function DepositDetailModal({
           {/* Transaction Status */}
           <div className="text-center p-4 bg-gray-800 rounded-lg">
             <div className={`text-lg font-bold ${isDeposit ? 'text-blue-400' : 'text-yellow-400'}`}>
-              {transactionType} Completed
+              {transaction.type} Completed
             </div>
             <div className="text-sm text-gray-400 mt-1">Transaction ID: {transaction.id.slice(0, 8)}...</div>
           </div>
@@ -94,26 +105,64 @@ export default function DepositDetailModal({
               </div>
             )}
 
-            {/* Amount */}
+            {/* Currency Type */}
             <div className="flex items-center justify-between p-4 bg-gray-800 rounded-lg">
               <div className="flex items-center gap-3">
-                <DollarSign className={isDeposit ? "text-blue-500" : "text-yellow-500"} size={20} />
+                {isBitcoinTransaction ? (
+                  <div className="w-5 h-5 bg-orange-500 rounded-full flex items-center justify-center">
+                    <span className="text-xs font-bold text-black">₿</span>
+                  </div>
+                ) : (
+                  <DollarSign className="text-green-500" size={20} />
+                )}
                 <div>
-                  <div className="text-sm text-gray-400">{transactionType} Amount</div>
+                  <div className="text-sm text-gray-400">Currency</div>
                   <div className="font-semibold text-white">
-                    {isDeposit ? '+' : '-'}₹{formatCash(Math.abs(transaction.amount))}
+                    {isBitcoinTransaction ? 'Bitcoin (BTC)' : 'Indian Rupee (INR)'}
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* Balance After */}
+            {/* Amount */}
             <div className="flex items-center justify-between p-4 bg-gray-800 rounded-lg">
               <div className="flex items-center gap-3">
-                <DollarSign className="text-green-500" size={20} />
+                {isBitcoinTransaction ? (
+                  <div className="w-5 h-5 bg-orange-500 rounded-full flex items-center justify-center">
+                    <span className="text-xs font-bold text-black">₿</span>
+                  </div>
+                ) : (
+                  <DollarSign className={isDeposit ? "text-blue-500" : "text-yellow-500"} size={20} />
+                )}
                 <div>
-                  <div className="text-sm text-gray-400">Balance After Transaction</div>
-                  <div className="font-semibold text-white">₹{formatCash(transaction.balance)}</div>
+                  <div className="text-sm text-gray-400">{transaction.type} Amount</div>
+                  <div className="font-semibold text-white">
+                    {isDeposit ? '+' : '-'}{isBitcoinTransaction ? formatBtc(Math.abs(displayAmount)) : `₹${formatCash(Math.abs(displayAmount))}`}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Balance After (show appropriate balance) */}
+            <div className="flex items-center justify-between p-4 bg-gray-800 rounded-lg">
+              <div className="flex items-center gap-3">
+                {isBitcoinTransaction ? (
+                  <div className="w-5 h-5 bg-green-500 rounded-full flex items-center justify-center">
+                    <span className="text-xs font-bold text-black">₿</span>
+                  </div>
+                ) : (
+                  <DollarSign className="text-green-500" size={20} />
+                )}
+                <div>
+                  <div className="text-sm text-gray-400">
+                    {isBitcoinTransaction ? 'Bitcoin' : 'Cash'} Balance After
+                  </div>
+                  <div className="font-semibold text-white">
+                    {isBitcoinTransaction 
+                      ? formatBtc(transaction.btcBalance || 0)
+                      : `₹${formatCash(transaction.balance)}`
+                    }
+                  </div>
                 </div>
               </div>
             </div>
@@ -146,8 +195,8 @@ export default function DepositDetailModal({
             <div className="text-sm text-gray-400 mb-2">Transaction Summary</div>
             <div className="text-sm text-white">
               {isDeposit 
-                ? `₹${formatCash(Math.abs(transaction.amount))} was deposited to ${isAdmin && userName ? `${userName}'s` : 'your'} account.`
-                : `₹${formatCash(Math.abs(transaction.amount))} was withdrawn from ${isAdmin && userName ? `${userName}'s` : 'your'} account.`
+                ? `${isBitcoinTransaction ? formatBtc(Math.abs(displayAmount)) : `₹${formatCash(Math.abs(displayAmount))}`} was deposited to ${isAdmin && userName ? `${userName}'s` : 'your'} account.`
+                : `${isBitcoinTransaction ? formatBtc(Math.abs(displayAmount)) : `₹${formatCash(Math.abs(displayAmount))}`} was withdrawn from ${isAdmin && userName ? `${userName}'s` : 'your'} account.`
               }
               {transaction.reason && ` Reason: ${transaction.reason}`}
             </div>
