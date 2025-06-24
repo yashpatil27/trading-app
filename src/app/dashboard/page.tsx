@@ -3,7 +3,7 @@
 import { useSession } from 'next-auth/react'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { History, LogOut, Home, Plus, Minus, ArrowDownLeft, ArrowUpRight, ArrowUp, ArrowDown, Wallet } from 'lucide-react'
+import { History, LogOut, Home, Plus, Minus, ArrowDownLeft, ArrowUpRight, ArrowUp, ArrowDown, Wallet, Settings } from 'lucide-react'
 import { BitcoinIcon } from '@bitcoin-design/bitcoin-icons-react/filled'
 import { signOut } from 'next-auth/react'
 import { useBitcoinPrice } from '@/hooks/useBitcoinPrice'
@@ -257,9 +257,10 @@ export default function Dashboard() {
             {session.user.role === 'ADMIN' && (
               <button
                 onClick={() => router.push('/admin')}
-                className="bg-purple-600 hover:bg-purple-700 px-3 py-1 rounded text-sm"
+                className="text-purple-400 hover:text-purple-300 transition-colors"
+                title="Admin Panel"
               >
-                Admin
+                <Settings size={24} strokeWidth={2} />
               </button>
             )}
             <button
