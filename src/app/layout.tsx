@@ -17,7 +17,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "BitTrade - Bitcoin Trading Platform",
+  title: '₿itTrade - Bitcoin Trading Platform',
   description: "Trade Bitcoin with INR in India - Real-time prices, secure trading",
 };
 

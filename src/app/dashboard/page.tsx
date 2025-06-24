@@ -251,7 +251,7 @@ export default function Dashboard() {
       <div className="bg-gray-900 border-b border-gray-800 p-4">
         <div className="flex justify-between items-center">
           <div className="flex items-center gap-3">
-            <h1 className="text-xl font-bold">BitTrade</h1>
+            <h1 className="text-xl font-bold">₿itTrade</h1>
           </div>
           <div className="flex items-center gap-4">
             {session.user.role === 'ADMIN' && (

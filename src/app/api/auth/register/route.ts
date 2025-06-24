@@ -62,7 +62,7 @@ export async function POST(request: NextRequest) {
         inrAmount: 0,
         inrBalanceAfter: 0,
         btcBalanceAfter: 0,
-        reason: 'Initial account setup - Welcome to BitTrade!'
+        reason: 'Initial account setup - Welcome to ₿itTrade!'
       }
     })
 
@@ -72,7 +72,7 @@ export async function POST(request: NextRequest) {
     console.log(`🎉 New user registered: ${user.email} (${user.name}) - Initial balance set to 0`)
 
     return NextResponse.json({ 
-      message: 'Account created successfully! Welcome to BitTrade!',
+      message: 'Account created successfully! Welcome to ₿itTrade!',
       user: user
     })
 
