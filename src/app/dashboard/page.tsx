@@ -264,7 +264,7 @@ export default function Dashboard() {
               </button>
             )}
             <button
-              onClick={() => signOut()}
+              onClick={() => signOut({ callbackUrl: "/login" })}
               className="text-white hover:text-gray-300 font-bold text-lg"
             >
               <LogOut size={24} strokeWidth={2.5} />

@@ -46,6 +46,7 @@ export const authOptions: NextAuthOptions = {
   ],
   pages: {
     signIn: '/login',
+    signOut: '/login',
   },
   callbacks: {
     async jwt({ token, user }) {
@@ -60,6 +61,17 @@ export const authOptions: NextAuthOptions = {
         session.user.role = token.role as string
       }
       return session
+    },
+    async redirect({ url, baseUrl }) {
+      // Ensure redirects always use the correct base URL
+      if (url.startsWith('/')) {
+        return `${baseUrl}${url}`
+      }
+      // Handle logout redirects
+      if (url === baseUrl || url.includes('/api/auth/signout')) {
+        return `${baseUrl}/login`
+      }
+      return baseUrl
     }
   },
   session: {
