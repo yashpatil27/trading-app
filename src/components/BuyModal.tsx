@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { X } from 'lucide-react'
+import { X, Clock } from 'lucide-react'
 import { Wallet } from 'lucide-react'
 
 interface BuyModalProps {
@@ -12,6 +12,7 @@ interface BuyModalProps {
   btcPrice: number
   buyRate: number
   loading: boolean
+  countdown?: number
 }
 
 export default function BuyModal({ 
@@ -21,7 +22,8 @@ export default function BuyModal({
   availableBalance, 
   btcPrice, 
   buyRate,
-  loading 
+  loading,
+  countdown 
 }: BuyModalProps) {
   const [inrAmount, setInrAmount] = useState('')
   const [btcAmount, setBtcAmount] = useState(0)
@@ -110,6 +112,14 @@ export default function BuyModal({
             <div className="text-sm text-gray-400">Buy Rate</div>
             <div className="text-lg font-bold text-green-400">₹{formatCash(buyRate)}</div>
             <div className="text-xs text-gray-500">per ₿</div>
+            {countdown !== undefined && (
+              <div className="flex items-center justify-center gap-2 mt-2">
+                <div className="bg-gray-700 px-2 py-1 rounded-full flex items-center gap-1">
+                  <Clock size={10} className="text-green-400" />
+                  <span className="text-xs text-gray-300">Update: {countdown}s</span>
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Amount Input */}

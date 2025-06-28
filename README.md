@@ -1,307 +1,88 @@
-# ₿itTrade - Professional Bitcoin Trading Platform
+# ₿itTrade - Bitcoin Trading Platform
 
-> A modern, full-stack Bitcoin trading application with enterprise-grade security and precision
+A modern Bitcoin trading platform built with Next.js, allowing users to buy and sell Bitcoin with Indian Rupees (INR).
 
-**₿itTrade** is a complete Bitcoin trading simulator that provides a realistic trading experience with real-time price data, secure PIN authentication, and professional admin controls. Built with cutting-edge technologies for performance, security, and scalability.
+## 🚀 Features
 
-![Next.js](https://img.shields.io/badge/Next.js-15.3.4-black?style=for-the-badge&logo=next.js)
-![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?style=for-the-badge&logo=typescript)
-![Bitcoin](https://img.shields.io/badge/Bitcoin-₿-orange?style=for-the-badge&logo=bitcoin)
-![Redis](https://img.shields.io/badge/Redis-7-DC382D?style=for-the-badge&logo=redis)
-![Security](https://img.shields.io/badge/Security-PIN%20Protected-green?style=for-the-badge&logo=shield)
+- **Real-time Bitcoin Trading** - Buy and sell Bitcoin with live price updates
+- **Portfolio Analytics** - Track performance with detailed metrics
+- **Transaction History** - Complete trading and balance history
+- **Admin Panel** - User management and balance administration
+- **Mobile-First Design** - Optimized for mobile trading experience
+- **Performance Metrics** - Profit/loss tracking, win rates, cost basis analysis
 
-## ✨ Features Overview
+## 📱 Three Main Tabs
 
-### 🎯 **Core Trading Features**
-
-| Feature | Description | Status |
-|---------|-------------|--------|
-| **Real-time Prices** | Live Bitcoin price updates every 30 seconds | ✅ Active |
-| **Buy/Sell Bitcoin** | Instant trading with INR currency | ✅ Active |
-| **PIN Security** | 4-digit PIN confirmation for all trades | ✅ Secure |
-| **Portfolio View** | Real-time balance and holdings display | ✅ Live |
-| **Transaction History** | Complete trading audit trail | ✅ Complete |
-| **Mobile Responsive** | Optimized for all screen sizes | ✅ Responsive |
-
-### 🔐 **Security & Authentication**
-
-- **OAuth Integration** - Secure login with GitHub/Google
-- **PIN Protection** - Mandatory 4-digit PIN for trading
-- **Session Management** - Secure user session handling
-- **Role-Based Access** - User and Admin permission levels
-- **Audit Trail** - Complete transaction logging
-- **Data Validation** - Server-side input sanitization
-
-### 👨‍💼 **Admin Management**
-
-- **User Dashboard** - View all registered users
-- **Balance Control** - Add/remove INR and Bitcoin funds
-- **PIN Management** - Reset user trading PINs
-- **Transaction Monitoring** - Oversee all platform activity
-- **System Health** - Performance metrics and status
-- **Bulk Operations** - Efficient user management tools
-
-### ⚡ **Performance & Architecture**
-
-- **Enterprise-Grade Precision** - Integer-based financial calculations
-- **Redis Caching** - High-performance balance caching
-- **Optimized Database** - Strategic indexes for 50-90% faster queries
-- **React Optimization** - Memoized components reduce re-renders by 40-60%
-- **Professional UX** - Skeleton loading states and smooth animations
-- **Scalable Design** - Built for production workloads
-
-## 🌟 Key Features
-
-### 🔐 Security Features
-- **NextAuth.js Integration**: Secure authentication with GitHub/Google OAuth
-- **PIN Protection**: 4-digit PIN confirmation for all trading operations
-- **Session Management**: Secure session handling with proper token management
-- **Input Validation**: Comprehensive server-side validation
-- **Rate Limiting**: API rate limiting for security
-
-### 💰 Trading Features
-- **Real-time Bitcoin Prices**: Live price updates every 30 seconds
-- **Buy/Sell Operations**: Complete trading functionality with instant execution
-- **Portfolio Tracking**: Real-time balance updates and transaction history
-- **PIN Confirmation**: Secure trading with mandatory PIN verification
-- **Order History**: Complete transaction audit trail
-
-### 🏪 Financial Architecture
-- **Integer Precision**: Bank-grade financial calculations
-- **Satoshi Support**: Bitcoin amounts in smallest unit (satoshis)
-- **INR Integration**: Indian Rupee as base currency (whole numbers only)
-- **Balance Management**: Real-time balance tracking with Redis caching
-- **Transaction Records**: Complete financial audit trail
-
-### 👨‍💼 Admin Features
-- **User Management**: Complete user administration panel
-- **Balance Control**: Add/remove funds with transaction records
-- **System Monitoring**: Performance metrics and health checks
-- **PIN Management**: View and reset user trading PINs
-- **Transaction Oversight**: Monitor all platform transactions
+1. **Home** - Trading interface with buy/sell functionality
+2. **Portfolio** - Investment overview and performance analytics
+3. **History** - Complete transaction and trading history
 
 ## 🛠️ Tech Stack
 
-### Frontend
-- **Next.js 15**: Latest React framework with App Router
-- **TypeScript**: Type-safe development
-- **Tailwind CSS**: Utility-first CSS framework
-- **Shadcn/ui**: Modern UI component library
-- **React.memo**: Optimized components for performance (v3.3)
-- **Skeleton Loading**: Professional loading states (v3.3)
+- **Frontend**: Next.js 15, React, TypeScript, Tailwind CSS
+- **Backend**: Next.js API Routes, NextAuth.js
+- **Database**: SQLite with Prisma ORM
+- **Caching**: Redis for balance caching
+- **Real-time**: Server-Sent Events for price updates
+- **Process Management**: PM2 for production deployment
 
-### Backend
-- **Next.js API Routes**: Serverless API endpoints
-- **Prisma**: Modern database toolkit with SQLite + optimized indexes (v3.3)
-- **NextAuth.js**: Authentication library
-- **Redis**: High-performance caching with intelligent fallbacks
+## 📚 Documentation
 
-### Key Libraries
-- **Zod**: Schema validation
-- **React Hook Form**: Form management
-- **Turbopack**: Ultra-fast development builds
+**👉 For detailed explanations of every file and how to make changes, see [DOCUMENTATION.md](./DOCUMENTATION.md)**
 
-## 📦 Quick Start
+The documentation explains:
+- What every file does in simple terms
+- How to make common changes (colors, rates, features)
+- Step-by-step customization examples
+- Troubleshooting guide
 
-### Prerequisites
-- Node.js 18.17 or later
-- npm package manager
-- Redis server (for caching)
+## ⚡ Quick Start
 
-### Installation
-
-1. **Clone and install**
-   ```bash
-   git clone <repository-url>
-   cd trading-app
-   npm install
-   ```
-
-2. **Set up environment**
-   ```bash
-   cp .env.example .env
-   # Configure your OAuth keys and Redis URL in .env
-   ```
-
-3. **Initialize database**
-   ```bash
-   npx prisma generate
-   npx prisma db push
-   npx prisma db seed
-   ```
-
-4. **Start services**
-   ```bash
-   # Terminal 1: Start Redis
-   redis-server
-   
-   # Terminal 2: Start app
-   npm run dev
-   ```
-
-5. **Access application**
-   - Main App: http://localhost:3000
-   - Admin Panel: http://localhost:3000/admin
-   - Trading Dashboard: http://localhost:3000/dashboard
-
-## 🔧 Usage
-
-### For Regular Users
-1. **Authentication**: Sign in with GitHub/Google OAuth
-2. **Dashboard**: View portfolio, balances, and recent transactions
-3. **Trading**: Buy/sell Bitcoin with mandatory PIN confirmation
-4. **Security**: Default PIN is '1234' - change it for security
-5. **History**: Track all trading activities
-
-### For Administrators
-1. **Admin Access**: Navigate to `/admin` after signing in
-2. **User Management**: View all users with real-time balances
-3. **Balance Operations**: Add/remove INR funds from user accounts
-4. **System Health**: Monitor performance metrics and cache statistics
-5. **Security**: Reset user PINs when needed
-
-## 🏗️ Architecture Highlights
-
-### Financial Precision
-- **Bitcoin**: Stored as BigInt in satoshis (100,000,000 satoshis = 1 BTC)
-- **INR**: Stored as integers (whole rupees only, no decimals)
-- **Calculations**: Pure integer arithmetic eliminates floating-point errors
-- **Performance**: 10-20% faster than floating-point operations
-
-### Caching Strategy
-- **Redis Integration**: High-performance caching for user balances
-- **Bulk Operations**: Eliminates N+1 query problems
-- **Cache Warming**: Proactive cache loading for better performance
-- **Intelligent Fallbacks**: Graceful degradation when cache is unavailable
-
-### Security Implementation
-- **PIN System**: 4-digit PIN required for all trades
-- **Session-based**: PIN verification tied to user sessions
-- **No Lockouts**: Users can retry incorrect PINs without account lockout
-- **Audit Trail**: All transactions logged with timestamps
-
-## 🔒 Security Features
-
-### Authentication
-- OAuth integration with GitHub/Google
-- Secure session management with NextAuth.js
-- Role-based access control (USER/ADMIN)
-
-### Transaction Security
-- Mandatory PIN verification for all trades
-- Server-side input validation
-- SQL injection prevention with Prisma
-- Complete audit trails for all financial operations
-
-### Data Protection
-- Secure environment variable management
-- XSS protection with proper sanitization
-- CSRF protection built into Next.js
-- Rate limiting on sensitive endpoints
-
-## 📊 Performance Metrics
-
-### Database Optimization (v3.3 Enhanced)
-- **Index Performance**: 50-90% faster queries with strategic database indexes
-- **Transaction Queries**: 85-95% improvement (17-29ms vs 100-300ms previously)
-- **User Lookups**: Lightning-fast responses with optimized indexing
-- **Query Reduction**: 50-98% fewer database queries with bulk operations
-- **Cache Hit Rate**: 95%+ for frequently accessed user balances
-- **Response Times**: <100ms for cached balance lookups
-- **Bulk Loading**: Admin dashboard loads all users in single optimized query
-
-### Frontend Performance (v3.3 New)
-- **Component Re-renders**: 40-60% reduction with React.memo optimization
-- **Price Updates**: Smooth UI without flicker during 30-second price updates
-- **Loading Experience**: Professional skeleton screens for immediate feedback
-- **Memory Usage**: Optimized component lifecycle management
-
-### Financial Calculations
-- **Precision**: 100% accurate integer-based arithmetic
-- **Speed**: 10-20% performance improvement over floating-point
-- **Trading Speed**: Buy/sell operations complete in ~17ms (v3.3 optimized)
-- **Memory**: Lower memory usage with integer operations
-- **Reliability**: Zero precision loss in financial calculations
-
-## 🚀 Deployment
-
-### Production Setup
+### Development
 ```bash
-# Build the application
+npm install
+npm run dev
+```
+
+### Production
+```bash
 npm run build
-
-# Start production server
-npm start
+pm2 start npm --name "trading-app" -- start
 ```
 
-### Environment Variables
-```env
-DATABASE_URL="file:./dev.db"
-NEXTAUTH_SECRET="your-secret-key"
-NEXTAUTH_URL="http://localhost:3000"
-GITHUB_ID="your-github-client-id"
-GITHUB_SECRET="your-github-client-secret"
-REDIS_URL="redis://localhost:6379"
-```
+## 🔧 Common Changes
 
-## 📈 Roadmap
+- **Change buy/sell rates**: Edit `/src/app/api/trade/route.ts`
+- **Modify colors**: Update `/src/app/globals.css`
+- **Add new features**: Follow patterns in `/src/app/dashboard/page.tsx`
+- **Database changes**: Modify `/prisma/schema.prisma`
 
-### Version 4.0 (Planned)
-- [ ] Advanced price charts with TradingView integration
-- [ ] Multi-cryptocurrency support (ETH, LTC, etc.)
-- [ ] Limit orders and stop-loss functionality
-- [ ] Mobile app with React Native
-- [ ] WebSocket real-time trading
+## 📊 Performance Features
 
-### Performance Enhancements
-- [ ] PostgreSQL migration for production
-- [ ] Advanced caching strategies
-- [ ] Load balancing support
-- [ ] Comprehensive monitoring dashboard
+- **Realized P&L**: Profit from completed trades using FIFO cost basis
+- **Unrealized P&L**: Paper gains on current Bitcoin holdings
+- **Win Rate**: Percentage of profitable trading sessions
+- **Cost Basis Analysis**: Average purchase price and break-even points
+- **Trading Statistics**: Volume, frequency, and performance metrics
 
-## 🤝 Contributing
+## 🔐 Security Features
 
-1. Fork the repository
-2. Create a feature branch: `git checkout -b feature-name`
-3. Make your changes with tests
-4. Submit a pull request
+- **PIN Confirmation**: 4-digit PIN for trade execution
+- **Session Management**: Secure user authentication
+- **Admin Controls**: Separate admin interface for user management
+- **Balance Caching**: Redis-based fast balance lookups
 
-### Development Standards
-- TypeScript for type safety
-- Comprehensive testing
-- Code formatting with Prettier
-- Conventional commit messages
+## 🌐 Access
 
-## 📝 API Documentation
+- **Local**: http://localhost:3000
+- **Network**: http://your-server-ip:3000
 
-### Core Endpoints
-- `GET /api/btc-price` - Current Bitcoin price
-- `POST /api/trade/buy` - Buy Bitcoin (requires PIN)
-- `POST /api/trade/sell` - Sell Bitcoin (requires PIN)
-- `POST /api/trade/verify-pin` - Verify trading PIN
-- `GET /api/transactions` - User transaction history
-- `GET /api/admin/users` - All users (admin only)
+## 📖 Need Help?
 
-### Authentication
-- `GET /api/auth/session` - Current session
-- `GET /api/auth/signin` - Sign in page
-- `POST /api/auth/signout` - Sign out
-
-## 📞 Support
-
-For issues, questions, or contributions:
-- **GitHub Issues**: Report bugs and request features
-- **Documentation**: Comprehensive guides in `/docs`
-- **Community**: Join our Discord for discussions
-
-## 📄 License
-
-MIT License - see [LICENSE](LICENSE) file for details.
+1. **Read the [DOCUMENTATION.md](./DOCUMENTATION.md)** - Comprehensive guide for beginners
+2. **Check the code comments** - Inline explanations throughout the codebase
+3. **Study existing patterns** - See how features are implemented and replicate
 
 ---
 
-**Built with ❤️ for secure Bitcoin trading**
-
-*Enterprise-grade precision meets modern web development*
-
-*Last updated: June 21, 2025 - v3.3 Performance Edition*
+*Built with ❤️ for the Bitcoin community*

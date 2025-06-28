@@ -28,9 +28,10 @@ export default function AdminDashboard() {
   const [balanceAmount, setBalanceAmount] = useState('')
   const [balanceReason, setBalanceReason] = useState('')
   const [balanceCurrency, setBalanceCurrency] = useState<'INR' | 'BTC'>('INR')
-  const [showPinModal, setShowPinModal] = useState<User | null>(null)
+  const [showResetModal, setShowResetModal] = useState<User | null>(null)
   const [showDeleteModal, setShowDeleteModal] = useState<User | null>(null)
   const [newPin, setNewPin] = useState('')
+  const [newPassword, setNewPassword] = useState('')
   const [newUser, setNewUser] = useState({
     email: '',
     name: '',
@@ -116,30 +117,39 @@ export default function AdminDashboard() {
     }
   }
 
-  const resetPin = async () => {
-    if (!showPinModal || !newPin) return
+  const resetCredentials = async () => {
+    if (!showResetModal) return
 
     try {
-      const response = await fetch('/api/admin/pin', {
+      const updates: any = {}
+      if (newPin) {
+        updates.newPin = newPin
+      }
+      if (newPassword) {
+        updates.newPassword = newPassword
+      }
+
+      const response = await fetch('/api/admin/reset', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          userId: showPinModal.id,
-          newPin
+          userId: showResetModal.id,
+          ...updates
         })
       })
 
       if (response.ok) {
-        setShowPinModal(null)
+        setShowResetModal(null)
         setNewPin('')
+        setNewPassword('')
         fetchUsers()
       } else {
         const error = await response.json()
         alert(error.error)
       }
     } catch (error) {
-      console.error('Error resetting PIN:', error)
-      alert('Failed to reset PIN')
+      console.error('Error resetting credentials:', error)
+      alert('Failed to reset credentials')
     }
   }
 
@@ -277,7 +287,6 @@ export default function AdminDashboard() {
                 <thead className="bg-gray-800">
                   <tr>
                     <th className="text-left p-4 font-medium">User</th>
-                    <th className="text-left p-4 font-medium">Role</th>
                     <th className="text-left p-4 font-medium">Cash Balance</th>
                     <th className="text-left p-4 font-medium">Bitcoin Balance</th>
                     <th className="text-left p-4 font-medium">Trades</th>
@@ -299,15 +308,6 @@ export default function AdminDashboard() {
                           </div>
                         </div>
                       </td>
-                      <td className="p-4">
-                        <span className={`px-2 py-1 rounded text-xs font-medium ${
-                          user.role === 'ADMIN' 
-                            ? 'bg-purple-600/20 text-purple-400' 
-                            : 'bg-blue-600/20 text-blue-400'
-                        }`}>
-                          {user.role}
-                        </span>
-                      </td>
                       <td className="p-4 font-medium">₹{formatCash(user.balance || 0)}</td>
                       <td className="p-4 font-medium">₿{formatBitcoin(user.btcAmount || 0)}</td>
                       <td className="p-4">{user._count.trades}</td>
@@ -321,10 +321,10 @@ export default function AdminDashboard() {
                             Adjust Balance
                           </button>
                           <button
-                            onClick={() => setShowPinModal(user)}
+                            onClick={() => setShowResetModal(user)}
                             className="bg-blue-600 hover:bg-blue-700 px-3 py-1 rounded text-sm font-medium transition-colors"
                           >
-                            Reset PIN
+                            Reset
                           </button>
                           <button
                             onClick={() => setShowDeleteModal(user)}
@@ -346,23 +346,14 @@ export default function AdminDashboard() {
             {users.map((user) => (
               <div key={user.id} className="bg-gray-800 rounded-lg p-4 border border-gray-700">
                 {/* User Header */}
-                <div className="flex items-start justify-between mb-4">
-                  <div className="flex items-center gap-3">
-                    <div className="bg-orange-600 rounded-full p-2">
-                      <User size={16} />
-                    </div>
-                    <div>
-                      <div className="font-semibold text-white">{user.name}</div>
-                      <div className="text-sm text-gray-400">{user.email}</div>
-                    </div>
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="bg-orange-600 rounded-full p-2">
+                    <User size={16} />
                   </div>
-                  <span className={`px-2 py-1 rounded text-xs font-medium ${
-                    user.role === 'ADMIN' 
-                      ? 'bg-purple-600/20 text-purple-400' 
-                      : 'bg-blue-600/20 text-blue-400'
-                  }`}>
-                    {user.role}
-                  </span>
+                  <div>
+                    <div className="font-semibold text-white">{user.name}</div>
+                    <div className="text-sm text-gray-400">{user.email}</div>
+                  </div>
                 </div>
 
                 {/* Balances Grid */}
@@ -405,11 +396,11 @@ export default function AdminDashboard() {
                     Adjust Balance
                   </button>
                   <button
-                    onClick={() => setShowPinModal(user)}
+                    onClick={() => setShowResetModal(user)}
                     className="bg-blue-600 hover:bg-blue-700 py-3 px-4 rounded-lg flex items-center justify-center gap-2 font-medium transition-colors text-sm"
                   >
                     <Key size={16} />
-                    Reset PIN
+                    Reset
                   </button>
                   <button
                     onClick={() => setShowDeleteModal(user)}
@@ -550,20 +541,20 @@ export default function AdminDashboard() {
         </div>
       )}
 
-      {/* PIN Reset Modal */}
-      {showPinModal && (
+      {/* Reset Modal */}
+      {showResetModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
           <div className="bg-gray-900 rounded-2xl p-4 sm:p-6 w-full max-w-md border border-gray-700">
             <h3 className="text-lg sm:text-xl font-semibold mb-4 flex items-center gap-2">
               <Key size={20} />
-              Reset Trading PIN
+              Reset Credentials
             </h3>
             <div className="bg-gray-800 rounded-lg p-4 mb-4">
               <div className="flex items-center gap-3">
                 <User size={20} className="text-gray-400" />
                 <div>
-                  <div className="font-semibold">{showPinModal.name}</div>
-                  <div className="text-sm text-gray-400">Current PIN: {showPinModal.tradingPin}</div>
+                  <div className="font-semibold">{showResetModal.name}</div>
+                  <div className="text-sm text-gray-400">{showResetModal.email}</div>
                 </div>
               </div>
             </div>
@@ -579,18 +570,28 @@ export default function AdminDashboard() {
                   placeholder="0000"
                 />
               </div>
+              <div>
+                <label className="block text-sm text-gray-400 mb-2">New Password</label>
+                <input
+                  type="password"
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                  className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-3 text-white focus:outline-none focus:ring-2 focus:ring-orange-500"
+                  placeholder="New Password"
+                />
+              </div>
               <div className="grid grid-cols-2 gap-3">
                 <button
-                  onClick={resetPin}
-                  disabled={newPin.length !== 4}
-                  className="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 py-3 rounded-lg font-medium transition-colors"
+                  onClick={resetCredentials}
+                  className="bg-blue-600 hover:bg-blue-700 py-3 rounded-lg font-medium transition-colors"
                 >
-                  Reset PIN
+                  Reset
                 </button>
                 <button
                   onClick={() => {
-                    setShowPinModal(null)
+                    setShowResetModal(null)
                     setNewPin('')
+                    setNewPassword('')
                   }}
                   className="bg-gray-600 hover:bg-gray-500 py-3 rounded-lg font-medium transition-colors"
                 >
@@ -694,17 +695,6 @@ export default function AdminDashboard() {
                   className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-3 text-white focus:outline-none focus:ring-2 focus:ring-orange-500"
                   placeholder="Password"
                 />
-              </div>
-              <div>
-                <label className="block text-sm text-gray-400 mb-2">Role</label>
-                <select
-                  value={newUser.role}
-                  onChange={(e) => setNewUser({...newUser, role: e.target.value})}
-                  className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-3 text-white focus:outline-none focus:ring-2 focus:ring-orange-500"
-                >
-                  <option value="USER">User</option>
-                  <option value="ADMIN">Admin</option>
-                </select>
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <button

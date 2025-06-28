@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -11,79 +8,55 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  name      String
-  password  String
-  tradingPin String  @default("1234")  // 4-digit PIN for trade confirmation
-  role      Role     @default(USER)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  
+  id           String        @id @default(cuid())
+  email        String        @unique
+  name         String
+  password     String
+  tradingPin   String        @default("1234")
+  role         String        @default("USER")
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
   transactions Transaction[]
-  
-  // Performance indexes
+
   @@index([email])
   @@index([role])
   @@index([createdAt])
 }
 
 model Transaction {
-  id                 String          @id @default(cuid())
+  id                 String   @id @default(cuid())
   userId             String
-  type               TransactionType
-  
-  // === EXISTING FLOAT FIELDS (keep for compatibility) ===
-  btcAmount        Float?          // Amount in BTC (null for pure INR deposits/withdrawals)
-  btcPriceUsd      Float?          // BTC/USD price at time (null for deposits/withdrawals)
-  btcPriceInr      Float?          // BTC/INR price at time (null for deposits/withdrawals)
-  usdInrRate       Float?          // The specific USD/INR rate used (91 for BUY, 88 for SELL)
-  inrAmount        Float           // INR amount (always present)
-  inrBalanceAfter  Float           // INR balance after this transaction
-  btcBalanceAfter  Float           // BTC balance after this transaction
-  
-  // === NEW INTEGER FIELDS (for precision and performance) ===
-  btcAmountSatoshi   BigInt?       // Amount in satoshis (1 BTC = 100,000,000 satoshis)
-  btcPriceUsdInt     Int?          // BTC/USD price in whole dollars (rounded)
-  btcPriceInrInt     Int?          // BTC/INR price in whole rupees 
-  usdInrRateInt      Int?          // USD/INR rate * 100 (e.g., 91.50 → 9150)
-  inrAmountInt       Int?          // INR amount in whole rupees
-  inrBalanceAfterInt Int?          // INR balance after transaction in whole rupees
-  btcBalanceAfterSat BigInt?       // BTC balance after transaction in satoshis
-  
-  reason           String?         // For admin actions, notes
-  createdAt        DateTime        @default(now())
-  
-  user             User            @relation(fields: [userId], references: [id])
-  
-  // Performance indexes for common queries
-  @@index([userId, createdAt])     // Most important: user transactions ordered by date
-  @@index([userId, type])          // Filter by user and transaction type
-  @@index([type, createdAt])       // Admin queries by type and date
-  @@index([createdAt])             // General date-based queries
-  @@index([userId])                // User-specific queries (fallback)
+  type               String
+  btcAmount          Float?
+  btcPriceUsd        Float?
+  btcPriceInr        Float?
+  usdInrRate         Float?
+  inrAmount          Float
+  inrBalanceAfter    Float
+  btcBalanceAfter    Float
+  btcAmountSatoshi   BigInt?
+  btcPriceUsdInt     Int?
+  btcPriceInrInt     Int?
+  usdInrRateInt      Int?
+  inrAmountInt       Int?
+  inrBalanceAfterInt Int?
+  btcBalanceAfterSat BigInt?
+  reason             String?
+  createdAt          DateTime @default(now())
+  user               User     @relation(fields: [userId], references: [id])
+
+  @@index([userId, createdAt])
+  @@index([userId, type])
+  @@index([type, createdAt])
+  @@index([createdAt])
+  @@index([userId])
 }
 
 model BtcPrice {
-  id        String   @id @default(cuid())
-  priceUsd  Float    // BTC/USD price (keep existing)
-  priceUsdInt Int?   // BTC/USD price in whole dollars (new)
-  createdAt DateTime @default(now())
-  
-  // Performance index for price history queries
+  id          String   @id @default(cuid())
+  priceUsd    Float
+  priceUsdInt Int?
+  createdAt   DateTime @default(now())
+
   @@index([createdAt])
-}
-
-enum Role {
-  USER
-  ADMIN
-}
-
-enum TransactionType {
-  BUY
-  SELL
-  DEPOSIT
-  WITHDRAWAL
-  ADMIN_CREDIT
-  ADMIN_DEBIT
 }

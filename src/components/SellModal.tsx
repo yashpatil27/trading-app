@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { X } from 'lucide-react'
+import { X, Clock } from 'lucide-react'
 import { BitcoinIcon } from '@bitcoin-design/bitcoin-icons-react/filled'
 
 interface SellModalProps {
@@ -12,6 +12,7 @@ interface SellModalProps {
   btcPrice: number
   sellRate: number
   loading: boolean
+  countdown?: number
 }
 
 export default function SellModal({ 
@@ -21,7 +22,8 @@ export default function SellModal({
   availableBtc, 
   btcPrice, 
   sellRate,
-  loading 
+  loading,
+  countdown 
 }: SellModalProps) {
   const [btcAmount, setBtcAmount] = useState('')
   const [inrAmount, setInrAmount] = useState(0)
@@ -116,6 +118,14 @@ export default function SellModal({
             <div className="text-sm text-gray-400">Sell Rate</div>
             <div className="text-lg font-bold text-red-400">₹{formatCash(sellRate)}</div>
             <div className="text-xs text-gray-500">per ₿</div>
+            {countdown !== undefined && (
+              <div className="flex items-center justify-center gap-2 mt-2">
+                <div className="bg-gray-700 px-2 py-1 rounded-full flex items-center gap-1">
+                  <Clock size={10} className="text-green-400" />
+                  <span className="text-xs text-gray-300">Update: {countdown}s</span>
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Amount Input */}
