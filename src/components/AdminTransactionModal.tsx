@@ -78,10 +78,6 @@ export default function AdminTransactionModal({
             </div>
           </div>
 
-          {transaction.reason && (
-            <div className="p-4 bg-zinc-800 rounded-lg">
-              <div className="text-xs sm:text-sm text-gray-400">Details</div>
-              <p className="text-white mt-1">{transaction.reason}</p>
             </div>
           )}
 

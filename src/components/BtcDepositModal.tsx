@@ -128,10 +128,6 @@ export default function BtcDepositModal({
             </div>
           </div>
 
-          {transaction.reason && (
-            <div className="p-4 bg-zinc-800 rounded-lg">
-              <div className="text-xs sm:text-sm text-gray-400">Reason</div>
-              <p className="text-white mt-1">{transaction.reason}</p>
             </div>
           )}
 

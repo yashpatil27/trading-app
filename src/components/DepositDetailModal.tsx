@@ -152,16 +152,6 @@ export default function DepositDetailModal({
               </div>
             </div>
 
-            {/* Reason */}
-            <div className="flex items-center justify-between p-3 bg-zinc-800 rounded-lg">
-              <div className="flex items-center gap-3">
-                <DollarSign className="text-gray-500" size={20} />
-                <div>
-                  <div className="text-xs sm:text-sm text-gray-400">Reason</div>
-                  <div className="font-semibold text-white">{transaction.reason}</div>
-                </div>
-              </div>
-            </div>
 
             {/* Timestamp */}
             <div className="flex items-center justify-between p-3 bg-zinc-800 rounded-lg">
@@ -183,7 +173,6 @@ export default function DepositDetailModal({
                 ? `${isBitcoinTransaction ? formatBtc(Math.abs(displayAmount)) : `₹${formatCash(Math.abs(displayAmount))}`} was deposited to ${isADMIN && userName ? `${userName}'s` : 'your'} account.`
                 : `${isBitcoinTransaction ? formatBtc(Math.abs(displayAmount)) : `₹${formatCash(Math.abs(displayAmount))}`} was withdrawn from ${isADMIN && userName ? `${userName}'s` : 'your'} account.`
               }
-              {transaction.reason && ` Reason: ${transaction.reason}`}
             </div>
           </div>
 
