@@ -79,7 +79,7 @@ export default function DepositDetailModal({
             )}
             <div>
               <h2 className="text-lg sm:text-xl font-bold text-white">
-                {{"BUY": "BUY", "SELL": "SELL", "DEPOSIT_INR": "Cash Deposit", "DEPOSIT_BTC": "BTC Deposit", "WITHDRAWAL_INR": "Cash Withdrawal", "WITHDRAWAL_BTC": "BTC Withdrawal", "ADMIN": "Admin"}[transaction.type] || transaction.type} Completed
+                {{"BUY": "Buy", "SELL": "Sell", "DEPOSIT_INR": "Cash Deposit", "DEPOSIT_BTC": "BTC Deposit", "WITHDRAWAL_INR": "Cash Withdrawal", "WITHDRAWAL_BTC": "BTC Withdrawal", "ADMIN": "Admin"}[transaction.type] || transaction.type} Completed
               </h2>
               <div className="text-xs sm:text-sm text-gray-400">Transaction ID: {transaction.id}</div>
             </div>

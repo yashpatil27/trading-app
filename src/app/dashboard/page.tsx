@@ -548,7 +548,7 @@ const TradingInterface = ({
                   <div>
                     <div className="flex items-center gap-2">
                       <span className={`font-semibold ${getTransactionColor(transaction)}`}>
-                        {transaction.type === "BUY" ? `BUY ${formatBtc(transaction.amount)}` : transaction.type === "SELL" ? `SELL ${formatBtc(transaction.amount)}` : ({BUY: "BUY", SELL: "SELL", DEPOSIT_INR: "Cash Deposit", DEPOSIT_BTC: "BTC Deposit", WITHDRAWAL_INR: "Cash Withdrawal", WITHDRAWAL_BTC: "BTC Withdrawal", ADMIN: "Admin"}[transaction.type] || transaction.type)}
+                        {transaction.type === "BUY" ? `Buy ${formatBtc(transaction.amount)}` : transaction.type === "SELL" ? `Sell ${formatBtc(transaction.amount)}` : ({BUY: "Buy", SELL: "Sell", DEPOSIT_INR: "Cash Deposit", DEPOSIT_BTC: "BTC Deposit", WITHDRAWAL_INR: "Cash Withdrawal", WITHDRAWAL_BTC: "BTC Withdrawal", ADMIN: "Admin"}[transaction.type] || transaction.type)}
                       </span>
                     </div>
                   </div>
@@ -647,7 +647,7 @@ const TransactionHistory = ({
                 <div>
                   <div className="flex items-center gap-2">
                     <span className={`font-semibold ${getTransactionColor(transaction)}`}>
-                      {transaction.type === "BUY" ? `BUY ${formatBtc(transaction.amount)}` : transaction.type === "SELL" ? `SELL ${formatBtc(transaction.amount)}` : ({BUY: "BUY", SELL: "SELL", DEPOSIT_INR: "Cash Deposit", DEPOSIT_BTC: "BTC Deposit", WITHDRAWAL_INR: "Cash Withdrawal", WITHDRAWAL_BTC: "BTC Withdrawal", ADMIN: "Admin"}[transaction.type] || transaction.type)}
+                      {transaction.type === "BUY" ? `Buy ${formatBtc(transaction.amount)}` : transaction.type === "SELL" ? `Sell ${formatBtc(transaction.amount)}` : ({BUY: "Buy", SELL: "Sell", DEPOSIT_INR: "Cash Deposit", DEPOSIT_BTC: "BTC Deposit", WITHDRAWAL_INR: "Cash Withdrawal", WITHDRAWAL_BTC: "BTC Withdrawal", ADMIN: "Admin"}[transaction.type] || transaction.type)}
                     </span>
                   </div>
                 </div>
