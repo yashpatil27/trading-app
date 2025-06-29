@@ -115,7 +115,7 @@ export default function BuyModal({
             {countdown !== undefined && (
               <div className="flex items-center justify-center gap-2 mt-2">
                 <div className="bg-white px-2 py-1 rounded-full flex items-center gap-1">
-                  <Clock size={10} className="text-white" />
+                  <Clock size={10} className="text-black" />
                   <span className="text-xs text-black">Update: {countdown}s</span>
                 </div>
               </div>
