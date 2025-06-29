@@ -547,8 +547,7 @@ const TradingInterface = ({
                   <div>
                     <div className="flex items-center gap-2">
                       <span className={`font-semibold ${getTransactionColor(transaction)}`}>
-                        {transaction.category === 'TRADE' ? transaction.type : 
-                         transaction.type}
+                        {{BUY: "BUY", SELL: "SELL", DEPOSIT_INR: "CASH DEPOSIT", DEPOSIT_BTC: "BTC DEPOSIT", WITHDRAWAL_INR: "CASH WITHDRAWAL", ADMIN: "ADMIN"}[transaction.type] || transaction.type}
                       </span>
                       {transaction.category === 'TRADE' && (
                         <span className="text-sm text-gray-400">
