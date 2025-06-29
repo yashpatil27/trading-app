@@ -397,3 +397,163 @@ Remember: The best way to learn is by experimenting with small changes and seein
 ---
 
 *Last updated: June 28, 2025*
+
+---
+
+## 🆕 Version 2.0 Changelog - Transaction System Overhaul
+
+### Major Changes Made
+
+#### 1. Transaction Type System Redesign
+**What was changed:** Complete overhaul of how transactions are categorized and displayed.
+
+**Before:** Generic "DEPOSIT" and "WITHDRAWAL" types caused confusion and incorrect calculations.
+
+**After:** Specific transaction types:
+- `DEPOSIT_INR` - Cash deposits
+- `DEPOSIT_BTC` - Bitcoin deposits  
+- `WITHDRAWAL_INR` - Cash withdrawals
+- `WITHDRAWAL_BTC` - Bitcoin withdrawals
+- `BUY` - Bitcoin purchase transactions
+- `SELL` - Bitcoin sale transactions
+- `ADMIN` - Administrative balance adjustments
+
+**Files affected:**
+- `/src/app/dashboard/page.tsx` - Updated transaction interface and handling
+- `/src/app/api/transactions/route.ts` - API response formatting
+- Database - Transaction type standardization
+
+#### 2. User-Friendly Display Names
+**What was changed:** Technical transaction names replaced with user-friendly labels.
+
+**Mapping:**
+- `DEPOSIT_INR` → "CASH DEPOSIT"
+- `DEPOSIT_BTC` → "BTC DEPOSIT"  
+- `WITHDRAWAL_INR` → "CASH WITHDRAWAL"
+- `WITHDRAWAL_BTC` → "BTC WITHDRAWAL"
+- `BUY` → "BUY"
+- `SELL` → "SELL"
+- `ADMIN` → "ADMIN"
+
+**Implementation:** Inline mapping in transaction display components.
+
+#### 3. Enhanced Visual System
+**What was changed:** Color-coded transactions with appropriate icons.
+
+**Color scheme:**
+- 🔵 Blue: All deposit transactions (INR and BTC)
+- 🟡 Yellow: All withdrawal transactions (INR and BTC)
+- 🟢 Green: BUY transactions
+- 🔴 Red: SELL transactions
+- ⚫ Gray: ADMIN transactions
+
+**Icons:**
+- Bitcoin icon for BTC transactions
+- Arrow icons for INR transactions
+- Settings icon for admin transactions
+
+#### 4. Modal System Improvements
+**What was changed:** Separate modal handling for different transaction types with correct balance display.
+
+**Key fix:** BTC transaction modals now show Bitcoin balance after transaction instead of INR balance.
+
+**Components updated:**
+- `TradeTransactionModal.tsx` - For BUY/SELL transactions
+- `DepositDetailModal.tsx` - For deposit/withdrawal transactions
+- Modal prop handling in dashboard
+
+#### 5. Database Balance Accuracy
+**What was changed:** Proper INR equivalent calculation and storage for BTC transactions.
+
+**Implementation:** BTC deposits/withdrawals now store INR equivalent using Bitcoin sell rate at transaction time.
+
+**Result:** Accurate portfolio performance calculations without inflated returns from admin deposits.
+
+### Technical Implementation Details
+
+#### Transaction Interface Updates
+```typescript
+interface Transaction {
+  id: string
+  type: 'BUY' | 'SELL' | 'DEPOSIT_INR' | 'DEPOSIT_BTC' | 'WITHDRAWAL_INR' | 'WITHDRAWAL_BTC' | 'ADMIN'
+  category: 'TRADE' | 'BALANCE'
+  amount: number
+  price?: number
+  total: number
+  btcPrice?: number
+  reason: string
+  balance?: number
+  btcBalance?: number  // Added for proper BTC balance tracking
+  createdAt: string
+}
+```
+
+#### Modal Props Standardization
+- **Trade modals:** Receive `transaction` prop with trade details
+- **Deposit/withdrawal modals:** Receive `transaction` prop with balance information
+- **Consistent theming:** Dark UI with color-coded titles and icons
+
+#### Component Architecture
+```
+Dashboard Page
+├── Transaction Display (Recent Activity)
+├── Transaction Display (History Tab)  
+├── TradeTransactionModal (for BUY/SELL)
+└── DepositDetailModal (for deposits/withdrawals)
+```
+
+### Deployment and Build Improvements
+
+#### Build Process Fixes
+- **Missing component imports:** Resolved TradeDetailModal vs TradeTransactionModal naming
+- **Component prop matching:** Fixed trade/transaction prop naming inconsistencies
+- **Cache management:** Improved Redis cache clearing for fresh data display
+
+#### PM2 Process Management
+```bash
+# Updated deployment process
+npm run build
+pm2 restart all
+redis-cli FLUSHALL  # Clear cache for fresh data
+```
+
+### Testing and Validation
+
+#### What was tested:
+1. **Transaction display accuracy:** All transaction types show correct names and colors
+2. **Modal functionality:** Correct balance display for BTC vs INR transactions  
+3. **Portfolio calculations:** Accurate performance metrics without admin deposit inflation
+4. **Build stability:** Clean builds without import/export errors
+5. **Cache behavior:** Fresh data display after cache clearing
+
+#### Known issues resolved:
+- ❌ BTC withdrawal modal showing INR balance → ✅ Shows correct BTC balance
+- ❌ Admin deposits inflating portfolio returns → ✅ Excluded from performance calculations
+- ❌ Generic transaction names confusing users → ✅ Clear, friendly labels
+- ❌ Inconsistent transaction colors → ✅ Systematic color coding
+- ❌ Build failures from missing components → ✅ Clean builds with proper imports
+
+### Future Maintenance Notes
+
+#### When adding new transaction types:
+1. Update the Transaction interface type union
+2. Add user-friendly name mapping
+3. Define appropriate color scheme
+4. Update modal handling logic
+5. Test balance calculations
+
+#### When modifying transaction display:
+1. Update both Recent Activity and History tab display logic
+2. Ensure modal props match component expectations
+3. Test color and icon consistency
+4. Verify cache invalidation
+
+#### When making database changes:
+1. Consider impact on existing transactions
+2. Update API response formatting
+3. Test balance accuracy calculations
+4. Clear Redis cache after deployment
+
+---
+
+*This changelog documents the major improvements made in Version 2.0 of the BitTrade application, focusing on enhanced user experience and system reliability.*

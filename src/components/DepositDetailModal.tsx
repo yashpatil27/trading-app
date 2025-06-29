@@ -1,17 +1,16 @@
 'use client'
 
-import { X, ArrowDownLeft, ArrowUpRight, Calendar, DollarSign, User } from 'lucide-react'
+import { X, ArrowDownLeft, ArrowUpRight, Calendar, DollarSign, User, Settings } from 'lucide-react'
+import { BitcoinIcon } from '@bitcoin-design/bitcoin-icons-react/filled'
 
 interface DepositTransaction {
   id: string
-  type: 'DEPOSIT' | 'WITHDRAWAL'
+  type: 'BUY' | 'SELL' | 'DEPOSIT_INR' | 'DEPOSIT_BTC' | 'WITHDRAWAL_INR' | 'WITHDRAWAL_BTC' | 'ADMIN'
   amount: number
-  btcAmount?: number
   reason: string
-  balance: number
+  balance?: number
   btcBalance?: number
   createdAt: string
-  currency: 'INR' | 'BTC'
 }
 
 interface DepositDetailModalProps {
@@ -52,11 +51,18 @@ export default function DepositDetailModal({
     return `₿${amount.toFixed(8).replace(/\.?0+$/, '')}`
   }
 
-  const isDeposit = transaction.type === 'DEPOSIT'
-  const isBitcoinTransaction = transaction.currency === 'BTC'
-  const displayAmount = isBitcoinTransaction ? transaction.btcAmount || 0 : transaction.amount
-  const displaySymbol = isBitcoinTransaction ? '₿' : '₹'
-  const formatAmount = isBitcoinTransaction ? formatBtc : (amount: number) => formatCash(amount)
+  const isDeposit = transaction.type === 'DEPOSIT_INR' || transaction.type === 'DEPOSIT_BTC'
+  // Check transaction type for Bitcoin transactions
+  const isBitcoinTransaction = transaction.type === 'DEPOSIT_BTC' || transaction.type === 'WITHDRAWAL_BTC'
+  
+  // For Bitcoin transactions, the API returns:
+  // - amount = BTC amount
+  // - btcBalance = BTC balance after
+  // For INR transactions, the API returns:
+  // - amount = INR amount (but this would be in total field)  
+  // - balance = INR balance after
+  const displayAmount = transaction.amount
+  const displayBalance = isBitcoinTransaction ? transaction.btcBalance || 0 : transaction.balance || 0
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-end justify-center z-50">
@@ -64,14 +70,16 @@ export default function DepositDetailModal({
         {/* Header with Transaction Status */}
         <div className="flex justify-between items-center p-4 sm:p-6 border-b border-gray-800 sticky top-0 bg-gray-900 rounded-t-3xl">
           <div className="flex items-center gap-3">
-            {isDeposit ? (
+            {(transaction.type === 'DEPOSIT_INR' || transaction.type === 'DEPOSIT_BTC') ? (
               <ArrowDownLeft className="text-blue-500" size={24} />
-            ) : (
+            ) : (transaction.type === 'WITHDRAWAL_INR' || transaction.type === 'WITHDRAWAL_BTC') ? (
               <ArrowUpRight className="text-yellow-500" size={24} />
+            ) : (
+              <ArrowDownLeft className="text-gray-500" size={24} />
             )}
             <div>
               <h2 className="text-lg sm:text-xl font-bold text-white">
-                {transaction.type} Completed
+                {{"BUY": "BUY", "SELL": "SELL", "DEPOSIT_INR": "CASH DEPOSIT", "DEPOSIT_BTC": "BTC DEPOSIT", "WITHDRAWAL_INR": "CASH WITHDRAWAL", "WITHDRAWAL_BTC": "BTC WITHDRAWAL", "ADMIN": "ADMIN"}[transaction.type] || transaction.type} Completed
               </h2>
               <div className="text-xs sm:text-sm text-gray-400">Transaction ID: {transaction.id}</div>
             </div>
@@ -101,7 +109,6 @@ export default function DepositDetailModal({
               </div>
             )}
 
-
             {/* Amount */}
             <div className="flex items-center justify-between p-3 bg-gray-800 rounded-lg">
               <div className="flex items-center gap-3">
@@ -113,7 +120,7 @@ export default function DepositDetailModal({
                   <DollarSign className={isDeposit ? "text-blue-500" : "text-yellow-500"} size={20} />
                 )}
                 <div>
-                  <div className="text-xs sm:text-sm text-gray-400">{transaction.type} Amount</div>
+                  <div className="text-xs sm:text-sm text-gray-400">{{"DEPOSIT_INR": "CASH DEPOSIT", "DEPOSIT_BTC": "BTC DEPOSIT", "WITHDRAWAL_INR": "CASH WITHDRAWAL", "WITHDRAWAL_BTC": "BTC WITHDRAWAL", "ADMIN": "ADMIN"}[transaction.type] || transaction.type} Amount</div>
                   <div className="font-semibold text-white">
                     {isDeposit ? '+' : '-'}{isBitcoinTransaction ? formatBtc(Math.abs(displayAmount)) : `₹${formatCash(Math.abs(displayAmount))}`}
                   </div>
@@ -137,8 +144,8 @@ export default function DepositDetailModal({
                   </div>
                   <div className="font-semibold text-white">
                     {isBitcoinTransaction 
-                      ? formatBtc(transaction.btcBalance || 0)
-                      : `₹${formatCash(transaction.balance)}`
+                      ? formatBtc(displayBalance)
+                      : `₹${formatCash(displayBalance)}`
                     }
                   </div>
                 </div>

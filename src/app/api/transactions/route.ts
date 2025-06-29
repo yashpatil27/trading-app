@@ -40,7 +40,10 @@ export async function GET() {
     // Transform to use integer fields primarily with proper formatting
     const allTransactions = transactions.map(transaction => {
       const isTradeTransaction = ['BUY', 'SELL'].includes(transaction.type)
-      const isDepositWithdrawal = ['DEPOSIT', 'WITHDRAWAL'].includes(transaction.type)
+      const isDepositTransaction = transaction.type.includes('DEPOSIT')
+      const isWithdrawalTransaction = transaction.type.includes('WITHDRAWAL')
+      const isBitcoinTransaction = transaction.type.includes('BTC')
+      const isAdminTransaction = transaction.type === 'ADMIN'
 
       // Prefer integer fields when available
       const usingIntegers = !!(transaction.inrAmountInt !== null && 
@@ -50,48 +53,61 @@ export async function GET() {
       let inrAmount = 0
       let btcPrice = 0
       let balance = 0
+      let btcBalance = 0
 
       if (usingIntegers) {
         // Use integer fields with proper conversion
-        btcAmount = transaction.btcAmountSatoshi ? satoshiToBtc(transaction.btcAmountSatoshi) : 0
+        btcAmount = transaction.btcAmountSatoshi ? satoshiToBtc(BigInt(transaction.btcAmountSatoshi)) : 0
         inrAmount = transaction.inrAmountInt || 0
         btcPrice = transaction.btcPriceUsdInt || 0
         balance = transaction.inrBalanceAfterInt || 0
+        btcBalance = transaction.btcBalanceAfterSat ? satoshiToBtc(BigInt(transaction.btcBalanceAfterSat)) : 0
       } else {
         // Fallback to float fields
         btcAmount = transaction.btcAmount || 0
         inrAmount = transaction.inrAmount || 0
         btcPrice = transaction.btcPriceUsd || 0
         balance = transaction.inrBalanceAfter || 0
+        btcBalance = transaction.btcBalanceAfter || 0
       }
 
-      // For admin transactions, determine if it's Bitcoin or INR based on amounts
-      const isBitcoinAdminTransaction = isDepositWithdrawal && btcAmount > 0 && inrAmount === 0
-      
       // Calculate the signed amount for deposits/withdrawals
       let signedAmount = inrAmount
-      if (transaction.type === 'WITHDRAWAL') {
+      if (isWithdrawalTransaction) {
         signedAmount = -Math.abs(inrAmount)
-      } else if (transaction.type === 'DEPOSIT') {
+      } else if (isDepositTransaction) {
         signedAmount = Math.abs(inrAmount)
+      }
+
+      // Determine transaction category
+      let category: 'TRADE' | 'BALANCE' | 'ADMIN'
+      if (isTradeTransaction) {
+        category = 'TRADE'
+      } else if (isAdminTransaction) {
+        category = 'ADMIN'
+      } else {
+        category = 'BALANCE'
       }
 
       return {
         id: transaction.id,
-        type: transaction.type as 'BUY' | 'SELL' | 'DEPOSIT' | 'WITHDRAWAL',
-        category: isTradeTransaction ? 'TRADE' as const : 'BALANCE' as const,
+        type: transaction.type,
+        category: category,
         amount: btcAmount,
         price: transaction.btcPriceInrInt || transaction.btcPriceInr || 0,
         total: signedAmount,
         btcPrice: btcPrice,
-        reason: transaction.reason || `${transaction.type} ${btcAmount ? formatBtc(BigInt(Math.round(btcAmount * 100000000))) : ''}`,
+        btcBalance: btcBalance,
+        reason: transaction.reason || `${transaction.type}`,
         balance: balance,
         createdAt: transaction.createdAt,
         
         // Debug info
         _meta: {
           usingIntegers,
-          precision: usingIntegers ? 'integer' : 'float'
+          precision: usingIntegers ? 'integer' : 'float',
+          isBitcoinTransaction,
+          originalType: transaction.type
         }
       }
     })

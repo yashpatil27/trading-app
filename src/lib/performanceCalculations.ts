@@ -5,7 +5,7 @@
 
 interface Transaction {
   id: string
-  type: 'BUY' | 'SELL' | 'DEPOSIT' | 'WITHDRAWAL' | 'ADMIN_CREDIT' | 'ADMIN_DEBIT'
+  type: 'BUY' | 'SELL' | 'DEPOSIT_INR' | 'DEPOSIT_BTC' | 'WITHDRAWAL_INR' | 'WITHDRAWAL_BTC' | 'ADMIN'
   btcAmount: number | null
   btcPriceInr: number | null
   inrAmount: number
@@ -133,6 +133,13 @@ export class PerformanceCalculator {
           price: transaction.btcPriceInr,
           date: transaction.createdAt
         })
+      } else if (transaction.type === 'DEPOSIT_BTC' && transaction.btcAmount && transaction.btcPriceInr) {
+        // Add deposited Bitcoin to holdings at the recorded sell rate
+        holdings.push({
+          amount: transaction.btcAmount,
+          price: transaction.btcPriceInr,
+          date: transaction.createdAt
+        })
       } else if (transaction.type === 'SELL' && transaction.btcAmount && transaction.btcPriceInr) {
         // Sell using FIFO
         let remainingToSell = transaction.btcAmount
@@ -214,15 +221,16 @@ export class PerformanceCalculator {
   }
 
   /**
-   * Calculate initial investment amount (total deposits minus withdrawals)
+   * Calculate initial investment amount (deposits minus withdrawals)
+   * Only counts money/value that came into or left the account, not internal trading
    */
   private calculateInitialInvestment(): number {
     const deposits = this.transactions
-      .filter(t => t.type === 'DEPOSIT' || t.type === 'ADMIN_CREDIT')
+      .filter(t => t.type === 'DEPOSIT_INR' || t.type === 'DEPOSIT_BTC')
       .reduce((sum, t) => sum + t.inrAmount, 0)
     
     const withdrawals = this.transactions
-      .filter(t => t.type === 'WITHDRAWAL' || t.type === 'ADMIN_DEBIT')
+      .filter(t => t.type === 'WITHDRAWAL_INR' || t.type === 'WITHDRAWAL_BTC')
       .reduce((sum, t) => sum + t.inrAmount, 0)
     
     return deposits - withdrawals

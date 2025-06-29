@@ -10,13 +10,13 @@ import { useBitcoinPrice } from '@/hooks/useBitcoinPrice'
 import { PerformanceCalculator } from '@/lib/performanceCalculations'
 import BuyModal from '@/components/BuyModal'
 import SellModal from '@/components/SellModal'
-import TradeDetailModal from '@/components/TradeDetailModal'
+import TradeTransactionModal from '@/components/TradeTransactionModal'
 import DepositDetailModal from '@/components/DepositDetailModal'
 import PinConfirmationModal from '@/components/PinConfirmationModal'
 
 interface Transaction {
   id: string
-  type: 'BUY' | 'SELL' | 'CREDIT' | 'DEBIT'
+  type: 'BUY' | 'SELL' | 'DEPOSIT_INR' | 'DEPOSIT_BTC' | 'WITHDRAWAL_INR' | 'WITHDRAWAL_BTC' | 'ADMIN'
   category: 'TRADE' | 'BALANCE'
   amount: number
   price?: number
@@ -24,6 +24,7 @@ interface Transaction {
   btcPrice?: number
   reason: string
   balance?: number
+  btcBalance?: number
   createdAt: string
 }
 
@@ -547,7 +548,7 @@ const TradingInterface = ({
                   <div>
                     <div className="flex items-center gap-2">
                       <span className={`font-semibold ${getTransactionColor(transaction)}`}>
-                        {{BUY: "BUY", SELL: "SELL", DEPOSIT_INR: "CASH DEPOSIT", DEPOSIT_BTC: "BTC DEPOSIT", WITHDRAWAL_INR: "CASH WITHDRAWAL", ADMIN: "ADMIN"}[transaction.type] || transaction.type}
+                        {{BUY: "BUY", SELL: "SELL", DEPOSIT_INR: "CASH DEPOSIT", DEPOSIT_BTC: "BTC DEPOSIT", WITHDRAWAL_INR: "CASH WITHDRAWAL", WITHDRAWAL_BTC: "BTC WITHDRAWAL", ADMIN: "ADMIN"}[transaction.type] || transaction.type}
                       </span>
                       {transaction.category === 'TRADE' && (
                         <span className="text-sm text-gray-400">
@@ -566,20 +567,28 @@ const TradingInterface = ({
                 <div className="text-right">
                   <div className="font-semibold">
                     {transaction.category === 'BALANCE' ? (
-                      // For balance transactions, check if it's Bitcoin or INR
-                      transaction.amount > 0 && transaction.total === 0 ? (
-                        // Bitcoin transaction
-                        <>
-                          {transaction.type === 'WITHDRAWAL' ? '-' : '+'}
-                          {formatBtc(Math.abs(transaction.amount))}
-                        </>
-                      ) : (
-                        // INR transaction
-                        <>
-                          {transaction.type === 'WITHDRAWAL' ? '-' : ''}
-                          ₹{formatCash(Math.abs(transaction.total))}
-                        </>
-                      )
+                      // For balance transactions, show appropriate amounts based on transaction type
+                      (() => {
+                        switch (transaction.type) {
+                          case 'DEPOSIT_BTC':
+                            return <>+{formatBtc(Math.abs(transaction.amount))}</>
+                          case 'WITHDRAWAL_BTC':
+                            return <>-{formatBtc(Math.abs(transaction.amount))}</>
+                          case 'DEPOSIT_INR':
+                            return <>+₹{formatCash(Math.abs(transaction.total))}</>
+                          case 'WITHDRAWAL_INR':
+                            return <>-₹{formatCash(Math.abs(transaction.total))}</>
+                          case 'ADMIN':
+                            // Admin transactions could be either BTC or INR, check which one has value
+                            if (transaction.amount > 0 && transaction.total === 0) {
+                              return <>{formatBtc(Math.abs(transaction.amount))}</>
+                            } else {
+                              return <>₹{formatCash(Math.abs(transaction.total))}</>
+                            }
+                          default:
+                            return <>₹{formatCash(Math.abs(transaction.total))}</>
+                        }
+                      })()
                     ) : (
                       // Trade transactions show INR total
                       `₹${formatCash(transaction.total)}`
@@ -649,8 +658,7 @@ const TransactionHistory = ({
                 <div>
                   <div className="flex items-center gap-2">
                     <span className={`font-semibold ${getTransactionColor(transaction)}`}>
-                      {transaction.category === 'TRADE' ? transaction.type : 
-                       transaction.type}
+                      {{BUY: "BUY", SELL: "SELL", DEPOSIT_INR: "CASH DEPOSIT", DEPOSIT_BTC: "BTC DEPOSIT", WITHDRAWAL_INR: "CASH WITHDRAWAL", WITHDRAWAL_BTC: "BTC WITHDRAWAL", ADMIN: "ADMIN"}[transaction.type] || transaction.type}
                     </span>
                     {transaction.category === 'TRADE' && (
                       <span className="text-sm text-gray-400">
@@ -669,24 +677,32 @@ const TransactionHistory = ({
               <div className="text-right">
                 <div className="font-semibold">
                   {transaction.category === 'BALANCE' ? (
-                    // For balance transactions, check if it's Bitcoin or INR
-                    transaction.amount > 0 && transaction.total === 0 ? (
-                      // Bitcoin transaction
-                      <>
-                        {transaction.type === 'WITHDRAWAL' ? '-' : '+'}
-                        {formatBtc(Math.abs(transaction.amount))}
-                      </>
+                      // For balance transactions, show appropriate amounts based on transaction type
+                      (() => {
+                        switch (transaction.type) {
+                          case 'DEPOSIT_BTC':
+                            return <>+{formatBtc(Math.abs(transaction.amount))}</>
+                          case 'WITHDRAWAL_BTC':
+                            return <>-{formatBtc(Math.abs(transaction.amount))}</>
+                          case 'DEPOSIT_INR':
+                            return <>+₹{formatCash(Math.abs(transaction.total))}</>
+                          case 'WITHDRAWAL_INR':
+                            return <>-₹{formatCash(Math.abs(transaction.total))}</>
+                          case 'ADMIN':
+                            // Admin transactions could be either BTC or INR, check which one has value
+                            if (transaction.amount > 0 && transaction.total === 0) {
+                              return <>{formatBtc(Math.abs(transaction.amount))}</>
+                            } else {
+                              return <>₹{formatCash(Math.abs(transaction.total))}</>
+                            }
+                          default:
+                            return <>₹{formatCash(Math.abs(transaction.total))}</>
+                        }
+                      })()
                     ) : (
-                      // INR transaction
-                      <>
-                        {transaction.type === 'WITHDRAWAL' ? '-' : ''}
-                        ₹{formatCash(Math.abs(transaction.total))}
-                      </>
-                    )
-                  ) : (
-                    // Trade transactions show INR total
-                    `₹${formatCash(transaction.total)}`
-                  )}
+                      // Trade transactions show INR total
+                      `₹${formatCash(transaction.total)}`
+                    )}
                 </div>
                 {transaction.category === 'TRADE' && transaction.price && (
                   <div className="text-xs text-gray-400">
@@ -891,18 +907,23 @@ export default function Dashboard() {
   }
 
   const getTransactionIcon = (transaction: Transaction) => {
-    if (transaction.category === 'TRADE') {
-      return transaction.type === 'BUY' ? (
-        <ArrowUp className="text-green-500" width={20} height={20} />
-      ) : (
-        <ArrowDown className="text-red-500" width={20} height={20} />
-      )
-    } else {
-      return transaction.type === 'DEPOSIT' ? (
-        <ArrowDownLeft className="text-blue-500" size={20} />
-      ) : (
-        <ArrowUpRight className="text-yellow-500" size={20} />
-      )
+    switch (transaction.type) {
+      case 'BUY':
+        return <ArrowUp className="text-green-500" width={20} height={20} />
+      case 'SELL':
+        return <ArrowDown className="text-red-500" width={20} height={20} />
+      case 'DEPOSIT_INR':
+        return <ArrowDownLeft className="text-blue-500" size={20} />
+      case 'DEPOSIT_BTC':
+        return <BitcoinIcon style={{height: "20px", width: "20px", color: "#F7931A"}} />
+      case 'WITHDRAWAL_INR':
+        return <ArrowUpRight className="text-yellow-500" size={20} />
+      case 'WITHDRAWAL_BTC':
+        return <BitcoinIcon style={{height: "20px", width: "20px", color: "#EF4444"}} />
+      case 'ADMIN':
+        return <Settings className="text-indigo-500" size={20} />
+      default:
+        return <History className="text-gray-500" size={20} />
     }
   }
 
@@ -910,7 +931,7 @@ export default function Dashboard() {
     if (transaction.category === 'TRADE') {
       return transaction.type === 'BUY' ? 'text-green-400' : 'text-red-400'
     } else {
-      return transaction.type === 'DEPOSIT' ? 'text-blue-400' : 'text-yellow-400'
+      return (transaction.type === 'DEPOSIT_INR' || transaction.type === 'DEPOSIT_BTC' || transaction.type === 'DEPOSIT') ? 'text-blue-400' : 'text-yellow-400'
     }
   }
 
@@ -929,17 +950,17 @@ export default function Dashboard() {
     } else {
       // Handle deposit/withdrawal transactions
       // Determine if this is a Bitcoin or INR transaction based on transaction data
-      const isBitcoinTransaction = transaction.amount > 0 && transaction.total === 0
+      const isBitcoinTransaction = transaction.type.includes("BTC")
       const currency = isBitcoinTransaction ? 'BTC' : 'INR'
       
       setSelectedDeposit({
         id: transaction.id,
         type: transaction.type,
-        amount: currency === 'INR' ? Math.abs(transaction.total) : 0,
+        amount: currency === 'INR' ? Math.abs(transaction.total) : Math.abs(transaction.amount),
         btcAmount: currency === 'BTC' ? Math.abs(transaction.amount) : 0,
         reason: transaction.reason,
         balance: transaction.balance || 0,
-        btcBalance: user?.btcAmount || 0,
+        btcBalance: transaction.btcBalance || 0,
         createdAt: transaction.createdAt,
         currency: currency
       })
@@ -1110,10 +1131,10 @@ export default function Dashboard() {
         isLoading={loading}
       />
 
-      <TradeDetailModal
+      <TradeTransactionModal
         isOpen={!!selectedTrade}
         onClose={() => setSelectedTrade(null)}
-        trade={selectedTrade}
+        transaction={selectedTrade}
       />
 
       <DepositDetailModal
