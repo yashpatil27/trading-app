@@ -61,7 +61,7 @@ export default function BtcWithdrawalModal({
             <ArrowUpRight className="text-white" size={24} />
             <div>
               <h2 className="text-lg sm:text-xl font-bold text-white">
-                BTC WITHDRAWAL Completed
+                BTC Withdrawal Completed
               </h2>
               <div className="text-xs sm:text-sm text-gray-400">Transaction ID: {transaction.id}</div>
             </div>

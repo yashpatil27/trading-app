@@ -52,7 +52,7 @@ export default function InrWithdrawalModal({
             <ArrowUpRight className="text-white" size={24} />
             <div>
               <h2 className="text-lg sm:text-xl font-bold text-white">
-                CASH WITHDRAWAL Completed
+                Cash Withdrawal Completed
               </h2>
               <div className="text-xs sm:text-sm text-gray-400">Transaction ID: {transaction.id}</div>
             </div>

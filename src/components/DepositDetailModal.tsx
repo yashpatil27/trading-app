@@ -17,7 +17,7 @@ interface DepositDetailModalProps {
   isOpen: boolean
   onClose: () => void
   transaction: DepositTransaction | null
-  isAdmin?: boolean
+  isADMIN?: boolean
   userName?: string
 }
 
@@ -25,7 +25,7 @@ export default function DepositDetailModal({
   isOpen, 
   onClose, 
   transaction, 
-  isAdmin = false,
+  isADMIN = false,
   userName = ''
 }: DepositDetailModalProps) {
   if (!isOpen || !transaction) return null
@@ -79,7 +79,7 @@ export default function DepositDetailModal({
             )}
             <div>
               <h2 className="text-lg sm:text-xl font-bold text-white">
-                {{"BUY": "BUY", "SELL": "SELL", "DEPOSIT_INR": "CASH DEPOSIT", "DEPOSIT_BTC": "BTC DEPOSIT", "WITHDRAWAL_INR": "CASH WITHDRAWAL", "WITHDRAWAL_BTC": "BTC WITHDRAWAL", "ADMIN": "ADMIN"}[transaction.type] || transaction.type} Completed
+                {{"BUY": "BUY", "SELL": "SELL", "DEPOSIT_INR": "Cash Deposit", "DEPOSIT_BTC": "BTC Deposit", "WITHDRAWAL_INR": "Cash Withdrawal", "WITHDRAWAL_BTC": "BTC Withdrawal", "ADMIN": "Admin"}[transaction.type] || transaction.type} Completed
               </h2>
               <div className="text-xs sm:text-sm text-gray-400">Transaction ID: {transaction.id}</div>
             </div>
@@ -97,7 +97,7 @@ export default function DepositDetailModal({
           {/* Transaction Details */}
           <div className="space-y-3">
             {/* User Name (for admin view) */}
-            {isAdmin && userName && (
+            {isADMIN && userName && (
               <div className="flex items-center justify-between p-3 bg-zinc-800 rounded-lg">
                 <div className="flex items-center gap-3">
                   <User className="text-white" size={20} />
@@ -120,7 +120,7 @@ export default function DepositDetailModal({
                   <DollarSign className={isDeposit ? "text-white" : "text-white"} size={20} />
                 )}
                 <div>
-                  <div className="text-xs sm:text-sm text-gray-400">{{"DEPOSIT_INR": "CASH DEPOSIT", "DEPOSIT_BTC": "BTC DEPOSIT", "WITHDRAWAL_INR": "CASH WITHDRAWAL", "WITHDRAWAL_BTC": "BTC WITHDRAWAL", "ADMIN": "ADMIN"}[transaction.type] || transaction.type} Amount</div>
+                  <div className="text-xs sm:text-sm text-gray-400">{{"DEPOSIT_INR": "Cash Deposit", "DEPOSIT_BTC": "BTC Deposit", "WITHDRAWAL_INR": "Cash Withdrawal", "WITHDRAWAL_BTC": "BTC Withdrawal", "ADMIN": "Admin"}[transaction.type] || transaction.type} Amount</div>
                   <div className="font-semibold text-white">
                     {isDeposit ? '+' : '-'}{isBitcoinTransaction ? formatBtc(Math.abs(displayAmount)) : `₹${formatCash(Math.abs(displayAmount))}`}
                   </div>
@@ -180,8 +180,8 @@ export default function DepositDetailModal({
             <div className="text-xs sm:text-sm text-gray-400 mb-2">Transaction Summary</div>
             <div className="text-sm text-white">
               {isDeposit 
-                ? `${isBitcoinTransaction ? formatBtc(Math.abs(displayAmount)) : `₹${formatCash(Math.abs(displayAmount))}`} was deposited to ${isAdmin && userName ? `${userName}'s` : 'your'} account.`
-                : `${isBitcoinTransaction ? formatBtc(Math.abs(displayAmount)) : `₹${formatCash(Math.abs(displayAmount))}`} was withdrawn from ${isAdmin && userName ? `${userName}'s` : 'your'} account.`
+                ? `${isBitcoinTransaction ? formatBtc(Math.abs(displayAmount)) : `₹${formatCash(Math.abs(displayAmount))}`} was deposited to ${isADMIN && userName ? `${userName}'s` : 'your'} account.`
+                : `${isBitcoinTransaction ? formatBtc(Math.abs(displayAmount)) : `₹${formatCash(Math.abs(displayAmount))}`} was withdrawn from ${isADMIN && userName ? `${userName}'s` : 'your'} account.`
               }
               {transaction.reason && ` Reason: ${transaction.reason}`}
             </div>

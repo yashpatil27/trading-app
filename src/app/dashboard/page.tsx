@@ -548,7 +548,7 @@ const TradingInterface = ({
                   <div>
                     <div className="flex items-center gap-2">
                       <span className={`font-semibold ${getTransactionColor(transaction)}`}>
-                        {transaction.type === "BUY" ? `BUY ${formatBtc(transaction.amount)}` : transaction.type === "SELL" ? `SELL ${formatBtc(transaction.amount)}` : ({BUY: "BUY", SELL: "SELL", DEPOSIT_INR: "CASH DEPOSIT", DEPOSIT_BTC: "BTC DEPOSIT", WITHDRAWAL_INR: "CASH WITHDRAWAL", WITHDRAWAL_BTC: "BTC WITHDRAWAL", ADMIN: "ADMIN"}[transaction.type] || transaction.type)}
+                        {transaction.type === "BUY" ? `BUY ${formatBtc(transaction.amount)}` : transaction.type === "SELL" ? `SELL ${formatBtc(transaction.amount)}` : ({BUY: "BUY", SELL: "SELL", DEPOSIT_INR: "Cash Deposit", DEPOSIT_BTC: "BTC Deposit", WITHDRAWAL_INR: "Cash Withdrawal", WITHDRAWAL_BTC: "BTC Withdrawal", ADMIN: "Admin"}[transaction.type] || transaction.type)}
                       </span>
                     </div>
                   </div>
@@ -568,7 +568,7 @@ const TradingInterface = ({
                           case 'WITHDRAWAL_INR':
                             return <>-₹{formatCash(Math.abs(transaction.total))}</>
                           case 'ADMIN':
-                            // Admin transactions could be either BTC or INR, check which one has value
+                            // ADMIN transactions could be either BTC or INR, check which one has value
                             if (transaction.amount > 0 && transaction.total === 0) {
                               return <>{formatBtc(Math.abs(transaction.amount))}</>
                             } else {
@@ -647,7 +647,7 @@ const TransactionHistory = ({
                 <div>
                   <div className="flex items-center gap-2">
                     <span className={`font-semibold ${getTransactionColor(transaction)}`}>
-                      {transaction.type === "BUY" ? `BUY ${formatBtc(transaction.amount)}` : transaction.type === "SELL" ? `SELL ${formatBtc(transaction.amount)}` : ({BUY: "BUY", SELL: "SELL", DEPOSIT_INR: "CASH DEPOSIT", DEPOSIT_BTC: "BTC DEPOSIT", WITHDRAWAL_INR: "CASH WITHDRAWAL", WITHDRAWAL_BTC: "BTC WITHDRAWAL", ADMIN: "ADMIN"}[transaction.type] || transaction.type)}
+                      {transaction.type === "BUY" ? `BUY ${formatBtc(transaction.amount)}` : transaction.type === "SELL" ? `SELL ${formatBtc(transaction.amount)}` : ({BUY: "BUY", SELL: "SELL", DEPOSIT_INR: "Cash Deposit", DEPOSIT_BTC: "BTC Deposit", WITHDRAWAL_INR: "Cash Withdrawal", WITHDRAWAL_BTC: "BTC Withdrawal", ADMIN: "Admin"}[transaction.type] || transaction.type)}
                     </span>
                   </div>
                 </div>
@@ -667,7 +667,7 @@ const TransactionHistory = ({
                           case 'WITHDRAWAL_INR':
                             return <>-₹{formatCash(Math.abs(transaction.total))}</>
                           case 'ADMIN':
-                            // Admin transactions could be either BTC or INR, check which one has value
+                            // ADMIN transactions could be either BTC or INR, check which one has value
                             if (transaction.amount > 0 && transaction.total === 0) {
                               return <>{formatBtc(Math.abs(transaction.amount))}</>
                             } else {
@@ -970,7 +970,7 @@ export default function Dashboard() {
               <button
                 onClick={() => router.push('/admin')}
                 className="text-white hover:text-gray-300 transition-colors"
-                title="Admin Panel"
+                title="ADMIN Panel"
               >
                 <Settings size={24} strokeWidth={2} />
               </button>
