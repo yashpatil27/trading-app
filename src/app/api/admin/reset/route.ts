@@ -73,7 +73,7 @@ export async function POST(request: NextRequest) {
     await prisma.transaction.create({
       data: {
         userId: userId,
-        type: 'ADMIN_CREDIT', // Reusing existing type for admin actions
+        type: 'ADMIN', // Reusing existing type for admin actions
         inrAmount: 0,
         inrBalanceAfter: 0,
         btcBalanceAfter: 0,

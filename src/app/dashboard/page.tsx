@@ -155,11 +155,11 @@ const PortfolioOverview = ({
         <div className="text-3xl font-bold text-white mb-2">
           ₹{portfolioStats ? formatCash(portfolioStats.totalValue) : '0'}
         </div>
-        <div className="text-sm text-orange-100">
+        <div className="text-sm text-gray-300">
           Cash + Bitcoin (at current sell rate)
         </div>
         {performanceMetrics && (
-          <div className={`text-sm mt-2 ${performanceMetrics.totalReturn >= 0 ? 'text-green-200' : 'text-red-200'}`}>
+          <div className={`text-sm mt-2 ${performanceMetrics.totalReturn >= 0 ? 'text-white' : 'text-white'}`}>
             Total Return: {formatPercentage(performanceMetrics.totalReturnPercentage)}
           </div>
         )}
@@ -168,9 +168,9 @@ const PortfolioOverview = ({
       {/* Asset Breakdown */}
       <div className="grid grid-cols-2 gap-4">
         {/* Cash Holdings */}
-        <div className="bg-gray-900 rounded-2xl p-4">
+        <div className="bg-zinc-800 rounded-2xl p-4">
           <div className="flex items-center gap-2 mb-3">
-            <DollarSign className="text-green-400" size={20} />
+            <DollarSign className="text-white" size={20} />
             <span className="text-white font-bold">Cash</span>
           </div>
           <div className="text-xl font-bold mb-1">₹{formatCash(user?.balance || 0)}</div>
@@ -183,9 +183,9 @@ const PortfolioOverview = ({
         </div>
 
         {/* Bitcoin Holdings */}
-        <div className="bg-gray-900 rounded-2xl p-4">
+        <div className="bg-zinc-800 rounded-2xl p-4">
           <div className="flex items-center gap-2 mb-3">
-            <BitcoinIcon style={{height: "20px", width: "20px", color: "#F7931A"}} />
+            <BitcoinIcon style={{height: "20px", width: "20px", color: "#FFFFFF"}} />
             <span className="text-white font-bold">Bitcoin</span>
           </div>
           <div className="text-xl font-bold mb-1">{formatBtc(user?.btcAmount || 0)}</div>
@@ -209,20 +209,20 @@ const PortfolioOverview = ({
       {/* Portfolio Analytics */}
       <div className="space-y-4">
         {/* Performance Card */}
-        <div className="bg-gray-900 rounded-2xl p-6">
+        <div className="bg-black rounded-2xl p-6">
           <div className="flex items-center gap-2 mb-4">
-            <TrendingUp className="text-blue-400" size={20} />
+            <TrendingUp className="text-white" size={20} />
             <span className="text-white font-bold">Performance</span>
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div className="text-center">
-              <div className={`text-2xl font-bold ${performanceMetrics?.totalRealizedPnL && performanceMetrics.totalRealizedPnL >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+              <div className={`text-2xl font-bold ${performanceMetrics?.totalRealizedPnL && performanceMetrics.totalRealizedPnL >= 0 ? 'text-white' : 'text-white'}`}>
                 ₹{performanceMetrics ? formatCash(performanceMetrics.totalRealizedPnL) : '0'}
               </div>
               <div className="text-xs text-gray-500">Realized P&L</div>
             </div>
             <div className="text-center">
-              <div className={`text-2xl font-bold ${performanceMetrics?.unrealizedPnL && performanceMetrics.unrealizedPnL >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+              <div className={`text-2xl font-bold ${performanceMetrics?.unrealizedPnL && performanceMetrics.unrealizedPnL >= 0 ? 'text-white' : 'text-white'}`}>
                 ₹{performanceMetrics ? formatCash(performanceMetrics.unrealizedPnL) : '0'}
               </div>
               <div className="text-xs text-gray-500">Unrealized P&L</div>
@@ -245,16 +245,16 @@ const PortfolioOverview = ({
         </div>
 
         {/* Asset Allocation Chart */}
-        <div className="bg-gray-900 rounded-2xl p-6">
+        <div className="bg-black rounded-2xl p-6">
           <div className="flex items-center gap-2 mb-4">
-            <PieChart className="text-purple-400" size={20} />
+            <PieChart className="text-white" size={20} />
             <span className="text-white font-bold">Asset Allocation</span>
           </div>
           <div className="space-y-3">
             {/* Cash Allocation Bar */}
             <div className="space-y-1">
               <div className="flex justify-between text-sm">
-                <span className="text-green-400">Cash (INR)</span>
+                <span className="text-white">Cash (INR)</span>
                 <span className="text-gray-400">
                   {portfolioStats && portfolioStats.totalValue > 0 
                     ? `${((portfolioStats.cashValue / portfolioStats.totalValue) * 100).toFixed(1)}%`
@@ -277,7 +277,7 @@ const PortfolioOverview = ({
             {/* Bitcoin Allocation Bar */}
             <div className="space-y-1">
               <div className="flex justify-between text-sm">
-                <span className="text-orange-400">Bitcoin</span>
+                <span className="text-white">Bitcoin</span>
                 <span className="text-gray-400">
                   {portfolioStats && portfolioStats.totalValue > 0 
                     ? `${((portfolioStats.btcValueInr / portfolioStats.totalValue) * 100).toFixed(1)}%`
@@ -300,19 +300,19 @@ const PortfolioOverview = ({
         </div>
 
         {/* Trading Activity Summary */}
-        <div className="bg-gray-900 rounded-2xl p-6">
+        <div className="bg-black rounded-2xl p-6">
           <div className="flex items-center gap-2 mb-4">
-            <BarChart3 className="text-indigo-400" size={20} />
+            <BarChart3 className="text-white" size={20} />
             <span className="text-white font-bold">Trading Activity</span>
           </div>
           <div className="grid grid-cols-2 gap-4">
-            <div className="text-center p-3 bg-gray-800 rounded-lg">
+            <div className="text-center p-3 bg-zinc-800 rounded-lg">
               <div className="text-lg font-bold text-gray-300">
                 {performanceMetrics ? performanceMetrics.totalTrades : 0}
               </div>
               <div className="text-xs text-gray-500">Total Trades</div>
             </div>
-            <div className="text-center p-3 bg-gray-800 rounded-lg">
+            <div className="text-center p-3 bg-zinc-800 rounded-lg">
               <div className="text-lg font-bold text-gray-300">
                 ₹{performanceMetrics ? formatCash(performanceMetrics.totalTradingVolume) : '0'}
               </div>
@@ -320,13 +320,13 @@ const PortfolioOverview = ({
             </div>
           </div>
           <div className="mt-4 grid grid-cols-2 gap-4">
-            <div className="text-center p-3 bg-gray-800 rounded-lg">
+            <div className="text-center p-3 bg-zinc-800 rounded-lg">
               <div className="text-lg font-bold text-gray-300">
                 {performanceMetrics ? performanceMetrics.monthlyStats.trades : 0}
               </div>
               <div className="text-xs text-gray-500">This Month</div>
             </div>
-            <div className="text-center p-3 bg-gray-800 rounded-lg">
+            <div className="text-center p-3 bg-zinc-800 rounded-lg">
               <div className="text-lg font-bold text-gray-300">
                 ₹{performanceMetrics ? formatCash(performanceMetrics.averageTradeSize) : '0'}
               </div>
@@ -336,13 +336,13 @@ const PortfolioOverview = ({
         </div>
 
         {/* Cost Basis Analysis */}
-        <div className="bg-gray-900 rounded-2xl p-6">
+        <div className="bg-black rounded-2xl p-6">
           <div className="flex items-center gap-2 mb-4">
-            <Calculator className="text-yellow-400" size={20} />
+            <Calculator className="text-white" size={20} />
             <span className="text-white font-bold">Cost Basis Analysis</span>
           </div>
           <div className="space-y-3">
-            <div className="p-3 bg-gray-800 rounded-lg">
+            <div className="p-3 bg-zinc-800 rounded-lg">
               <div className="flex justify-between items-center mb-1">
                 <span className="text-sm text-gray-300">Average Buy Price</span>
                 <span className="text-sm font-bold text-white">₹{formatCash(performanceMetrics?.costBasis || 0)}</span>
@@ -350,7 +350,7 @@ const PortfolioOverview = ({
               <div className="text-xs text-gray-400">Your weighted average purchase price</div>
             </div>
             
-            <div className="p-3 bg-gray-800 rounded-lg">
+            <div className="p-3 bg-zinc-800 rounded-lg">
               <div className="flex justify-between items-center mb-1">
                 <span className="text-sm text-gray-300">Break-even Price</span>
                 <span className="text-sm font-bold text-white">₹{formatCash(breakEvenPrice())}</span>
@@ -359,16 +359,16 @@ const PortfolioOverview = ({
             </div>
 
             {user?.btcAmount && user.btcAmount > 0 && (
-              <div className="p-3 bg-gray-800 rounded-lg">
+              <div className="p-3 bg-zinc-800 rounded-lg">
                 <div className="flex justify-between items-center mb-1">
                   <span className="text-sm text-gray-300">Current P&L Zone</span>
                   <div className="flex items-center gap-1">
                     {targets.isInProfit ? (
-                      <TrendingUpIcon className="text-green-400" size={16} />
+                      <TrendingUpIcon className="text-white" size={16} />
                     ) : (
-                      <TrendingDownIcon className="text-red-400" size={16} />
+                      <TrendingDownIcon className="text-white" size={16} />
                     )}
-                    <span className={`text-sm font-bold ${targets.isInProfit ? 'text-green-400' : 'text-red-400'}`}>
+                    <span className={`text-sm font-bold ${targets.isInProfit ? 'text-white' : 'text-white'}`}>
                       {formatPercentage(targets.profitPercentage)}
                     </span>
                   </div>
@@ -382,26 +382,26 @@ const PortfolioOverview = ({
         </div>
 
         {/* Trading Statistics */}
-        <div className="bg-gray-900 rounded-2xl p-6">
+        <div className="bg-black rounded-2xl p-6">
           <div className="flex items-center gap-2 mb-4">
-            <BarChart3 className="text-pink-400" size={20} />
+            <BarChart3 className="text-white" size={20} />
             <span className="text-white font-bold">Trading Statistics</span>
           </div>
           <div className="grid grid-cols-2 gap-3">
-            <div className="p-3 bg-gray-800 rounded-lg text-center">
+            <div className="p-3 bg-zinc-800 rounded-lg text-center">
               <div className="text-lg font-bold text-gray-300">{tradingDays}</div>
               <div className="text-xs text-gray-400">Days Trading</div>
             </div>
-            <div className="p-3 bg-gray-800 rounded-lg text-center">
+            <div className="p-3 bg-zinc-800 rounded-lg text-center">
               <div className="text-lg font-bold text-gray-300">{profitableDays}</div>
               <div className="text-xs text-gray-400">Profitable Days</div>
             </div>
-            <div className="p-3 bg-gray-800 rounded-lg text-center">
-              <div className="text-lg font-bold text-green-400">+₹{formatCash(Math.abs(bestTrade))}</div>
+            <div className="p-3 bg-zinc-800 rounded-lg text-center">
+              <div className="text-lg font-bold text-white">+₹{formatCash(Math.abs(bestTrade))}</div>
               <div className="text-xs text-gray-400">Best Trade</div>
             </div>
-            <div className="p-3 bg-gray-800 rounded-lg text-center">
-              <div className="text-lg font-bold text-red-400">-₹{formatCash(Math.abs(worstTrade))}</div>
+            <div className="p-3 bg-zinc-800 rounded-lg text-center">
+              <div className="text-lg font-bold text-white">-₹{formatCash(Math.abs(worstTrade))}</div>
               <div className="text-xs text-gray-400">Worst Trade</div>
             </div>
           </div>
@@ -446,7 +446,7 @@ const TradingInterface = ({
       {/* Portfolio Cards */}
       <div className="grid grid-cols-2 gap-4">
         {/* Cash Balance */}
-        <div className="bg-gray-900 rounded-2xl p-4">
+        <div className="bg-zinc-800 rounded-2xl p-4">
           <div className="flex items-center gap-2 mb-2">
             <Wallet className="text-white" width={20} height={20} />
             <span className="text-white font-bold">Cash</span>
@@ -455,9 +455,9 @@ const TradingInterface = ({
         </div>
 
         {/* Bitcoin Holdings */}
-        <div className="bg-gray-900 rounded-2xl p-4">
+        <div className="bg-zinc-800 rounded-2xl p-4">
           <div className="flex items-center gap-2 mb-2">
-            <BitcoinIcon style={{height: "20px", width: "20px", color: "#F7931A"}} />
+            <BitcoinIcon style={{height: "20px", width: "20px", color: "#FFFFFF"}} />
             <span className="text-white font-bold">Bitcoin</span>
           </div>
           <div className="text-xl font-bold">{formatBtc(user?.btcAmount || 0)}</div>
@@ -469,32 +469,32 @@ const TradingInterface = ({
 
       {/* Bitcoin Price Card */}
       {btcPrice && (
-        <div className="bg-gray-900 rounded-2xl p-6">
+        <div className="bg-zinc-800 rounded-2xl p-6">
           <div className="text-center mb-4">
             <div className="flex items-center justify-center gap-2 mb-1">
               <span className="text-white font-bold text-lg">Bitcoin Price</span>
             </div>
-            <div className="text-2xl font-bold text-orange-500">
+            <div className="text-2xl font-bold text-white">
               ${formatUSD(btcPrice.btcUSD)}
             </div>
             <div className="flex items-center justify-center gap-2 mt-2">
-              <div className="bg-gray-800 px-3 py-1 rounded-full flex items-center gap-2">
-                <Clock size={12} className="text-green-400" />
-                <span className="text-xs text-gray-300">Next update: {countdown}s</span>
+              <div className="bg-white px-3 py-1 rounded-full flex items-center gap-2">
+                <Clock size={12} className="text-black" />
+                <span className="text-xs text-black">Next update: {countdown}s</span>
               </div>
             </div>
             {btcPrice.note && (
-              <div className="text-xs text-yellow-400 mt-1">{btcPrice.note}</div>
+              <div className="text-xs text-white mt-1">{btcPrice.note}</div>
             )}
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div className="text-center">
               <div className="text-white font-bold text-lg">Buy Rate</div>
-              <div className="text-green-400 font-semibold">₹{formatCash(btcPrice.buyRate)}</div>
+              <div className="text-white font-semibold">₹{formatCash(btcPrice.buyRate)}</div>
             </div>
             <div className="text-center">
               <div className="text-white font-bold text-lg">Sell Rate</div>
-              <div className="text-red-400 font-semibold">₹{formatCash(btcPrice.sellRate)}</div>
+              <div className="text-white font-semibold">₹{formatCash(btcPrice.sellRate)}</div>
             </div>
           </div>
           <div className="text-xs text-gray-500 text-center mt-2">
@@ -508,23 +508,23 @@ const TradingInterface = ({
         <button
           onClick={() => setShowBuyModal(true)}
           disabled={!isConnected || !btcPrice || Math.floor(user?.balance || 0) === 0}
-          className="bg-green-600 hover:bg-green-700 disabled:bg-gray-700 py-4 rounded-2xl font-bold flex items-center justify-center gap-2 transition-colors"
+          className="bg-white hover:bg-gray-200 disabled:bg-gray-300 text-black py-4 rounded-2xl font-bold flex items-center justify-center gap-2 transition-colors"
         >
           <Plus size={20} />
-          Buy Bitcoin
+          Buy
         </button>
         <button
           onClick={() => setShowSellModal(true)}
           disabled={!isConnected || !btcPrice || (user?.btcAmount || 0) === 0}
-          className="bg-red-600 hover:bg-red-700 disabled:bg-gray-700 py-4 rounded-2xl font-bold flex items-center justify-center gap-2 transition-colors"
+          className="bg-white hover:bg-gray-200 disabled:bg-gray-300 text-black py-4 rounded-2xl font-bold flex items-center justify-center gap-2 transition-colors"
         >
           <Minus size={20} />
-          Sell Bitcoin
+          Sell
         </button>
       </div>
 
       {/* Recent Transactions */}
-      <div className="bg-gray-900 rounded-2xl p-6">
+      <div className="bg-black rounded-2xl p-6">
         <div className="flex items-center gap-3 mb-4">
           <History size={20} />
           <h3 className="text-lg font-semibold">Recent Activity</h3>
@@ -541,27 +541,16 @@ const TradingInterface = ({
               <div 
                 key={transaction.id} 
                 onClick={() => handleTransactionClick(transaction)}
-                className="flex justify-between items-center p-3 bg-gray-800 rounded-lg cursor-pointer hover:bg-gray-700 transition-colors"
+                className="flex justify-between items-center p-3 bg-zinc-800 rounded-lg cursor-pointer hover:bg-gray-700 transition-colors"
               >
                 <div className="flex items-center gap-3">
                   {getTransactionIcon(transaction)}
                   <div>
                     <div className="flex items-center gap-2">
                       <span className={`font-semibold ${getTransactionColor(transaction)}`}>
-                        {{BUY: "BUY", SELL: "SELL", DEPOSIT_INR: "CASH DEPOSIT", DEPOSIT_BTC: "BTC DEPOSIT", WITHDRAWAL_INR: "CASH WITHDRAWAL", WITHDRAWAL_BTC: "BTC WITHDRAWAL", ADMIN: "ADMIN"}[transaction.type] || transaction.type}
+                        {transaction.type === "BUY" ? `BUY ${formatBtc(transaction.amount)}` : transaction.type === "SELL" ? `SELL ${formatBtc(transaction.amount)}` : ({BUY: "BUY", SELL: "SELL", DEPOSIT_INR: "CASH DEPOSIT", DEPOSIT_BTC: "BTC DEPOSIT", WITHDRAWAL_INR: "CASH WITHDRAWAL", WITHDRAWAL_BTC: "BTC WITHDRAWAL", ADMIN: "ADMIN"}[transaction.type] || transaction.type)}
                       </span>
-                      {transaction.category === 'TRADE' && (
-                        <span className="text-sm text-gray-400">
-                          {formatBtc(transaction.amount)}
-                        </span>
-                      )}
                     </div>
-                    <div className="text-xs text-gray-500">
-                      {new Date(transaction.createdAt).toLocaleString()}
-                    </div>
-                    {transaction.category === 'BALANCE' && (
-                      <div className="text-xs text-gray-400">{transaction.reason}</div>
-                    )}
                   </div>
                 </div>
                 <div className="text-right">
@@ -628,7 +617,7 @@ const TransactionHistory = ({
   setActiveTab: (tab: TabType) => void
 }) => {
   return (
-    <div className="bg-gray-900 rounded-2xl p-6">
+    <div className="bg-black rounded-2xl p-6">
       <div className="flex items-center gap-3 mb-6">
         <History size={24} />
         <h2 className="text-xl font-semibold">Complete Transaction History</h2>
@@ -651,27 +640,16 @@ const TransactionHistory = ({
             <div 
               key={transaction.id} 
               onClick={() => handleTransactionClick(transaction)}
-              className="flex justify-between items-center p-4 bg-gray-800 rounded-lg cursor-pointer hover:bg-gray-700 transition-colors"
+              className="flex justify-between items-center p-4 bg-zinc-800 rounded-lg cursor-pointer hover:bg-gray-700 transition-colors"
             >
               <div className="flex items-center gap-3">
                 {getTransactionIcon(transaction)}
                 <div>
                   <div className="flex items-center gap-2">
                     <span className={`font-semibold ${getTransactionColor(transaction)}`}>
-                      {{BUY: "BUY", SELL: "SELL", DEPOSIT_INR: "CASH DEPOSIT", DEPOSIT_BTC: "BTC DEPOSIT", WITHDRAWAL_INR: "CASH WITHDRAWAL", WITHDRAWAL_BTC: "BTC WITHDRAWAL", ADMIN: "ADMIN"}[transaction.type] || transaction.type}
+                      {transaction.type === "BUY" ? `BUY ${formatBtc(transaction.amount)}` : transaction.type === "SELL" ? `SELL ${formatBtc(transaction.amount)}` : ({BUY: "BUY", SELL: "SELL", DEPOSIT_INR: "CASH DEPOSIT", DEPOSIT_BTC: "BTC DEPOSIT", WITHDRAWAL_INR: "CASH WITHDRAWAL", WITHDRAWAL_BTC: "BTC WITHDRAWAL", ADMIN: "ADMIN"}[transaction.type] || transaction.type)}
                     </span>
-                    {transaction.category === 'TRADE' && (
-                      <span className="text-sm text-gray-400">
-                        {formatBtc(transaction.amount)}
-                      </span>
-                    )}
                   </div>
-                  <div className="text-xs text-gray-500">
-                    {new Date(transaction.createdAt).toLocaleString()}
-                  </div>
-                  {transaction.category === 'BALANCE' && (
-                    <div className="text-xs text-gray-400">{transaction.reason}</div>
-                  )}
                 </div>
               </div>
               <div className="text-right">
@@ -909,19 +887,19 @@ export default function Dashboard() {
   const getTransactionIcon = (transaction: Transaction) => {
     switch (transaction.type) {
       case 'BUY':
-        return <ArrowUp className="text-green-500" width={20} height={20} />
+        return <ArrowUp className="text-white" width={20} height={20} />
       case 'SELL':
-        return <ArrowDown className="text-red-500" width={20} height={20} />
+        return <ArrowDown className="text-white" width={20} height={20} />
       case 'DEPOSIT_INR':
-        return <ArrowDownLeft className="text-blue-500" size={20} />
+        return <ArrowDownLeft className="text-white" size={20} />
       case 'DEPOSIT_BTC':
-        return <BitcoinIcon style={{height: "20px", width: "20px", color: "#F7931A"}} />
+        return <BitcoinIcon style={{height: "20px", width: "20px", color: "#FFFFFF"}} />
       case 'WITHDRAWAL_INR':
-        return <ArrowUpRight className="text-yellow-500" size={20} />
+        return <ArrowUpRight className="text-white" size={20} />
       case 'WITHDRAWAL_BTC':
-        return <BitcoinIcon style={{height: "20px", width: "20px", color: "#EF4444"}} />
+        return <BitcoinIcon style={{height: "20px", width: "20px", color: "#FFFFFF"}} />
       case 'ADMIN':
-        return <Settings className="text-indigo-500" size={20} />
+        return <Settings className="text-white" size={20} />
       default:
         return <History className="text-gray-500" size={20} />
     }
@@ -929,9 +907,9 @@ export default function Dashboard() {
 
   const getTransactionColor = (transaction: Transaction) => {
     if (transaction.category === 'TRADE') {
-      return transaction.type === 'BUY' ? 'text-green-400' : 'text-red-400'
+      return transaction.type === 'BUY' ? 'text-white' : 'text-white'
     } else {
-      return (transaction.type === 'DEPOSIT_INR' || transaction.type === 'DEPOSIT_BTC' || transaction.type === 'DEPOSIT') ? 'text-blue-400' : 'text-yellow-400'
+      return (transaction.type === 'DEPOSIT_INR' || transaction.type === 'DEPOSIT_BTC' || transaction.type === 'DEPOSIT') ? 'text-white' : 'text-white'
     }
   }
 
@@ -982,7 +960,7 @@ export default function Dashboard() {
   return (
     <div className="min-h-screen bg-black text-white pb-20">
       {/* Header */}
-      <div className="bg-gray-900 border-b border-gray-800 p-4">
+      <div className="bg-black border-b border-zinc-800 p-4">
         <div className="flex justify-between items-center">
           <div className="flex items-center gap-3">
             <h1 className="text-xl font-bold">₿itTrade</h1>
@@ -991,7 +969,7 @@ export default function Dashboard() {
             {session.user.role === 'ADMIN' && (
               <button
                 onClick={() => router.push('/admin')}
-                className="text-purple-400 hover:text-purple-300 transition-colors"
+                className="text-white hover:text-gray-300 transition-colors"
                 title="Admin Panel"
               >
                 <Settings size={24} strokeWidth={2} />
@@ -1010,7 +988,7 @@ export default function Dashboard() {
       <div className="p-4 max-w-md mx-auto space-y-6">
         {/* Connection Error */}
         {error && (
-          <div className="bg-red-900/50 border border-red-500 text-red-200 px-4 py-3 rounded-lg text-sm">
+          <div className="bg-red-900/50 border border-red-500 text-white px-4 py-3 rounded-lg text-sm">
             {error}
           </div>
         )}
@@ -1060,7 +1038,7 @@ export default function Dashboard() {
       </div>
 
       {/* Bottom Navigation */}
-      <div className="fixed bottom-0 left-0 right-0 bg-gray-900 border-t border-gray-800">
+      <div className="fixed bottom-0 left-0 right-0 bg-black border-t border-zinc-800">
         <div className="flex max-w-md mx-auto">
           <button
             onClick={() => setActiveTab("dashboard")}

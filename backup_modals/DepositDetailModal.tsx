@@ -66,14 +66,14 @@ export default function DepositDetailModal({
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-end justify-center z-50">
-      <div className="bg-black rounded-t-3xl w-full max-w-md mx-4 mb-0 animate-slide-up max-h-[95vh] overflow-y-auto">
+      <div className="bg-gray-900 rounded-t-3xl w-full max-w-md mx-4 mb-0 animate-slide-up max-h-[95vh] overflow-y-auto">
         {/* Header with Transaction Status */}
-        <div className="flex justify-between items-center p-4 sm:p-6 border-b border-zinc-800 sticky top-0 bg-black rounded-t-3xl">
+        <div className="flex justify-between items-center p-4 sm:p-6 border-b border-gray-800 sticky top-0 bg-gray-900 rounded-t-3xl">
           <div className="flex items-center gap-3">
             {(transaction.type === 'DEPOSIT_INR' || transaction.type === 'DEPOSIT_BTC') ? (
-              <ArrowDownLeft className="text-white" size={24} />
+              <ArrowDownLeft className="text-blue-500" size={24} />
             ) : (transaction.type === 'WITHDRAWAL_INR' || transaction.type === 'WITHDRAWAL_BTC') ? (
-              <ArrowUpRight className="text-white" size={24} />
+              <ArrowUpRight className="text-yellow-500" size={24} />
             ) : (
               <ArrowDownLeft className="text-gray-500" size={24} />
             )}
@@ -98,9 +98,9 @@ export default function DepositDetailModal({
           <div className="space-y-3">
             {/* User Name (for admin view) */}
             {isAdmin && userName && (
-              <div className="flex items-center justify-between p-3 bg-zinc-800 rounded-lg">
+              <div className="flex items-center justify-between p-3 bg-gray-800 rounded-lg">
                 <div className="flex items-center gap-3">
-                  <User className="text-white" size={20} />
+                  <User className="text-purple-500" size={20} />
                   <div>
                     <div className="text-xs sm:text-sm text-gray-400">User</div>
                     <div className="font-semibold text-white">{userName}</div>
@@ -110,14 +110,14 @@ export default function DepositDetailModal({
             )}
 
             {/* Amount */}
-            <div className="flex items-center justify-between p-3 bg-zinc-800 rounded-lg">
+            <div className="flex items-center justify-between p-3 bg-gray-800 rounded-lg">
               <div className="flex items-center gap-3">
                 {isBitcoinTransaction ? (
                   <div className="w-5 h-5 bg-orange-500 rounded-full flex items-center justify-center">
                     <span className="text-xs font-bold text-black">₿</span>
                   </div>
                 ) : (
-                  <DollarSign className={isDeposit ? "text-white" : "text-white"} size={20} />
+                  <DollarSign className={isDeposit ? "text-blue-500" : "text-yellow-500"} size={20} />
                 )}
                 <div>
                   <div className="text-xs sm:text-sm text-gray-400">{{"DEPOSIT_INR": "CASH DEPOSIT", "DEPOSIT_BTC": "BTC DEPOSIT", "WITHDRAWAL_INR": "CASH WITHDRAWAL", "WITHDRAWAL_BTC": "BTC WITHDRAWAL", "ADMIN": "ADMIN"}[transaction.type] || transaction.type} Amount</div>
@@ -129,14 +129,14 @@ export default function DepositDetailModal({
             </div>
 
             {/* Balance After (show appropriate balance) */}
-            <div className="flex items-center justify-between p-3 bg-zinc-800 rounded-lg">
+            <div className="flex items-center justify-between p-3 bg-gray-800 rounded-lg">
               <div className="flex items-center gap-3">
                 {isBitcoinTransaction ? (
                   <div className="w-5 h-5 bg-green-500 rounded-full flex items-center justify-center">
                     <span className="text-xs font-bold text-black">₿</span>
                   </div>
                 ) : (
-                  <DollarSign className="text-white" size={20} />
+                  <DollarSign className="text-green-500" size={20} />
                 )}
                 <div>
                   <div className="text-xs sm:text-sm text-gray-400">
@@ -153,7 +153,7 @@ export default function DepositDetailModal({
             </div>
 
             {/* Reason */}
-            <div className="flex items-center justify-between p-3 bg-zinc-800 rounded-lg">
+            <div className="flex items-center justify-between p-3 bg-gray-800 rounded-lg">
               <div className="flex items-center gap-3">
                 <DollarSign className="text-gray-500" size={20} />
                 <div>
@@ -164,9 +164,9 @@ export default function DepositDetailModal({
             </div>
 
             {/* Timestamp */}
-            <div className="flex items-center justify-between p-3 bg-zinc-800 rounded-lg">
+            <div className="flex items-center justify-between p-3 bg-gray-800 rounded-lg">
               <div className="flex items-center gap-3">
-                <Calendar className="text-white" size={20} />
+                <Calendar className="text-purple-500" size={20} />
                 <div>
                   <div className="text-xs sm:text-sm text-gray-400">Date & Time</div>
                   <div className="font-semibold text-white">{formatDate(transaction.createdAt)}</div>
@@ -176,7 +176,7 @@ export default function DepositDetailModal({
           </div>
 
           {/* Summary */}
-          <div className="p-3 bg-zinc-800 rounded-lg border border-gray-700">
+          <div className="p-3 bg-gray-800 rounded-lg border border-gray-700">
             <div className="text-xs sm:text-sm text-gray-400 mb-2">Transaction Summary</div>
             <div className="text-sm text-white">
               {isDeposit 
@@ -190,7 +190,7 @@ export default function DepositDetailModal({
           {/* Close Button */}
           <button
             onClick={onClose}
-            className="w-full bg-white hover:bg-gray-200 text-black font-semibold py-3 rounded-lg transition-colors mb-4"
+            className="w-full bg-gray-700 hover:bg-gray-600 text-white font-semibold py-3 rounded-lg transition-colors mb-4"
           >
             Close
           </button>

@@ -81,14 +81,14 @@ export default function PinConfirmationModal({
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-gray-900 rounded-lg p-6 w-full max-w-md mx-4 border border-gray-700">
+      <div className="bg-black rounded-lg p-6 w-full max-w-md mx-4 border border-gray-700">
         {/* Header */}
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-xl font-bold text-white">{title}</h2>
           <button
             onClick={handleCancel}
             disabled={isSubmitting}
-            className="text-gray-400 hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="bg-white text-black hover:bg-gray-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <X size={24} />
           </button>
@@ -111,7 +111,7 @@ export default function PinConfirmationModal({
 
         {/* Error Message */}
         {isError && (
-          <div className="text-red-400 text-center text-sm mb-4">
+          <div className="text-white text-center text-sm mb-4">
             Incorrect PIN. Please try again.
           </div>
         )}

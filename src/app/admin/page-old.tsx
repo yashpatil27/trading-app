@@ -316,19 +316,19 @@ export default function AdminDashboard() {
                         <div className="flex gap-2 justify-end">
                           <button
                             onClick={() => setShowBalanceModal(user)}
-                            className="bg-gray-600 hover:bg-gray-700 px-3 py-1 rounded text-sm font-medium transition-colors"
+                            className="bg-green-600 hover:bg-green-700 px-3 py-1 rounded text-sm font-medium transition-colors"
                           >
                             Adjust Balance
                           </button>
                           <button
                             onClick={() => setShowResetModal(user)}
-                            className="bg-gray-600 hover:bg-gray-700 px-3 py-1 rounded text-sm font-medium transition-colors"
+                            className="bg-blue-600 hover:bg-blue-700 px-3 py-1 rounded text-sm font-medium transition-colors"
                           >
                             Reset
                           </button>
                           <button
                             onClick={() => setShowDeleteModal(user)}
-                            className="bg-gray-600 hover:bg-gray-700 px-3 py-1 rounded text-sm font-medium transition-colors"
+                            className="bg-red-600 hover:bg-red-700 px-3 py-1 rounded text-sm font-medium transition-colors"
                           >
                             Delete
                           </button>
@@ -390,21 +390,21 @@ export default function AdminDashboard() {
                 <div className="grid grid-cols-3 gap-3">
                   <button
                     onClick={() => setShowBalanceModal(user)}
-                    className="bg-gray-600 hover:bg-gray-700 py-3 px-4 rounded-lg flex items-center justify-center gap-2 font-medium transition-colors text-sm"
+                    className="bg-green-600 hover:bg-green-700 py-3 px-4 rounded-lg flex items-center justify-center gap-2 font-medium transition-colors text-sm"
                   >
                     <Wallet size={16} />
                     Adjust Balance
                   </button>
                   <button
                     onClick={() => setShowResetModal(user)}
-                    className="bg-gray-600 hover:bg-gray-700 py-3 px-4 rounded-lg flex items-center justify-center gap-2 font-medium transition-colors text-sm"
+                    className="bg-blue-600 hover:bg-blue-700 py-3 px-4 rounded-lg flex items-center justify-center gap-2 font-medium transition-colors text-sm"
                   >
                     <Key size={16} />
                     Reset
                   </button>
                   <button
                     onClick={() => setShowDeleteModal(user)}
-                    className="bg-gray-600 hover:bg-gray-700 py-3 px-4 rounded-lg flex items-center justify-center gap-2 font-medium transition-colors text-sm"
+                    className="bg-red-600 hover:bg-red-700 py-3 px-4 rounded-lg flex items-center justify-center gap-2 font-medium transition-colors text-sm"
                   >
                     <Trash2 size={16} />
                     Delete
@@ -511,7 +511,7 @@ export default function AdminDashboard() {
                 <button
                   onClick={() => adjustBalance('CREDIT')}
                   disabled={!balanceAmount}
-                  className="bg-gray-600 hover:bg-gray-700 disabled:bg-gray-600 py-3 rounded-lg flex items-center justify-center gap-1 font-medium transition-colors"
+                  className="bg-green-600 hover:bg-green-700 disabled:bg-gray-600 py-3 rounded-lg flex items-center justify-center gap-1 font-medium transition-colors"
                 >
                   <Plus size={16} />
                   Add
@@ -519,7 +519,7 @@ export default function AdminDashboard() {
                 <button
                   onClick={() => adjustBalance('DEBIT')}
                   disabled={!balanceAmount}
-                  className="bg-gray-600 hover:bg-gray-700 disabled:bg-gray-600 py-3 rounded-lg flex items-center justify-center gap-1 font-medium transition-colors"
+                  className="bg-red-600 hover:bg-red-700 disabled:bg-gray-600 py-3 rounded-lg flex items-center justify-center gap-1 font-medium transition-colors"
                 >
                   <Minus size={16} />
                   Remove
@@ -583,7 +583,7 @@ export default function AdminDashboard() {
               <div className="grid grid-cols-2 gap-3">
                 <button
                   onClick={resetCredentials}
-                  className="bg-gray-600 hover:bg-gray-700 py-3 rounded-lg font-medium transition-colors"
+                  className="bg-blue-600 hover:bg-blue-700 py-3 rounded-lg font-medium transition-colors"
                 >
                   Reset
                 </button>
@@ -607,18 +607,18 @@ export default function AdminDashboard() {
       {showDeleteModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
           <div className="bg-gray-900 rounded-2xl p-4 sm:p-6 w-full max-w-md border border-gray-700">
-            <h3 className="text-lg sm:text-xl font-semibold mb-4 flex items-center gap-2 text-white">
+            <h3 className="text-lg sm:text-xl font-semibold mb-4 flex items-center gap-2 text-red-400">
               <Trash2 size={20} />
               Delete User
             </h3>
             
             <div className="bg-red-900/20 border border-red-800 rounded-lg p-4 mb-4">
               <div className="flex items-center gap-3">
-                <User size={20} className="text-white" />
+                <User size={20} className="text-red-400" />
                 <div>
                   <div className="font-semibold text-white">{showDeleteModal.name}</div>
                   <div className="text-sm text-gray-400">{showDeleteModal.email}</div>
-                  <div className="text-sm text-white">
+                  <div className="text-sm text-red-400">
                     Current balance: ₹{formatCash(showDeleteModal.balance || 0)} | 
                     ₿{formatBitcoin(showDeleteModal.btcAmount || 0)}
                   </div>
@@ -628,11 +628,11 @@ export default function AdminDashboard() {
 
             <div className="space-y-4">
               <div className="text-center">
-                <p className="text-white font-medium mb-2">⚠️ This action cannot be undone!</p>
+                <p className="text-red-400 font-medium mb-2">⚠️ This action cannot be undone!</p>
                 <p className="text-gray-300 text-sm">
                   This will permanently delete the user and all their transaction history.
                   {(showDeleteModal.balance > 0 || showDeleteModal.btcAmount > 0) && (
-                    <span className="block text-white mt-2">
+                    <span className="block text-red-400 mt-2">
                       User has active balance. Please adjust balance to zero first.
                     </span>
                   )}
@@ -643,7 +643,7 @@ export default function AdminDashboard() {
                 <button
                   onClick={deleteUser}
                   disabled={showDeleteModal.balance > 0 || showDeleteModal.btcAmount > 0}
-                  className="bg-gray-600 hover:bg-gray-700 disabled:bg-gray-600 disabled:cursor-not-allowed py-3 rounded-lg flex items-center justify-center gap-2 font-medium transition-colors"
+                  className="bg-red-600 hover:bg-red-700 disabled:bg-gray-600 disabled:cursor-not-allowed py-3 rounded-lg flex items-center justify-center gap-2 font-medium transition-colors"
                 >
                   <Trash2 size={16} />
                   Delete User
@@ -721,3 +721,63 @@ export default function AdminDashboard() {
     </div>
   )
 }
+
+// --- System Rates Section ---
+const [showPinModal, setShowPinModal] = useState(false);
+const [selectedRate, setSelectedRate] = useState<'buy' | 'sell' | null>(null);
+const [newRate, setNewRate] = useState('');
+
+const updateRate = async (type: 'buy' | 'sell', pin: string) => {
+  const rate = parseFloat(newRate);
+  if (isNaN(rate) || rate <= 0) return alert('Please enter a valid rate.');
+
+  try {
+    const response = await fetch('/api/admin/pin', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ pin }) });
+    const isValidPin = await response.json();
+    if (!isValidPin) {
+      return alert('Invalid PIN');
+    }
+
+    await fetch(`/api/rates`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ type, rate }) });
+    setNewRate('');
+    setSelectedRate(null);
+    alert('Rate updated successfully.');
+  } catch (error) {
+    console.error('Failed to update rate:', error);
+    alert('Failed to update rate.');
+  }
+};
+
+return (
+  <div className="min-h-screen bg-black text-white">
+    {/* Existing Content ... */}
+
+    {/* System Rates Update Section */}
+    <div className="bg-gray-900 rounded-xl border border-gray-800 p-4 mb-6">
+      <h2 className="text-xl font-semibold mb-4">Update USD/INR Rates</h2>
+      <div className="grid grid-cols-2 gap-4">
+        <input type="number" className="w-full bg-gray-800 border border-gray-700 p-3 rounded-lg text-white" value={newRate} onChange={e => setNewRate(e.target.value)} placeholder="Enter new rate" />
+        <div className="grid grid-cols-2 gap-2">
+          <button className="bg-green-600 hover:bg-green-700 p-2 rounded-lg" onClick={() => { setSelectedRate('buy'); setShowPinModal(true); }}>Set Buy Rate</button>
+          <button className="bg-blue-600 hover:bg-blue-700 p-2 rounded-lg" onClick={() => { setSelectedRate('sell'); setShowPinModal(true); }}>Set Sell Rate</button>
+        </div>
+      </div>
+    </div>
+
+    {/* PIN Verification Modal */}
+    <PinConfirmationModal
+      isOpen={showPinModal}
+      onClose={() => setShowPinModal(false)}
+      onConfirm={async (pin) => {
+        if (selectedRate) {
+          await updateRate(selectedRate, pin);
+          setShowPinModal(false);
+        }
+      }}
+      title="Verify PIN"
+      description="Enter your 4-digit PIN to confirm rate update"
+    />
+
+    {/* Existing Content ... */}
+  </div>
+);

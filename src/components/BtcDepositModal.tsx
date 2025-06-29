@@ -1,34 +1,33 @@
 'use client'
 
-import { X, TrendingUp, TrendingDown, Calendar, DollarSign } from 'lucide-react'
+import { X, ArrowDownLeft, Calendar, User, DollarSign } from 'lucide-react'
 import { BitcoinIcon } from '@bitcoin-design/bitcoin-icons-react/filled'
 
-interface TradeTransaction {
+interface BtcDepositTransaction {
   id: string
-  type: 'BUY' | 'SELL'
+  type: 'DEPOSIT_BTC'
   amount: number
-  price: number
   total: number
   reason: string
   balance: number
   createdAt: string
 }
 
-interface TradeTransactionModalProps {
+interface BtcDepositModalProps {
   isOpen: boolean
   onClose: () => void
-  transaction: TradeTransaction | null
+  transaction: BtcDepositTransaction | null
   isAdmin?: boolean
   userName?: string
 }
 
-export default function TradeTransactionModal({ 
+export default function BtcDepositModal({ 
   isOpen, 
   onClose, 
   transaction, 
   isAdmin = false,
   userName = ''
-}: TradeTransactionModalProps) {
+}: BtcDepositModalProps) {
   if (!isOpen || !transaction) return null
 
   const formatDate = (dateString: string) => {
@@ -43,7 +42,7 @@ export default function TradeTransactionModal({
   }
 
   const formatBtc = (amount: number) => {
-    return `${amount.toFixed(8)} BTC`
+    return `₿${amount.toFixed(8)}`
   }
 
   const formatInr = (amount: number) => {
@@ -60,33 +59,39 @@ export default function TradeTransactionModal({
 
         <div className="flex justify-between items-center p-4 sm:p-6 border-b border-zinc-800 sticky top-0 bg-black rounded-t-3xl">
           <div className="flex items-center gap-3">
-            {transaction.type === 'BUY' ? (
-              <TrendingUp className="text-white" size={24} />
-            ) : (
-              <TrendingDown className="text-white" size={24} />
-            )}
+            <ArrowDownLeft className="text-white" size={24} />
             <div>
               <h2 className="text-lg sm:text-xl font-bold text-white">
-                {transaction.type} Order
+                BTC DEPOSIT Completed
               </h2>
-              <div className="text-xs sm:text-sm text-gray-400">Transaction ID: {transaction.id.slice(-8)}</div>
+              <div className="text-xs sm:text-sm text-gray-400">Transaction ID: {transaction.id}</div>
             </div>
           </div>
           <button
-            onClick={onClose}
-            className="text-gray-400 hover:text-white"
-          >
-            <X size={24} />
-          </button>
         </div>
 
         <div className="p-4 space-y-3">
+
+          {isAdmin && userName && (
+            <div className="flex items-center justify-between p-3 bg-zinc-800 rounded-lg">
+              <div className="flex items-center gap-3">
+                <User className="text-white" size={20} />
+                <div>
+                  <div className="text-xs sm:text-sm text-gray-400">User</div>
+                  <div className="font-semibold text-white">{userName}</div>
+                </div>
+              </div>
+            </div>
+          )}
+
           <div className="flex items-center justify-between p-3 bg-zinc-800 rounded-lg">
             <div className="flex items-center gap-3">
-              <BitcoinIcon style={{ height: '16px', width: '16px', color: '#F7931A' }} />
+              <div className="w-5 h-5 bg-orange-500 rounded-full flex items-center justify-center">
+                <span className="text-xs font-bold text-black">₿</span>
+              </div>
               <div>
-                <div className="text-xs text-gray-400">Bitcoin Amount</div>
-                <div className="text-sm font-semibold text-white">{formatBtc(transaction.amount)}</div>
+                <div className="text-xs sm:text-sm text-gray-400">BTC Deposit Amount</div>
+                <div className="font-semibold text-white">+{formatBtc(transaction.amount)}</div>
               </div>
             </div>
           </div>
@@ -95,18 +100,20 @@ export default function TradeTransactionModal({
             <div className="flex items-center gap-3">
               <DollarSign className="text-white" size={20} />
               <div>
-                <div className="text-xs text-gray-400">Price per BTC</div>
-                <div className="text-sm font-semibold text-white">{formatInr(transaction.price)}</div>
+                <div className="text-xs sm:text-sm text-gray-400">Total INR Equivalent</div>
+                <div className="font-semibold text-white">{formatInr(transaction.total)}</div>
               </div>
             </div>
           </div>
 
           <div className="flex items-center justify-between p-3 bg-zinc-800 rounded-lg">
             <div className="flex items-center gap-3">
-              <DollarSign className="text-white" size={20} />
+              <div className="w-5 h-5 bg-green-500 rounded-full flex items-center justify-center">
+                <span className="text-xs font-bold text-black">₿</span>
+              </div>
               <div>
-                <div className="text-xs text-gray-400">Total Amount</div>
-                <div className="text-sm font-semibold text-white">{formatInr(transaction.total)}</div>
+                <div className="text-xs sm:text-sm text-gray-400">Bitcoin Balance After</div>
+                <div className="font-semibold text-white">{formatBtc(transaction.balance)}</div>
               </div>
             </div>
           </div>
@@ -123,16 +130,8 @@ export default function TradeTransactionModal({
 
           {transaction.reason && (
             <div className="p-4 bg-zinc-800 rounded-lg">
-              <div className="text-xs sm:text-sm text-gray-400">Note</div>
+              <div className="text-xs sm:text-sm text-gray-400">Reason</div>
               <p className="text-white mt-1">{transaction.reason}</p>
-
-          {/* Close Button */}
-          <button
-            onClick={onClose}
-            className="w-full bg-white hover:bg-gray-200 text-black font-semibold py-3 rounded-lg transition-colors mb-4"
-          >
-            Close
-          </button>
             </div>
           )}
 
@@ -140,4 +139,4 @@ export default function TradeTransactionModal({
       </div>
     </div>
   )
-}  
+}   

@@ -90,9 +90,9 @@ export default function SellModal({
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-end justify-center z-50">
-      <div className="bg-gray-900 rounded-t-3xl w-full max-w-md mx-4 mb-0 animate-slide-up">
+      <div className="bg-black rounded-t-3xl w-full max-w-md mx-4 mb-0 animate-slide-up">
         {/* Header */}
-        <div className="flex justify-between items-center p-6 border-b border-gray-800">
+        <div className="flex justify-between items-center p-6 border-b border-zinc-800">
           <h2 className="text-xl font-bold text-white">Sell Bitcoin</h2>
           <button
             onClick={onClose}
@@ -105,8 +105,8 @@ export default function SellModal({
 
         <div className="p-6 space-y-6">
           {/* Available Bitcoin */}
-          <div className="flex items-center gap-3 p-4 bg-gray-800 rounded-lg">
-            <BitcoinIcon style={{height: "20px", width: "20px", color: "#F7931A"}} />
+          <div className="flex items-center gap-3 p-4 bg-zinc-800 rounded-lg">
+            <BitcoinIcon style={{height: "20px", width: "20px", color: "#FFFFFF"}} />
             <div>
               <div className="text-sm text-gray-400">Available Bitcoin</div>
               <div className="font-semibold text-white">{formatBtc(availableBtc)}</div>
@@ -114,15 +114,15 @@ export default function SellModal({
           </div>
 
           {/* Current Price */}
-          <div className="text-center p-4 bg-gray-800 rounded-lg">
+          <div className="text-center p-4 bg-zinc-800 rounded-lg">
             <div className="text-sm text-gray-400">Sell Rate</div>
-            <div className="text-lg font-bold text-red-400">₹{formatCash(sellRate)}</div>
+            <div className="text-lg font-bold text-white">₹{formatCash(sellRate)}</div>
             <div className="text-xs text-gray-500">per ₿</div>
             {countdown !== undefined && (
               <div className="flex items-center justify-center gap-2 mt-2">
-                <div className="bg-gray-700 px-2 py-1 rounded-full flex items-center gap-1">
-                  <Clock size={10} className="text-green-400" />
-                  <span className="text-xs text-gray-300">Update: {countdown}s</span>
+                <div className="bg-white px-2 py-1 rounded-full flex items-center gap-1">
+                  <Clock size={10} className="text-white" />
+                  <span className="text-xs text-black">Update: {countdown}s</span>
                 </div>
               </div>
             )}
@@ -135,13 +135,13 @@ export default function SellModal({
               type="text"
               value={btcAmount}
               onChange={handleInputChange}
-              className="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white text-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+              className="w-full bg-zinc-800 border border-gray-700 rounded-lg px-4 py-3 text-white text-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
               placeholder="0"
               disabled={loading}
             />
             {btcAmount && (
               <div className="text-sm text-gray-400 mt-2">
-                You will receive: <span className="text-orange-400 font-semibold">₹{formatCash(inrAmount)}</span>
+                You will receive: <span className="text-white font-semibold">₹{formatCash(inrAmount)}</span>
               </div>
             )}
           </div>
@@ -153,7 +153,7 @@ export default function SellModal({
                 key={percentage}
                 onClick={() => handlePercentageClick(percentage)}
                 disabled={loading || availableBtc === 0}
-                className="bg-gray-800 hover:bg-gray-700 disabled:bg-gray-800 text-white py-3 px-3 rounded-lg font-medium transition-colors text-sm"
+                className="bg-zinc-800 hover:bg-gray-700 disabled:bg-zinc-800 text-white py-3 px-3 rounded-lg font-medium transition-colors text-sm"
               >
                 {percentage === 100 ? 'Max' : `${percentage}%`}
               </button>
@@ -162,13 +162,13 @@ export default function SellModal({
 
           {/* Error Message */}
           {btcAmount && btcValue > availableBtc && (
-            <div className="text-red-400 text-sm text-center">
+            <div className="text-white text-sm text-center">
               Insufficient Bitcoin. Maximum: {formatBtc(availableBtc)}
             </div>
           )}
 
           {availableBtc === 0 && (
-            <div className="text-yellow-400 text-sm text-center">
+            <div className="text-white text-sm text-center">
               You don&apos;t have any Bitcoin to sell
             </div>
           )}
@@ -177,7 +177,7 @@ export default function SellModal({
           <button
             onClick={handleSell}
             disabled={!isValidAmount || loading || availableBtc === 0}
-            className="w-full bg-red-600 hover:bg-red-700 disabled:bg-gray-700 text-white font-bold py-4 rounded-lg transition-colors"
+            className="w-full bg-white hover:bg-gray-200 disabled:bg-gray-200 text-black font-bold py-4 rounded-lg transition-colors"
           >
             {loading ? 'Processing...' : `Sell ₿${btcAmount || '0'}`}
           </button>

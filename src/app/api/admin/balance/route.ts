@@ -4,6 +4,7 @@ import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 import { BalanceCache } from '@/lib/balanceCache'
 import { createCompleteTransactionData, satoshiToBtc, btcToSatoshi } from '@/lib/currencyUtils'
+import PriceService from '@/services/priceService'
 
 export async function POST(request: NextRequest) {
   try {
@@ -34,6 +35,7 @@ export async function POST(request: NextRequest) {
     let newBtcBalance = currentBtcBalance
     let transactionType: string
     let transactionAmount: number
+    let transactionData: any
 
     if (currency === 'INR') {
       // INR balance adjustment
@@ -46,6 +48,18 @@ export async function POST(request: NextRequest) {
       
       transactionType = type === 'CREDIT' ? 'DEPOSIT' : 'WITHDRAWAL'
       transactionAmount = Math.abs(amount)
+
+      // Create standard transaction for INR
+      transactionData = createCompleteTransactionData({
+        userId,
+        type: transactionType as any,
+        inrAmount: transactionAmount,
+        btcAmount: 0,
+        inrBalanceAfter: newInrBalance,
+        btcBalanceAfter: newBtcBalance,
+        reason: reason || (type === "CREDIT" ? "Cash Deposit" : "Cash Withdrawal")
+      })
+
     } else if (currency === 'BTC') {
       // Bitcoin balance adjustment
       const adjustmentAmount = type === 'CREDIT' ? amount : -amount
@@ -55,22 +69,55 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ error: 'Insufficient Bitcoin balance' }, { status: 400 })
       }
       
-      transactionType = type === 'CREDIT' ? 'DEPOSIT' : 'WITHDRAWAL'
       transactionAmount = Math.abs(amount)
+
+      if (type === 'CREDIT') {
+        // BTC CREDIT: Record as BUY transaction at sell rate for proper cost basis
+        const priceService = PriceService.getInstance()
+        const currentPrice = priceService.getCurrentPrice()
+        
+        if (!currentPrice) {
+          return NextResponse.json({ error: 'Bitcoin price not available' }, { status: 503 })
+        }
+
+        // Calculate sell rate (user gets this rate when selling)
+        const sellRateInr = currentPrice.btcUSD * 88
+        const inrEquivalent = Math.round(transactionAmount * sellRateInr)
+        
+        // Record as BUY transaction at sell rate
+        transactionData = createCompleteTransactionData({
+          userId,
+          type: 'DEPOSIT_BTC', // This makes it part of FIFO cost basis calculations
+          btcAmount: transactionAmount,
+          btcPriceUsd: currentPrice.btcUSD,
+          btcPriceInr: sellRateInr,
+          usdInrRate: 88, // Use sell rate
+          inrAmount: inrEquivalent, // INR equivalent counts toward initial investment
+          inrBalanceAfter: newInrBalance,
+          btcBalanceAfter: newBtcBalance,
+          reason: reason || "BTC Deposit"
+        })
+
+        console.log(`💰 Admin BTC Credit: Recording as DEPOSIT_BTC at sell rate ₹${sellRateInr.toFixed(2)}/BTC for cost basis`)
+
+      } else {
+        // BTC DEBIT: Record as standard withdrawal
+        transactionType = 'WITHDRAWAL'
+        
+        transactionData = createCompleteTransactionData({
+          userId,
+          type: transactionType as any,
+          inrAmount: 0,
+          btcAmount: transactionAmount,
+          inrBalanceAfter: newInrBalance,
+          btcBalanceAfter: newBtcBalance,
+          reason: reason || "BTC Withdrawal"
+        })
+      }
+
     } else {
       return NextResponse.json({ error: 'Invalid currency' }, { status: 400 })
     }
-
-    // Create transaction record with dual-mode support
-    const transactionData = createCompleteTransactionData({
-      userId,
-      type: transactionType as any,
-      inrAmount: currency === 'INR' ? transactionAmount : 0,
-      btcAmount: currency === 'BTC' ? transactionAmount : 0,
-      inrBalanceAfter: newInrBalance,
-      btcBalanceAfter: newBtcBalance,
-      reason: reason || `Admin ${type.toLowerCase()} - ${currency} adjustment`
-    })
 
     const transaction = await prisma.transaction.create({
       data: transactionData
@@ -80,7 +127,11 @@ export async function POST(request: NextRequest) {
     await BalanceCache.setUserBalances(userId, newInrBalance, newBtcBalance)
 
     // Log the admin action
-    console.log(`💰 Admin ${type}: ${session.user.email} ${type.toLowerCase()}ed ${currency === 'INR' ? '₹' : '₿'}${transactionAmount} ${currency} ${type === 'CREDIT' ? 'to' : 'from'} ${user.email} | Using integer fields`)
+    const logMessage = currency === 'BTC' && type === 'CREDIT' 
+      ? `💰 Admin BTC Credit: ${session.user.email} credited ₿${transactionAmount} BTC to ${user.email} (recorded as BUY at sell rate for P&L)`
+      : `💰 Admin ${type}: ${session.user.email} ${type.toLowerCase()}ed ${currency === 'INR' ? '₹' : '₿'}${transactionAmount} ${currency} ${type === 'CREDIT' ? 'to' : 'from'} ${user.email}`
+
+    console.log(logMessage)
 
     return NextResponse.json({ 
       success: true, 
@@ -91,7 +142,10 @@ export async function POST(request: NextRequest) {
       },
       currency,
       amount: transactionAmount,
-      type
+      type,
+      message: currency === 'BTC' && type === 'CREDIT' 
+        ? 'BTC credited with cost basis at current sell rate for accurate P&L tracking'
+        : 'Balance adjusted successfully'
     })
 
   } catch (error) {

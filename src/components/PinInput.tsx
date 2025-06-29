@@ -78,7 +78,7 @@ export default function PinInput({ value, onChange, isError = false, disabled = 
           disabled={disabled}
           className={`
             w-12 h-12 text-center text-xl font-bold rounded-lg border-2 
-            bg-gray-800 text-white
+            bg-zinc-800 text-white
             transition-all duration-200
             ${isError 
               ? 'border-red-500 bg-red-900/20' 

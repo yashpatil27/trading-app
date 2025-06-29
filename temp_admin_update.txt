@@ -1,0 +1,69 @@
+  // System Rates Management
+  const [showPinModal, setShowPinModal] = useState(false)
+  const [selectedRate, setSelectedRate] = useState<'buy' | 'sell' | null>(null)
+  const [newRate, setNewRate] = useState('')
+  const [currentRates, setCurrentRates] = useState({ buy: 88, sell: 91 })
+
+  const fetchCurrentRates = async () => {
+    try {
+      const response = await fetch('/api/system-rates')
+      if (response.ok) {
+        const rates = await response.json()
+        setCurrentRates(rates)
+      }
+    } catch (error) {
+      console.error('Failed to fetch rates:', error)
+    }
+  }
+
+  const updateRate = async (pin: string) => {
+    if (!selectedRate || !newRate) return false
+
+    const rate = parseFloat(newRate)
+    if (isNaN(rate) || rate <= 0) {
+      alert('Please enter a valid rate.')
+      return false
+    }
+
+    try {
+      // Verify PIN first
+      const pinResponse = await fetch('/api/admin/pin', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ pin })
+      })
+      
+      if (!pinResponse.ok) {
+        return false
+      }
+
+      // Update the rate
+      const updateResponse = await fetch('/api/system-rates', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          [selectedRate === 'buy' ? 'usdInrBuyRate' : 'usdInrSellRate']: rate 
+        })
+      })
+
+      if (updateResponse.ok) {
+        setNewRate('')
+        setSelectedRate(null)
+        fetchCurrentRates()
+        return true
+      } else {
+        alert('Failed to update rate')
+        return false
+      }
+    } catch (error) {
+      console.error('Failed to update rate:', error)
+      alert('Failed to update rate')
+      return false
+    }
+  }
+
+  useEffect(() => {
+    if (session?.user.role === 'ADMIN') {
+      fetchCurrentRates()
+    }
+  }, [session])
