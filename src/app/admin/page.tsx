@@ -190,7 +190,7 @@ export default function AdminDashboard() {
     return (
       <div className="min-h-screen bg-black text-white flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin h-8 w-8 border-2 border-orange-500 border-t-transparent rounded-full mx-auto mb-4"></div>
+          <div className="animate-spin h-8 w-8 border-2 border-white border-t-transparent rounded-full mx-auto mb-4"></div>
           <p>Loading admin panel...</p>
         </div>
       </div>
@@ -209,7 +209,7 @@ export default function AdminDashboard() {
           <div className="flex items-center gap-4">
             <button
               onClick={() => router.push('/dashboard')}
-              className="bg-white hover:bg-gray-200 text-black p-2 rounded-lg transition-colors"
+              className="bg-white hover:bg-zinc-200 text-black p-2 rounded-lg transition-colors"
             >
               <ArrowLeft size={20} />
             </button>
@@ -223,7 +223,7 @@ export default function AdminDashboard() {
           </div>
           <button
             onClick={() => setShowCreateUser(true)}
-            className="w-full sm:w-auto bg-white hover:bg-gray-200 text-black px-4 py-3 sm:py-2 rounded-lg flex items-center justify-center gap-2 font-medium transition-colors"
+            className="w-full sm:w-auto bg-white hover:bg-zinc-200 text-black px-4 py-3 sm:py-2 rounded-lg flex items-center justify-center gap-2 font-medium transition-colors"
           >
             <Plus size={16} />
             Create User
@@ -252,7 +252,7 @@ export default function AdminDashboard() {
 
           <div className="bg-zinc-800 rounded-xl p-4 sm:p-6 border border-zinc-800">
             <div className="flex items-center gap-3 mb-2">
-              <TrendingUp className="text-orange-500" size={20} />
+              <TrendingUp className="text-white" size={20} />
               <span className="text-zinc-400 text-sm">Total Bitcoin</span>
             </div>
             <div className="text-lg sm:text-2xl font-semibold">
@@ -316,19 +316,19 @@ export default function AdminDashboard() {
                         <div className="flex gap-2 justify-end">
                           <button
                             onClick={() => setShowBalanceModal(user)}
-                            className="bg-white hover:bg-gray-200 text-black px-3 py-1 rounded text-sm font-medium transition-colors"
+                            className="bg-white hover:bg-zinc-200 text-black px-3 py-1 rounded text-sm font-medium transition-colors"
                           >
                             Deposit
                           </button>
                           <button
                             onClick={() => setShowResetModal(user)}
-                            className="bg-white hover:bg-gray-200 text-black px-3 py-1 rounded text-sm font-medium transition-colors"
+                            className="bg-white hover:bg-zinc-200 text-black px-3 py-1 rounded text-sm font-medium transition-colors"
                           >
                             Reset
                           </button>
                           <button
                             onClick={() => setShowDeleteModal(user)}
-                            className="bg-white hover:bg-gray-200 text-black px-3 py-1 rounded text-sm font-medium transition-colors"
+                            className="bg-white hover:bg-zinc-200 text-black px-3 py-1 rounded text-sm font-medium transition-colors"
                           >
                             Delete
                           </button>
@@ -367,7 +367,7 @@ export default function AdminDashboard() {
                   </div>
                   <div className="bg-zinc-800 rounded-lg p-3 border border-zinc-700">
                     <div className="flex items-center gap-2 mb-1">
-                      <TrendingUp size={14} className="text-orange-500" />
+                      <TrendingUp size={14} className="text-white" />
                       <span className="text-xs text-zinc-400">Bitcoin Balance</span>
                     </div>
                     <div className="font-semibold text-white">₿{formatBitcoin(user.btcAmount || 0)}</div>
@@ -390,21 +390,21 @@ export default function AdminDashboard() {
                 <div className="grid grid-cols-3 gap-3">
                   <button
                     onClick={() => setShowBalanceModal(user)}
-                    className="bg-white hover:bg-gray-200 text-black py-3 px-4 rounded-lg flex items-center justify-center gap-2 font-medium transition-colors text-sm"
+                    className="bg-white hover:bg-zinc-200 text-black py-3 px-4 rounded-lg flex items-center justify-center gap-2 font-medium transition-colors text-sm"
                   >
                     <Landmark size={18} />
                     Deposit
                   </button>
                   <button
                     onClick={() => setShowResetModal(user)}
-                    className="bg-white hover:bg-gray-200 text-black py-3 px-4 rounded-lg flex items-center justify-center gap-2 font-medium transition-colors text-sm"
+                    className="bg-white hover:bg-zinc-200 text-black py-3 px-4 rounded-lg flex items-center justify-center gap-2 font-medium transition-colors text-sm"
                   >
                     <Key size={16} />
                     Reset
                   </button>
                   <button
                     onClick={() => setShowDeleteModal(user)}
-                    className="bg-white hover:bg-gray-200 text-black py-3 px-4 rounded-lg flex items-center justify-center gap-2 font-medium transition-colors text-sm"
+                    className="bg-white hover:bg-zinc-200 text-black py-3 px-4 rounded-lg flex items-center justify-center gap-2 font-medium transition-colors text-sm"
                   >
                     <Trash2 size={16} />
                     Delete
@@ -511,7 +511,7 @@ export default function AdminDashboard() {
                 <button
                   onClick={() => adjustBalance('CREDIT')}
                   disabled={!balanceAmount}
-                  className="bg-white hover:bg-gray-200 text-black disabled:bg-gray-300 disabled:text-zinc-500 py-3 rounded-lg flex items-center justify-center gap-1 font-medium transition-colors"
+                  className="bg-white hover:bg-zinc-200 text-black disabled:bg-zinc-300 disabled:text-zinc-500 py-3 rounded-lg flex items-center justify-center gap-1 font-medium transition-colors"
                 >
                   <Plus size={16} />
                   Add
@@ -519,7 +519,7 @@ export default function AdminDashboard() {
                 <button
                   onClick={() => adjustBalance('DEBIT')}
                   disabled={!balanceAmount}
-                  className="bg-white hover:bg-gray-200 text-black disabled:bg-gray-300 disabled:text-zinc-500 py-3 rounded-lg flex items-center justify-center gap-1 font-medium transition-colors"
+                  className="bg-white hover:bg-zinc-200 text-black disabled:bg-zinc-300 disabled:text-zinc-500 py-3 rounded-lg flex items-center justify-center gap-1 font-medium transition-colors"
                 >
                   <Minus size={16} />
                   Remove
@@ -531,7 +531,7 @@ export default function AdminDashboard() {
                     setBalanceReason('')
                     setBalanceCurrency('INR')
                   }}
-                  className="bg-white hover:bg-gray-200 text-black py-3 rounded-lg font-medium transition-colors"
+                  className="bg-white hover:bg-zinc-200 text-black py-3 rounded-lg font-medium transition-colors"
                 >
                   Cancel
                 </button>
@@ -583,7 +583,7 @@ export default function AdminDashboard() {
               <div className="grid grid-cols-2 gap-3">
                 <button
                   onClick={resetCredentials}
-                  className="bg-white hover:bg-gray-200 text-black py-3 rounded-lg font-medium transition-colors"
+                  className="bg-white hover:bg-zinc-200 text-black py-3 rounded-lg font-medium transition-colors"
                 >
                   Reset
                 </button>
@@ -593,7 +593,7 @@ export default function AdminDashboard() {
                     setNewPin('')
                     setNewPassword('')
                   }}
-                  className="bg-white hover:bg-gray-200 text-black py-3 rounded-lg font-medium transition-colors"
+                  className="bg-white hover:bg-zinc-200 text-black py-3 rounded-lg font-medium transition-colors"
                 >
                   Cancel
                 </button>
@@ -629,7 +629,7 @@ export default function AdminDashboard() {
             <div className="space-y-4">
               <div className="text-center">
                 <p className="text-white font-medium mb-2">⚠️ This action cannot be undone!</p>
-                <p className="text-gray-300 text-sm">
+                <p className="text-zinc-300 text-sm">
                   This will permanently delete the user and all their transaction history.
                   {(showDeleteModal.balance > 0 || showDeleteModal.btcAmount > 0) && (
                     <span className="block text-white mt-2">
@@ -643,14 +643,14 @@ export default function AdminDashboard() {
                 <button
                   onClick={deleteUser}
                   disabled={showDeleteModal.balance > 0 || showDeleteModal.btcAmount > 0}
-                  className="bg-white hover:bg-gray-200 text-black disabled:bg-gray-300 disabled:text-zinc-500 disabled:cursor-not-allowed py-3 rounded-lg flex items-center justify-center gap-2 font-medium transition-colors"
+                  className="bg-white hover:bg-zinc-200 text-black disabled:bg-zinc-300 disabled:text-zinc-500 disabled:cursor-not-allowed py-3 rounded-lg flex items-center justify-center gap-2 font-medium transition-colors"
                 >
                   <Trash2 size={16} />
                   Delete
                 </button>
                 <button
                   onClick={() => setShowDeleteModal(null)}
-                  className="bg-white hover:bg-gray-200 text-black py-3 rounded-lg font-medium transition-colors"
+                  className="bg-white hover:bg-zinc-200 text-black py-3 rounded-lg font-medium transition-colors"
                 >
                   Cancel
                 </button>
@@ -700,7 +700,7 @@ export default function AdminDashboard() {
                 <button
                   onClick={createUser}
                   disabled={!newUser.email || !newUser.name || !newUser.password}
-                  className="bg-white hover:bg-gray-200 text-black disabled:bg-gray-300 disabled:text-zinc-500 py-3 rounded-lg font-medium transition-colors"
+                  className="bg-white hover:bg-zinc-200 text-black disabled:bg-zinc-300 disabled:text-zinc-500 py-3 rounded-lg font-medium transition-colors"
                 >
                   Create User
                 </button>
@@ -709,7 +709,7 @@ export default function AdminDashboard() {
                     setShowCreateUser(false)
                     setNewUser({ email: '', name: '', password: '', role: 'USER' })
                   }}
-                  className="bg-white hover:bg-gray-200 text-black py-3 rounded-lg font-medium transition-colors"
+                  className="bg-white hover:bg-zinc-200 text-black py-3 rounded-lg font-medium transition-colors"
                 >
                   Cancel
                 </button>

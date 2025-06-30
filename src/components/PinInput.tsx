@@ -82,11 +82,11 @@ export default function PinInput({ value, onChange, isError = false, disabled = 
             transition-all duration-200
             ${isError 
               ? 'border-red-500 bg-red-900/20' 
-              : 'border-zinc-600 focus:border-orange-500'
+              : 'border-zinc-600 focus:border-white'
             }
             ${disabled 
               ? 'opacity-50 cursor-not-allowed' 
-              : 'focus:outline-none focus:ring-2 focus:ring-orange-500/50'
+              : 'focus:outline-none focus:ring-2 focus:ring-white/50'
             }
           `}
           autoComplete="off"

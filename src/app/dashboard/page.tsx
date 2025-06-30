@@ -209,13 +209,13 @@ const PortfolioOverview = ({
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div className="text-center p-3 bg-zinc-800 rounded-lg">
-              <div className="text-lg font-bold text-gray-300">
+              <div className="text-lg font-bold text-zinc-300">
                 ₹{performanceMetrics ? formatCash(performanceMetrics.totalRealizedPnL) : '0'}
               </div>
               <div className="text-xs text-zinc-500">Realized P&L</div>
             </div>
             <div className="text-center p-3 bg-zinc-800 rounded-lg">
-              <div className="text-lg font-bold text-gray-300">
+              <div className="text-lg font-bold text-zinc-300">
                 ₹{performanceMetrics ? formatCash(performanceMetrics.unrealizedPnL) : '0'}
               </div>
               <div className="text-xs text-zinc-500">Unrealized P&L</div>
@@ -223,13 +223,13 @@ const PortfolioOverview = ({
           </div>
           <div className="mt-4 grid grid-cols-2 gap-4">
             <div className="text-center p-3 bg-zinc-800 rounded-lg">
-              <div className="text-lg font-bold text-gray-300">
+              <div className="text-lg font-bold text-zinc-300">
                 {performanceMetrics ? formatPercentage(performanceMetrics.totalReturnPercentage) : '0%'}
               </div>
               <div className="text-xs text-zinc-500">Total Return</div>
             </div>
             <div className="text-center p-3 bg-zinc-800 rounded-lg">
-              <div className="text-lg font-bold text-gray-300">
+              <div className="text-lg font-bold text-zinc-300">
                 ₹{performanceMetrics ? formatCash(performanceMetrics.totalInvestment) : '0'}
               </div>
               <div className="text-xs text-zinc-500">Total Investment</div>
@@ -300,13 +300,13 @@ const PortfolioOverview = ({
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div className="text-center p-3 bg-zinc-800 rounded-lg">
-              <div className="text-lg font-bold text-gray-300">
+              <div className="text-lg font-bold text-zinc-300">
                 {performanceMetrics ? performanceMetrics.totalTrades : 0}
               </div>
               <div className="text-xs text-zinc-500">Total Trades</div>
             </div>
             <div className="text-center p-3 bg-zinc-800 rounded-lg">
-              <div className="text-lg font-bold text-gray-300">
+              <div className="text-lg font-bold text-zinc-300">
                 ₹{performanceMetrics ? formatCash(performanceMetrics.totalTradingVolume) : '0'}
               </div>
               <div className="text-xs text-zinc-500">Total Volume</div>
@@ -314,13 +314,13 @@ const PortfolioOverview = ({
           </div>
           <div className="mt-4 grid grid-cols-2 gap-4">
             <div className="text-center p-3 bg-zinc-800 rounded-lg">
-              <div className="text-lg font-bold text-gray-300">
+              <div className="text-lg font-bold text-zinc-300">
                 {performanceMetrics ? performanceMetrics.monthlyStats.trades : 0}
               </div>
               <div className="text-xs text-zinc-500">This Month</div>
             </div>
             <div className="text-center p-3 bg-zinc-800 rounded-lg">
-              <div className="text-lg font-bold text-gray-300">
+              <div className="text-lg font-bold text-zinc-300">
                 ₹{performanceMetrics ? formatCash(performanceMetrics.averageTradeSize) : '0'}
               </div>
               <div className="text-xs text-zinc-500">Avg Trade Size</div>
@@ -337,7 +337,7 @@ const PortfolioOverview = ({
           <div className="space-y-3">
             <div className="p-3 bg-zinc-800 rounded-lg">
               <div className="flex justify-between items-center mb-1">
-                <span className="text-sm text-gray-300">Average Buy Price</span>
+                <span className="text-sm text-zinc-300">Average Buy Price</span>
                 <span className="text-sm font-bold text-white">₹{formatCash(performanceMetrics?.costBasis || 0)}</span>
               </div>
               <div className="text-xs text-zinc-400">Your weighted average purchase price</div>
@@ -345,7 +345,7 @@ const PortfolioOverview = ({
             
             <div className="p-3 bg-zinc-800 rounded-lg">
               <div className="flex justify-between items-center mb-1">
-                <span className="text-sm text-gray-300">Break-even Price</span>
+                <span className="text-sm text-zinc-300">Break-even Price</span>
                 <span className="text-sm font-bold text-white">₹{formatCash(breakEvenPrice())}</span>
               </div>
               <div className="text-xs text-zinc-400">Price needed to break even</div>
@@ -354,7 +354,7 @@ const PortfolioOverview = ({
             {user?.btcAmount && user.btcAmount > 0 && (
               <div className="p-3 bg-zinc-800 rounded-lg">
                 <div className="flex justify-between items-center mb-1">
-                  <span className="text-sm text-gray-300">Current P&L Zone</span>
+                  <span className="text-sm text-zinc-300">Current P&L Zone</span>
                   <div className="flex items-center gap-1">
                     {targets.isInProfit ? (
                       <TrendingUpIcon className="text-white" size={16} />
@@ -382,11 +382,11 @@ const PortfolioOverview = ({
           </div>
           <div className="grid grid-cols-2 gap-3">
             <div className="p-3 bg-zinc-800 rounded-lg text-center">
-              <div className="text-lg font-bold text-gray-300">{tradingDays}</div>
+              <div className="text-lg font-bold text-zinc-300">{tradingDays}</div>
               <div className="text-xs text-zinc-400">Days Trading</div>
             </div>
             <div className="p-3 bg-zinc-800 rounded-lg text-center">
-              <div className="text-lg font-bold text-gray-300">{profitableDays}</div>
+              <div className="text-lg font-bold text-zinc-300">{profitableDays}</div>
               <div className="text-xs text-zinc-400">Profitable Days</div>
             </div>
             <div className="p-3 bg-zinc-800 rounded-lg text-center">
@@ -501,7 +501,7 @@ const TradingInterface = ({
         <button
           onClick={() => setShowBuyModal(true)}
           disabled={!isConnected || !btcPrice || Math.floor(user?.balance || 0) === 0}
-          className="bg-white hover:bg-gray-200 disabled:bg-gray-300 text-black py-4 rounded-2xl font-bold flex items-center justify-center gap-2 transition-colors"
+          className="bg-white hover:bg-zinc-200 disabled:bg-zinc-300 text-black py-4 rounded-2xl font-bold flex items-center justify-center gap-2 transition-colors"
         >
           <Plus size={20} />
           Buy
@@ -509,7 +509,7 @@ const TradingInterface = ({
         <button
           onClick={() => setShowSellModal(true)}
           disabled={!isConnected || !btcPrice || (user?.btcAmount || 0) === 0}
-          className="bg-white hover:bg-gray-200 disabled:bg-gray-300 text-black py-4 rounded-2xl font-bold flex items-center justify-center gap-2 transition-colors"
+          className="bg-white hover:bg-zinc-200 disabled:bg-zinc-300 text-black py-4 rounded-2xl font-bold flex items-center justify-center gap-2 transition-colors"
         >
           <Minus size={20} />
           Sell
@@ -983,7 +983,7 @@ export default function Dashboard() {
             {session.user.role === 'ADMIN' && (
               <button
                 onClick={() => router.push('/admin')}
-                className="text-white hover:text-gray-300 transition-colors"
+                className="text-white hover:text-zinc-300 transition-colors"
                 title="ADMIN Panel"
               >
                 <Settings size={24} strokeWidth={2} />
@@ -991,7 +991,7 @@ export default function Dashboard() {
             )}
             <button
               onClick={() => signOut({ callbackUrl: "/login" })}
-              className="text-white hover:text-gray-300 font-semibold text-lg"
+              className="text-white hover:text-zinc-300 font-semibold text-lg"
             >
               <LogOut size={24} strokeWidth={2.5} />
             </button>
@@ -1069,7 +1069,7 @@ export default function Dashboard() {
           <button
             onClick={() => setActiveTab("dashboard")}
             className={`flex-1 py-4 px-6 text-center font-medium transition-colors flex flex-col items-center gap-1 ${
-              activeTab === "dashboard" ? "text-white border-b-2 border-gray-300" : "text-zinc-500 hover:text-white"
+              activeTab === "dashboard" ? "text-white border-b-2 border-zinc-300" : "text-zinc-500 hover:text-white"
             }`}
           >
             <Home size={20} />
@@ -1078,7 +1078,7 @@ export default function Dashboard() {
           <button
             onClick={() => setActiveTab("portfolio")}
             className={`flex-1 py-4 px-6 text-center font-medium transition-colors flex flex-col items-center gap-1 ${
-              activeTab === "portfolio" ? "text-white border-b-2 border-gray-300" : "text-zinc-500 hover:text-white"
+              activeTab === "portfolio" ? "text-white border-b-2 border-zinc-300" : "text-zinc-500 hover:text-white"
             }`}
           >
             <PieChart size={20} />
@@ -1087,7 +1087,7 @@ export default function Dashboard() {
           <button
             onClick={() => setActiveTab("history")}
             className={`flex-1 py-4 px-6 text-center font-medium transition-colors flex flex-col items-center gap-1 ${
-              activeTab === "history" ? "text-white border-b-2 border-gray-300" : "text-zinc-500 hover:text-white"
+              activeTab === "history" ? "text-white border-b-2 border-zinc-300" : "text-zinc-500 hover:text-white"
             }`}
           >
             <History size={20} />

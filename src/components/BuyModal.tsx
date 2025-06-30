@@ -129,7 +129,7 @@ export default function BuyModal({
               type="text"
               value={inrAmount}
               onChange={handleInputChange}
-              className="w-full bg-zinc-800 border border-gray-700 rounded-lg px-4 py-3 text-white text-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+              className="w-full bg-zinc-800 border border-gray-700 rounded-lg px-4 py-3 text-white text-lg focus:outline-none focus:ring-2 focus:ring-white"
               placeholder="0"
               disabled={loading}
             />
@@ -171,7 +171,7 @@ export default function BuyModal({
           <button
             onClick={handleBuy}
             disabled={!isValidAmount || loading || roundedBalance === 0}
-            className="w-full bg-white hover:bg-gray-200 disabled:bg-gray-200 text-black font-semibold py-4 rounded-lg transition-colors"
+            className="w-full bg-white hover:bg-zinc-200 disabled:bg-zinc-200 text-black font-semibold py-4 rounded-lg transition-colors"
           >
             {loading ? 'Processing...' : `Buy ₹${inrAmount ? formatCash(parseInt(inrAmount)) : '0'} worth of Bitcoin`}
           </button>

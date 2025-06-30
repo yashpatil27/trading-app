@@ -174,7 +174,7 @@ export default function DepositDetailModal({
           {/* Close Button */}
           <button
             onClick={onClose}
-            className="w-full bg-white hover:bg-gray-200 text-black font-semibold py-3 rounded-lg transition-colors mb-4"
+            className="w-full bg-white hover:bg-zinc-200 text-black font-semibold py-3 rounded-lg transition-colors mb-4"
           >
             Close
           </button>

@@ -4,7 +4,7 @@ import React from 'react'
 export const Skeleton = ({ className = '', ...props }: React.HTMLAttributes<HTMLDivElement>) => {
   return (
     <div 
-      className={`animate-pulse bg-gray-200 rounded ${className}`} 
+      className={`animate-pulse bg-zinc-200 rounded ${className}`} 
       {...props}
     />
   )
@@ -12,7 +12,7 @@ export const Skeleton = ({ className = '', ...props }: React.HTMLAttributes<HTML
 
 // Price card skeleton
 export const PriceCardSkeleton = () => (
-  <div className="bg-gray-50 border border-gray-200 rounded-lg p-6">
+  <div className="bg-zinc-50 border border-zinc-200 rounded-lg p-6">
     <div className="flex items-center justify-between">
       <div className="space-y-3">
         <div className="flex items-center gap-2">
@@ -32,7 +32,7 @@ export const PriceCardSkeleton = () => (
 
 // Balance card skeleton
 export const BalanceCardSkeleton = () => (
-  <div className="bg-gray-50 border border-gray-200 rounded-lg p-6">
+  <div className="bg-zinc-50 border border-zinc-200 rounded-lg p-6">
     <div className="flex items-center gap-2 mb-4">
       <Skeleton className="h-5 w-5" />
       <Skeleton className="h-5 w-32" />
@@ -61,7 +61,7 @@ export const BalanceCardSkeleton = () => (
 
 // Transaction item skeleton
 export const TransactionSkeleton = () => (
-  <div className="bg-white border border-gray-200 rounded-lg p-4">
+  <div className="bg-white border border-zinc-200 rounded-lg p-4">
     <div className="flex items-center justify-between">
       <div className="flex items-center gap-3">
         <Skeleton className="h-10 w-10 rounded-full" />
@@ -133,8 +133,8 @@ export const AdminUserRowSkeleton = () => (
 export const ModalLoadingSkeleton = () => (
   <div className="flex items-center justify-center p-6">
     <div className="flex items-center gap-3">
-      <div className="animate-spin h-6 w-6 border-2 border-gray-300 border-t-blue-600 rounded-full"></div>
-      <span className="text-gray-600">Processing...</span>
+      <div className="animate-spin h-6 w-6 border-2 border-zinc-300 border-t-blue-600 rounded-full"></div>
+      <span className="text-zinc-600">Processing...</span>
     </div>
   </div>
 )

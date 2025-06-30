@@ -88,7 +88,7 @@ export default function PinConfirmationModal({
           <button
             onClick={handleCancel}
             disabled={isSubmitting}
-            className="bg-white text-black hover:bg-gray-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed p-2 rounded-lg"
+            className="bg-white text-black hover:bg-zinc-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed p-2 rounded-lg"
           >
             <X size={20} />
           </button>
@@ -133,14 +133,14 @@ export default function PinConfirmationModal({
           <button
             onClick={handleCancel}
             disabled={isSubmitting || isLoading}
-            className="flex-1 px-4 py-2 bg-white text-black rounded-lg hover:bg-gray-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-medium"
+            className="flex-1 px-4 py-2 bg-white text-black rounded-lg hover:bg-zinc-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-medium"
           >
             Cancel
           </button>
           <button
             onClick={handleSubmit}
             disabled={pin.length !== 4 || isSubmitting || isLoading}
-            className="flex-1 px-4 py-2 bg-white text-black rounded-lg hover:bg-gray-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-medium"
+            className="flex-1 px-4 py-2 bg-white text-black rounded-lg hover:bg-zinc-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-medium"
           >
             {isSubmitting ? 'Confirming...' : 'Confirm'}
           </button>

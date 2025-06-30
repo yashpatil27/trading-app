@@ -262,7 +262,7 @@ export default function AdminDashboard() {
     return (
       <div className="min-h-screen bg-black text-white flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin h-8 w-8 border-2 border-orange-500 border-t-transparent rounded-full mx-auto mb-4"></div>
+          <div className="animate-spin h-8 w-8 border-2 border-white border-t-transparent rounded-full mx-auto mb-4"></div>
           <p>Loading admin panel...</p>
         </div>
       </div>
@@ -281,13 +281,13 @@ export default function AdminDashboard() {
           <div className="flex items-center gap-4">
             <button
               onClick={() => router.push('/dashboard')}
-              className="bg-gray-800 hover:bg-gray-700 p-2 rounded-lg transition-colors"
+              className="bg-zinc-800 hover:bg-gray-700 p-2 rounded-lg transition-colors"
             >
               <ArrowLeft size={20} />
             </button>
             <div>
               <h1 className="text-2xl sm:text-3xl font-semibold flex items-center gap-3">
-                <Shield className="text-orange-500" size={28} />
+                <Shield className="text-white" size={28} />
                 Admin Panel
               </h1>
               <p className="text-zinc-400 text-sm sm:text-base">Manage users and system operations</p>
@@ -303,8 +303,8 @@ export default function AdminDashboard() {
         </div>
 
         {/* USD/INR Rates Management Section */}
-        <div className="bg-gray-900 rounded-xl border border-gray-800 overflow-hidden mb-6 sm:mb-8">
-          <div className="p-4 sm:p-6 border-b border-gray-800">
+        <div className="bg-zinc-900 rounded-xl border border-zinc-800 overflow-hidden mb-6 sm:mb-8">
+          <div className="p-4 sm:p-6 border-b border-zinc-800">
             <h2 className="text-lg sm:text-xl font-semibold flex items-center gap-2">
               <DollarSign size={20} />
               USD/INR Exchange Rates
@@ -316,11 +316,11 @@ export default function AdminDashboard() {
               <div className="space-y-4">
                 <h3 className="text-sm font-medium text-zinc-400 mb-3">Current Rates</h3>
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="bg-gray-800 rounded-lg p-4">
+                  <div className="bg-zinc-800 rounded-lg p-4">
                     <div className="text-sm text-green-400 mb-1">User Sell Rate</div>
                     <div className="text-xl font-semibold">₹{currentRates.buy}</div>
                   </div>
-                  <div className="bg-gray-800 rounded-lg p-4">
+                  <div className="bg-zinc-800 rounded-lg p-4">
                     <div className="text-sm text-blue-400 mb-1">User Buy Rate</div>
                     <div className="text-xl font-semibold">₹{currentRates.sell}</div>
                   </div>
@@ -336,7 +336,7 @@ export default function AdminDashboard() {
                     step="0.01"
                     value={newRate}
                     onChange={(e) => setNewRate(e.target.value)}
-                    className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-3 text-white focus:outline-none focus:ring-2 focus:ring-orange-500"
+                    className="w-full bg-zinc-800 border border-gray-700 rounded-lg px-3 py-3 text-white focus:outline-none focus:ring-2 focus:ring-white"
                     placeholder="Enter new rate"
                   />
                   <div className="grid grid-cols-2 gap-3">
@@ -371,7 +371,7 @@ export default function AdminDashboard() {
 
         {/* Stats Cards */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6 sm:mb-8">
-          <div className="bg-gray-900 rounded-xl p-4 sm:p-6 border border-gray-800">
+          <div className="bg-zinc-900 rounded-xl p-4 sm:p-6 border border-zinc-800">
             <div className="flex items-center gap-3 mb-2">
               <Users className="text-blue-500" size={20} />
               <span className="text-zinc-400 text-sm">Total Users</span>
@@ -379,7 +379,7 @@ export default function AdminDashboard() {
             <div className="text-xl sm:text-2xl font-semibold">{users.length}</div>
           </div>
           
-          <div className="bg-gray-900 rounded-xl p-4 sm:p-6 border border-gray-800">
+          <div className="bg-zinc-900 rounded-xl p-4 sm:p-6 border border-zinc-800">
             <div className="flex items-center gap-3 mb-2">
               <Wallet className="text-green-500" size={20} />
               <span className="text-zinc-400 text-sm">Total Cash</span>
@@ -389,9 +389,9 @@ export default function AdminDashboard() {
             </div>
           </div>
 
-          <div className="bg-gray-900 rounded-xl p-4 sm:p-6 border border-gray-800">
+          <div className="bg-zinc-900 rounded-xl p-4 sm:p-6 border border-zinc-800">
             <div className="flex items-center gap-3 mb-2">
-              <TrendingUp className="text-orange-500" size={20} />
+              <TrendingUp className="text-white" size={20} />
               <span className="text-zinc-400 text-sm">Total Bitcoin</span>
             </div>
             <div className="text-lg sm:text-2xl font-semibold">
@@ -399,7 +399,7 @@ export default function AdminDashboard() {
             </div>
           </div>
 
-          <div className="bg-gray-900 rounded-xl p-4 sm:p-6 border border-gray-800">
+          <div className="bg-zinc-900 rounded-xl p-4 sm:p-6 border border-zinc-800">
             <div className="flex items-center gap-3 mb-2">
               <Shield className="text-purple-500" size={20} />
               <span className="text-zinc-400 text-sm">Admins</span>
@@ -411,8 +411,8 @@ export default function AdminDashboard() {
         </div>
 
         {/* Users Section - keeping the original implementation but just the header shown for brevity */}
-        <div className="bg-gray-900 rounded-xl border border-gray-800 overflow-hidden">
-          <div className="p-4 sm:p-6 border-b border-gray-800">
+        <div className="bg-zinc-900 rounded-xl border border-zinc-800 overflow-hidden">
+          <div className="p-4 sm:p-6 border-b border-zinc-800">
             <h2 className="text-lg sm:text-xl font-semibold flex items-center gap-2">
               <Users size={20} />
               User Management
