@@ -132,7 +132,7 @@ export default function LoginPage() {
   if (status === 'loading') {
     return (
       <div className="min-h-screen bg-black flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-orange-500"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white"></div>
       </div>
     )
   }
@@ -145,20 +145,20 @@ export default function LoginPage() {
     <div className="min-h-screen bg-black flex items-center justify-center p-4">
       <div className="max-w-md w-full space-y-8">
         <div className="text-center">
-                <h1 className="text-4xl font-bold text-white mb-2">₿itTrade</h1>
-          <p className="text-gray-400">
+                <h1 className="text-4xl font-semibold text-white mb-2">₿itTrade</h1>
+          <p className="text-zinc-400">
             {isRegister ? 'Create your account' : 'Sign in to your account'}
           </p>
         </div>
 
         {/* Tab Navigation */}
-        <div className="flex bg-gray-800 rounded-lg p-1">
+        <div className="flex bg-zinc-800 rounded-lg p-1">
           <button
             onClick={() => { setIsRegister(false); setError('') }}
             className={`flex-1 flex items-center justify-center gap-2 py-2 px-4 rounded-md transition-colors ${
               !isRegister
-                ? 'bg-orange-500 text-white'
-                : 'text-gray-300 hover:text-white'
+                ? 'bg-white text-black'
+                : 'text-zinc-300 hover:text-white'
             }`}
           >
             <LogIn className="h-4 w-4" />
@@ -168,8 +168,8 @@ export default function LoginPage() {
             onClick={() => { setIsRegister(true); setError('') }}
             className={`flex-1 flex items-center justify-center gap-2 py-2 px-4 rounded-md transition-colors ${
               isRegister
-                ? 'bg-orange-500 text-white'
-                : 'text-gray-300 hover:text-white'
+                ? 'bg-white text-black'
+                : 'text-zinc-300 hover:text-white'
             }`}
           >
             <UserPlus className="h-4 w-4" />
@@ -188,21 +188,21 @@ export default function LoginPage() {
         {!isRegister && (
           <form className="space-y-6" onSubmit={handleLogin}>
             <div>
-              <label className="block text-gray-300 text-sm font-medium mb-2">
+              <label className="block text-zinc-300 text-sm font-medium mb-2">
                 Email
               </label>
               <input
                 type="email"
                 value={credentials.email}
                 onChange={(e) => setCredentials({ ...credentials, email: e.target.value })}
-                className="w-full px-4 py-3 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:border-orange-500 focus:ring-1 focus:ring-orange-500"
+                className="w-full px-4 py-3 bg-zinc-800 border border-zinc-600 rounded-lg text-white placeholder-zinc-400 focus:border-white focus:ring-1 focus:ring-white"
                 placeholder="Enter your email"
                 required
               />
             </div>
 
             <div>
-              <label className="block text-gray-300 text-sm font-medium mb-2">
+              <label className="block text-zinc-300 text-sm font-medium mb-2">
                 Password
               </label>
               <div className="relative">
@@ -210,14 +210,14 @@ export default function LoginPage() {
                   type={showPassword ? 'text' : 'password'}
                   value={credentials.password}
                   onChange={(e) => setCredentials({ ...credentials, password: e.target.value })}
-                  className="w-full px-4 py-3 pr-12 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:border-orange-500 focus:ring-1 focus:ring-orange-500"
+                  className="w-full px-4 py-3 pr-12 bg-zinc-800 border border-zinc-600 rounded-lg text-white placeholder-zinc-400 focus:border-white focus:ring-1 focus:ring-white"
                   placeholder="Enter your password"
                   required
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white"
+                  className="absolute right-4 top-1/2 transform -translate-y-1/2 text-zinc-400 hover:text-white"
                 >
                   {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                 </button>
@@ -227,11 +227,11 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 px-4 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              className="w-full bg-white hover:bg-zinc-100 text-black font-semibold py-3 px-4 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
               {loading ? (
                 <>
-                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-black"></div>
                   Signing in...
                 </>
               ) : (
@@ -248,7 +248,7 @@ export default function LoginPage() {
         {isRegister && (
           <form className="space-y-6" onSubmit={handleRegisterSubmit}>
             <div>
-              <label className="block text-gray-300 text-sm font-medium mb-2">
+              <label className="block text-zinc-300 text-sm font-medium mb-2">
                 <Mail className="h-4 w-4 inline mr-1" />
                 Email Address
               </label>
@@ -256,14 +256,14 @@ export default function LoginPage() {
                 type="email"
                 value={registerData.email}
                 onChange={(e) => setRegisterData({ ...registerData, email: e.target.value })}
-                className="w-full px-4 py-3 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:border-orange-500 focus:ring-1 focus:ring-orange-500"
+                className="w-full px-4 py-3 bg-zinc-800 border border-zinc-600 rounded-lg text-white placeholder-zinc-400 focus:border-white focus:ring-1 focus:ring-white"
                 placeholder="your@email.com"
                 required
               />
             </div>
 
             <div>
-              <label className="block text-gray-300 text-sm font-medium mb-2">
+              <label className="block text-zinc-300 text-sm font-medium mb-2">
                 <User className="h-4 w-4 inline mr-1" />
                 Full Name
               </label>
@@ -271,14 +271,14 @@ export default function LoginPage() {
                 type="text"
                 value={registerData.name}
                 onChange={(e) => setRegisterData({ ...registerData, name: e.target.value })}
-                className="w-full px-4 py-3 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:border-orange-500 focus:ring-1 focus:ring-orange-500"
+                className="w-full px-4 py-3 bg-zinc-800 border border-zinc-600 rounded-lg text-white placeholder-zinc-400 focus:border-white focus:ring-1 focus:ring-white"
                 placeholder="Your Full Name"
                 required
               />
             </div>
 
             <div>
-              <label className="block text-gray-300 text-sm font-medium mb-2">
+              <label className="block text-zinc-300 text-sm font-medium mb-2">
                 <Lock className="h-4 w-4 inline mr-1" />
                 Password
               </label>
@@ -287,7 +287,7 @@ export default function LoginPage() {
                   type={showPassword ? 'text' : 'password'}
                   value={registerData.password}
                   onChange={(e) => setRegisterData({ ...registerData, password: e.target.value })}
-                  className="w-full px-4 py-3 pr-12 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:border-orange-500 focus:ring-1 focus:ring-orange-500"
+                  className="w-full px-4 py-3 pr-12 bg-zinc-800 border border-zinc-600 rounded-lg text-white placeholder-zinc-400 focus:border-white focus:ring-1 focus:ring-white"
                   placeholder="Minimum 6 characters"
                   minLength={6}
                   required
@@ -295,7 +295,7 @@ export default function LoginPage() {
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white"
+                  className="absolute right-4 top-1/2 transform -translate-y-1/2 text-zinc-400 hover:text-white"
                 >
                   {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                 </button>
@@ -303,7 +303,7 @@ export default function LoginPage() {
             </div>
 
             <div>
-              <label className="block text-gray-300 text-sm font-medium mb-2">
+              <label className="block text-zinc-300 text-sm font-medium mb-2">
                 <Lock className="h-4 w-4 inline mr-1" />
                 Confirm Password
               </label>
@@ -312,10 +312,10 @@ export default function LoginPage() {
                   type={showConfirmPassword ? 'text' : 'password'}
                   value={registerData.confirmPassword}
                   onChange={(e) => setRegisterData({ ...registerData, confirmPassword: e.target.value })}
-                  className={`w-full px-4 py-3 pr-12 bg-gray-800 border rounded-lg text-white placeholder-gray-400 focus:ring-1 ${
+                  className={`w-full px-4 py-3 pr-12 bg-zinc-800 border rounded-lg text-white placeholder-zinc-400 focus:ring-1 ${
                     registerData.confirmPassword && registerData.password !== registerData.confirmPassword
                       ? 'border-red-500 focus:border-red-500 focus:ring-red-500'
-                      : 'border-gray-600 focus:border-orange-500 focus:ring-orange-500'
+                      : 'border-zinc-600 focus:border-white focus:ring-white'
                   }`}
                   placeholder="Confirm your password"
                   required
@@ -323,7 +323,7 @@ export default function LoginPage() {
                 <button
                   type="button"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white"
+                  className="absolute right-4 top-1/2 transform -translate-y-1/2 text-zinc-400 hover:text-white"
                 >
                   {showConfirmPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                 </button>
@@ -334,7 +334,7 @@ export default function LoginPage() {
             </div>
 
             <div>
-              <label className="block text-gray-300 text-sm font-medium mb-3">
+              <label className="block text-zinc-300 text-sm font-medium mb-3">
                 <Key className="h-4 w-4 inline mr-1" />
                 Choose Your 4-Digit Trading PIN
               </label>
@@ -344,7 +344,7 @@ export default function LoginPage() {
                   onChange={(pin) => setRegisterData({ ...registerData, tradingPin: pin })}
                 />
               </div>
-              <p className="text-gray-400 text-xs mt-2 text-center">
+              <p className="text-zinc-400 text-xs mt-2 text-center">
                 You'll use this PIN to confirm all trades
               </p>
             </div>
@@ -352,11 +352,11 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading || registerData.password !== registerData.confirmPassword || registerData.tradingPin.length !== 4}
-              className="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 px-4 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              className="w-full bg-white hover:bg-zinc-100 text-black font-semibold py-3 px-4 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
               {loading ? (
                 <>
-                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-black"></div>
                   Processing...
                 </>
               ) : (
@@ -371,7 +371,7 @@ export default function LoginPage() {
 
         {/* Footer */}
         <div className="text-center">
-          <p className="text-gray-500 text-sm">
+          <p className="text-zinc-500 text-sm">
             Secure Bitcoin trading platform
           </p>
         </div>

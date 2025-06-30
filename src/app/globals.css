@@ -75,3 +75,8 @@ body {
 .animate-slide-up {
   animation: slide-up 0.3s ease-out;
 }
+
+/* Override default heading bold styling to use semibold */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 600 !important; /* Semibold weight */
+}

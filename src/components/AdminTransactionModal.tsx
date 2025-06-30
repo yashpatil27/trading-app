@@ -43,12 +43,12 @@ export default function AdminTransactionModal({
 
         <div className="flex justify-between items-center p-4 sm:p-6 border-b border-zinc-800 sticky top-0 bg-black rounded-t-3xl">
           <div className="flex items-center gap-3">
-            <Settings className="text-gray-500" size={24} />
+            <Settings className="text-zinc-500" size={24} />
             <div>
-              <h2 className="text-lg sm:text-xl font-bold text-white">
+              <h2 className="text-lg sm:text-xl font-semibold text-white">
                 Admin Action
               </h2>
-              <div className="text-xs sm:text-sm text-gray-400">Transaction ID: {transaction.id}</div>
+              <div className="text-xs sm:text-sm text-zinc-400">Transaction ID: {transaction.id}</div>
             </div>
           </div>
           <button
@@ -61,7 +61,7 @@ export default function AdminTransactionModal({
               <div className="flex items-center gap-3">
                 <User className="text-white" size={20} />
                 <div>
-                  <div className="text-xs sm:text-sm text-gray-400">User</div>
+                  <div className="text-xs sm:text-sm text-zinc-400">User</div>
                   <div className="font-semibold text-white">{userName}</div>
                 </div>
               </div>
@@ -70,9 +70,9 @@ export default function AdminTransactionModal({
 
           <div className="flex items-center justify-between p-3 bg-zinc-800 rounded-lg">
             <div className="flex items-center gap-3">
-              <Calendar className="text-gray-500" size={20} />
+              <Calendar className="text-zinc-500" size={20} />
               <div>
-                <div className="text-xs sm:text-sm text-gray-400">Date & Time</div>
+                <div className="text-xs sm:text-sm text-zinc-400">Date & Time</div>
                 <div className="font-semibold text-white">{formatDate(transaction.createdAt)}</div>
               </div>
             </div>

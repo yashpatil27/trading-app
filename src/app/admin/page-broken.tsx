@@ -262,7 +262,7 @@ export default function AdminDashboard() {
     return (
       <div className="min-h-screen bg-black text-white flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin h-8 w-8 border-2 border-orange-500 border-t-transparent rounded-full mx-auto mb-4"></div>
+          <div className="animate-spin h-8 w-8 border-2 border-white border-t-transparent rounded-full mx-auto mb-4"></div>
           <p>Loading admin panel...</p>
         </div>
       </div>
@@ -281,21 +281,21 @@ export default function AdminDashboard() {
           <div className="flex items-center gap-4">
             <button
               onClick={() => router.push('/dashboard')}
-              className="bg-gray-800 hover:bg-gray-700 p-2 rounded-lg transition-colors"
+              className="bg-zinc-800 hover:bg-zinc-700 p-2 rounded-lg transition-colors"
             >
               <ArrowLeft size={20} />
             </button>
             <div>
-              <h1 className="text-2xl sm:text-3xl font-bold flex items-center gap-3">
-                <Shield className="text-orange-500" size={28} />
+              <h1 className="text-2xl sm:text-3xl font-semibold flex items-center gap-3">
+                <Shield className="text-white" size={28} />
                 Admin Panel
               </h1>
-              <p className="text-gray-400 text-sm sm:text-base">Manage users and system operations</p>
+              <p className="text-zinc-400 text-sm sm:text-base">Manage users and system operations</p>
             </div>
           </div>
           <button
             onClick={() => setShowCreateUser(true)}
-            className="w-full sm:w-auto bg-orange-600 hover:bg-orange-700 px-4 py-3 sm:py-2 rounded-lg flex items-center justify-center gap-2 font-medium transition-colors"
+            className="w-full sm:w-auto bg-zinc-100 hover:bg-zinc-200 px-4 py-3 sm:py-2 rounded-lg flex items-center justify-center gap-2 font-medium transition-colors"
           >
             <Plus size={16} />
             Create User
@@ -303,8 +303,8 @@ export default function AdminDashboard() {
         </div>
 
         {/* USD/INR Rates Management Section */}
-        <div className="bg-gray-900 rounded-xl border border-gray-800 overflow-hidden mb-6 sm:mb-8">
-          <div className="p-4 sm:p-6 border-b border-gray-800">
+        <div className="bg-zinc-900 rounded-xl border border-zinc-800 overflow-hidden mb-6 sm:mb-8">
+          <div className="p-4 sm:p-6 border-b border-zinc-800">
             <h2 className="text-lg sm:text-xl font-semibold flex items-center gap-2">
               <DollarSign size={20} />
               USD/INR Exchange Rates
@@ -314,29 +314,29 @@ export default function AdminDashboard() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Current Rates Display */}
               <div className="space-y-4">
-                <h3 className="text-sm font-medium text-gray-400 mb-3">Current Rates</h3>
+                <h3 className="text-sm font-medium text-zinc-400 mb-3">Current Rates</h3>
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="bg-gray-800 rounded-lg p-4">
-                    <div className="text-sm text-green-400 mb-1">User Sell Rate</div>
-                    <div className="text-xl font-bold">₹{currentRates.buy}</div>
+                  <div className="bg-zinc-800 rounded-lg p-4">
+                    <div className="text-sm text-white mb-1">User Sell Rate</div>
+                    <div className="text-xl font-semibold">₹{currentRates.buy}</div>
                   </div>
-                  <div className="bg-gray-800 rounded-lg p-4">
-                    <div className="text-sm text-blue-400 mb-1">User Buy Rate</div>
-                    <div className="text-xl font-bold">₹{currentRates.sell}</div>
+                  <div className="bg-zinc-800 rounded-lg p-4">
+                    <div className="text-sm text-white mb-1">User Buy Rate</div>
+                    <div className="text-xl font-semibold">₹{currentRates.sell}</div>
                   </div>
                 </div>
               </div>
 
               {/* Rate Update Form */}
               <div className="space-y-4">
-                <h3 className="text-sm font-medium text-gray-400 mb-3">Update Rates</h3>
+                <h3 className="text-sm font-medium text-zinc-400 mb-3">Update Rates</h3>
                 <div className="space-y-3">
                   <input
                     type="number"
                     step="0.01"
                     value={newRate}
                     onChange={(e) => setNewRate(e.target.value)}
-                    className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-3 text-white focus:outline-none focus:ring-2 focus:ring-orange-500"
+                    className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-3 text-white focus:outline-none focus:ring-2 focus:ring-white"
                     placeholder="Enter new rate"
                   />
                   <div className="grid grid-cols-2 gap-3">
@@ -346,7 +346,7 @@ export default function AdminDashboard() {
                         setShowPinModal(true)
                       }}
                       disabled={!newRate}
-                      className="bg-green-600 hover:bg-green-700 disabled:bg-gray-600 py-3 px-4 rounded-lg font-medium transition-colors flex items-center justify-center gap-2"
+                      className="bg-green-600 hover:bg-green-700 disabled:bg-zinc-600 py-3 px-4 rounded-lg font-medium transition-colors flex items-center justify-center gap-2"
                     >
                       <TrendingUp size={16} />
                       Set User Sell Rate
@@ -357,7 +357,7 @@ export default function AdminDashboard() {
                         setShowPinModal(true)
                       }}
                       disabled={!newRate}
-                      className="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 py-3 px-4 rounded-lg font-medium transition-colors flex items-center justify-center gap-2"
+                      className="bg-blue-600 hover:bg-blue-700 disabled:bg-zinc-600 py-3 px-4 rounded-lg font-medium transition-colors flex items-center justify-center gap-2"
                     >
                       <TrendingUp size={16} />
                       Set User Buy Rate
@@ -371,48 +371,48 @@ export default function AdminDashboard() {
 
         {/* Stats Cards */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6 sm:mb-8">
-          <div className="bg-gray-900 rounded-xl p-4 sm:p-6 border border-gray-800">
+          <div className="bg-zinc-900 rounded-xl p-4 sm:p-6 border border-zinc-800">
             <div className="flex items-center gap-3 mb-2">
-              <Users className="text-blue-500" size={20} />
-              <span className="text-gray-400 text-sm">Total Users</span>
+              <Users className="text-white" size={20} />
+              <span className="text-zinc-400 text-sm">Total Users</span>
             </div>
-            <div className="text-xl sm:text-2xl font-bold">{users.length}</div>
+            <div className="text-xl sm:text-2xl font-semibold">{users.length}</div>
           </div>
           
-          <div className="bg-gray-900 rounded-xl p-4 sm:p-6 border border-gray-800">
+          <div className="bg-zinc-900 rounded-xl p-4 sm:p-6 border border-zinc-800">
             <div className="flex items-center gap-3 mb-2">
-              <Wallet className="text-green-500" size={20} />
-              <span className="text-gray-400 text-sm">Total Cash</span>
+              <Wallet className="text-white" size={20} />
+              <span className="text-zinc-400 text-sm">Total Cash</span>
             </div>
-            <div className="text-lg sm:text-2xl font-bold">
+            <div className="text-lg sm:text-2xl font-semibold">
               ₹{formatCash(users.reduce((sum, user) => sum + (user.balance || 0), 0))}
             </div>
           </div>
 
-          <div className="bg-gray-900 rounded-xl p-4 sm:p-6 border border-gray-800">
+          <div className="bg-zinc-900 rounded-xl p-4 sm:p-6 border border-zinc-800">
             <div className="flex items-center gap-3 mb-2">
-              <TrendingUp className="text-orange-500" size={20} />
-              <span className="text-gray-400 text-sm">Total Bitcoin</span>
+              <TrendingUp className="text-white" size={20} />
+              <span className="text-zinc-400 text-sm">Total Bitcoin</span>
             </div>
-            <div className="text-lg sm:text-2xl font-bold">
+            <div className="text-lg sm:text-2xl font-semibold">
               ₿{formatBitcoin(users.reduce((sum, user) => sum + (user.btcAmount || 0), 0))}
             </div>
           </div>
 
-          <div className="bg-gray-900 rounded-xl p-4 sm:p-6 border border-gray-800">
+          <div className="bg-zinc-900 rounded-xl p-4 sm:p-6 border border-zinc-800">
             <div className="flex items-center gap-3 mb-2">
-              <Shield className="text-purple-500" size={20} />
-              <span className="text-gray-400 text-sm">Admins</span>
+              <Shield className="text-white" size={20} />
+              <span className="text-zinc-400 text-sm">Admins</span>
             </div>
-            <div className="text-xl sm:text-2xl font-bold">
+            <div className="text-xl sm:text-2xl font-semibold">
               {users.filter(user => user.role === 'ADMIN').length}
             </div>
           </div>
         </div>
 
         {/* Users Section - keeping the original implementation but just the header shown for brevity */}
-        <div className="bg-gray-900 rounded-xl border border-gray-800 overflow-hidden">
-          <div className="p-4 sm:p-6 border-b border-gray-800">
+        <div className="bg-zinc-900 rounded-xl border border-zinc-800 overflow-hidden">
+          <div className="p-4 sm:p-6 border-b border-zinc-800">
             <h2 className="text-lg sm:text-xl font-semibold flex items-center gap-2">
               <Users size={20} />
               User Management

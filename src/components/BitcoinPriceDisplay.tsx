@@ -19,7 +19,7 @@ interface BitcoinPriceDisplayProps {
 const BitcoinPriceDisplay = React.memo(({ price, isConnected, error }: BitcoinPriceDisplayProps) => {
   if (error) {
     return (
-      <div className="bg-zinc-800 border border-gray-700 rounded-lg p-4">
+      <div className="bg-zinc-800 border border-zinc-700 rounded-lg p-4">
         <div className="flex items-center gap-2 text-white">
           <WifiOff className="h-4 w-4" />
           <span className="text-sm">Price data unavailable</span>
@@ -30,9 +30,9 @@ const BitcoinPriceDisplay = React.memo(({ price, isConnected, error }: BitcoinPr
 
   if (!price) {
     return (
-      <div className="bg-zinc-800 border border-gray-700 rounded-lg p-4">
+      <div className="bg-zinc-800 border border-zinc-700 rounded-lg p-4">
         <div className="flex items-center gap-2 text-white">
-          <div className="animate-spin h-4 w-4 border-2 border-gray-600 border-t-white rounded-full"></div>
+          <div className="animate-spin h-4 w-4 border-2 border-zinc-600 border-t-white rounded-full"></div>
           <span className="text-sm">Loading price...</span>
         </div>
       </div>
@@ -40,7 +40,7 @@ const BitcoinPriceDisplay = React.memo(({ price, isConnected, error }: BitcoinPr
   }
 
   return (
-    <div className="bg-zinc-800 border border-gray-700 rounded-lg p-6">
+    <div className="bg-zinc-800 border border-zinc-700 rounded-lg p-6">
       <div className="flex items-center justify-between">
         <div>
           <div className="flex items-center gap-2 mb-2">
@@ -53,7 +53,7 @@ const BitcoinPriceDisplay = React.memo(({ price, isConnected, error }: BitcoinPr
           </div>
           
           <div className="space-y-1">
-            <div className="text-2xl font-bold text-white">
+            <div className="text-2xl font-semibold text-white">
               ₹{price.btcUSD.toLocaleString('en-IN')}
             </div>
             <div className="bg-white text-black text-sm px-2 py-1 rounded inline-block">

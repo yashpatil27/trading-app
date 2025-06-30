@@ -74,18 +74,18 @@ export default function DepositDetailModal({
             ) : (transaction.type === 'WITHDRAWAL_INR' || transaction.type === 'WITHDRAWAL_BTC') ? (
               <ArrowUpRight className="text-white" size={24} />
             ) : (
-              <ArrowDownLeft className="text-gray-500" size={24} />
+              <ArrowDownLeft className="text-zinc-500" size={24} />
             )}
             <div>
-              <h2 className="text-lg sm:text-xl font-bold text-white">
+              <h2 className="text-lg sm:text-xl font-semibold text-white">
                 {{"BUY": "Buy", "SELL": "Sell", "DEPOSIT_INR": "Cash Deposit", "DEPOSIT_BTC": "BTC Deposit", "WITHDRAWAL_INR": "Cash Withdrawal", "WITHDRAWAL_BTC": "BTC Withdrawal", "ADMIN": "Admin"}[transaction.type] || transaction.type} Completed
               </h2>
-              <div className="text-xs sm:text-sm text-gray-400">Transaction ID: {transaction.id}</div>
+              <div className="text-xs sm:text-sm text-zinc-400">Transaction ID: {transaction.id}</div>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-white"
+            className="text-zinc-400 hover:text-white"
           >
             <X size={24} />
           </button>
@@ -101,7 +101,7 @@ export default function DepositDetailModal({
                 <div className="flex items-center gap-3">
                   <User className="text-white" size={20} />
                   <div>
-                    <div className="text-xs sm:text-sm text-gray-400">User</div>
+                    <div className="text-xs sm:text-sm text-zinc-400">User</div>
                     <div className="font-semibold text-white">{userName}</div>
                   </div>
                 </div>
@@ -117,7 +117,7 @@ export default function DepositDetailModal({
                   <DollarSign className={isDeposit ? "text-white" : "text-white"} size={20} />
                 )}
                 <div>
-                  <div className="text-xs sm:text-sm text-gray-400">{{"DEPOSIT_INR": "Cash Deposit", "DEPOSIT_BTC": "BTC Deposit", "WITHDRAWAL_INR": "Cash Withdrawal", "WITHDRAWAL_BTC": "BTC Withdrawal", "ADMIN": "Admin"}[transaction.type] || transaction.type} Amount</div>
+                  <div className="text-xs sm:text-sm text-zinc-400">{{"DEPOSIT_INR": "Cash Deposit", "DEPOSIT_BTC": "BTC Deposit", "WITHDRAWAL_INR": "Cash Withdrawal", "WITHDRAWAL_BTC": "BTC Withdrawal", "ADMIN": "Admin"}[transaction.type] || transaction.type} Amount</div>
                   <div className="font-semibold text-white">
                     {isDeposit ? '+' : '-'}{isBitcoinTransaction ? formatBtc(Math.abs(displayAmount)) : `₹${formatCash(Math.abs(displayAmount))}`}
                   </div>
@@ -134,7 +134,7 @@ export default function DepositDetailModal({
                   <DollarSign className="text-white" size={20} />
                 )}
                 <div>
-                  <div className="text-xs sm:text-sm text-gray-400">
+                  <div className="text-xs sm:text-sm text-zinc-400">
                     {isBitcoinTransaction ? 'Bitcoin' : 'Cash'} Balance After
                   </div>
                   <div className="font-semibold text-white">
@@ -153,7 +153,7 @@ export default function DepositDetailModal({
               <div className="flex items-center gap-3">
                 <Calendar className="text-white" size={20} />
                 <div>
-                  <div className="text-xs sm:text-sm text-gray-400">Date & Time</div>
+                  <div className="text-xs sm:text-sm text-zinc-400">Date & Time</div>
                   <div className="font-semibold text-white">{formatDate(transaction.createdAt)}</div>
                 </div>
               </div>
@@ -161,8 +161,8 @@ export default function DepositDetailModal({
           </div>
 
           {/* Summary */}
-          <div className="p-3 bg-zinc-800 rounded-lg border border-gray-700">
-            <div className="text-xs sm:text-sm text-gray-400 mb-2">Transaction Summary</div>
+          <div className="p-3 bg-zinc-800 rounded-lg border border-zinc-700">
+            <div className="text-xs sm:text-sm text-zinc-400 mb-2">Transaction Summary</div>
             <div className="text-sm text-white">
               {isDeposit 
                 ? `${isBitcoinTransaction ? formatBtc(Math.abs(displayAmount)) : `₹${formatCash(Math.abs(displayAmount))}`} was deposited to ${isADMIN && userName ? `${userName}'s` : 'your'} account.`
@@ -174,7 +174,7 @@ export default function DepositDetailModal({
           {/* Close Button */}
           <button
             onClick={onClose}
-            className="w-full bg-white hover:bg-gray-200 text-black font-semibold py-3 rounded-lg transition-colors mb-4"
+            className="w-full bg-white hover:bg-zinc-200 text-black font-semibold py-3 rounded-lg transition-colors mb-4"
           >
             Close
           </button>
