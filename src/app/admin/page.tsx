@@ -190,7 +190,7 @@ export default function AdminDashboard() {
     return (
       <div className="min-h-screen bg-black text-white flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin h-8 w-8 border-2 border-white border-t-transparent rounded-full mx-auto mb-4"></div>
+          <div className="animate-spin h-8 w-8 border-2 border-orange-500 border-t-transparent rounded-full mx-auto mb-4"></div>
           <p>Loading admin panel...</p>
         </div>
       </div>
@@ -209,21 +209,21 @@ export default function AdminDashboard() {
           <div className="flex items-center gap-4">
             <button
               onClick={() => router.push('/dashboard')}
-              className="bg-white hover:bg-zinc-200 text-black p-2 rounded-lg transition-colors"
+              className="bg-white hover:bg-gray-200 text-black p-2 rounded-lg transition-colors"
             >
               <ArrowLeft size={20} />
             </button>
             <div>
-              <h1 className="text-2xl sm:text-3xl font-semibold flex items-center gap-3">
+              <h1 className="text-2xl sm:text-3xl font-bold flex items-center gap-3">
                 <Shield className="text-white" size={28} />
                 Admin Panel
               </h1>
-              <p className="text-zinc-400 text-sm sm:text-base">Manage users and system operations</p>
+              <p className="text-gray-400 text-sm sm:text-base">Manage users and system operations</p>
             </div>
           </div>
           <button
             onClick={() => setShowCreateUser(true)}
-            className="w-full sm:w-auto bg-white hover:bg-zinc-200 text-black px-4 py-3 sm:py-2 rounded-lg flex items-center justify-center gap-2 font-medium transition-colors"
+            className="w-full sm:w-auto bg-white hover:bg-gray-200 text-black px-4 py-3 sm:py-2 rounded-lg flex items-center justify-center gap-2 font-medium transition-colors"
           >
             <Plus size={16} />
             Create User
@@ -234,38 +234,38 @@ export default function AdminDashboard() {
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6 sm:mb-8">
           <div className="bg-zinc-800 rounded-xl p-4 sm:p-6 border border-zinc-800">
             <div className="flex items-center gap-3 mb-2">
-              <Users className="text-white" size={20} />
-              <span className="text-zinc-400 text-sm">Total Users</span>
+              <Users className="text-blue-500" size={20} />
+              <span className="text-gray-400 text-sm">Total Users</span>
             </div>
-            <div className="text-xl sm:text-2xl font-semibold">{users.length}</div>
+            <div className="text-xl sm:text-2xl font-bold">{users.length}</div>
           </div>
           
           <div className="bg-zinc-800 rounded-xl p-4 sm:p-6 border border-zinc-800">
             <div className="flex items-center gap-3 mb-2">
-              <Wallet className="text-white" size={20} />
-              <span className="text-zinc-400 text-sm">Total Cash</span>
+              <Wallet className="text-green-500" size={20} />
+              <span className="text-gray-400 text-sm">Total Cash</span>
             </div>
-            <div className="text-lg sm:text-2xl font-semibold">
+            <div className="text-lg sm:text-2xl font-bold">
               ₹{formatCash(users.reduce((sum, user) => sum + (user.balance || 0), 0))}
             </div>
           </div>
 
           <div className="bg-zinc-800 rounded-xl p-4 sm:p-6 border border-zinc-800">
             <div className="flex items-center gap-3 mb-2">
-              <TrendingUp className="text-white" size={20} />
-              <span className="text-zinc-400 text-sm">Total Bitcoin</span>
+              <TrendingUp className="text-orange-500" size={20} />
+              <span className="text-gray-400 text-sm">Total Bitcoin</span>
             </div>
-            <div className="text-lg sm:text-2xl font-semibold">
+            <div className="text-lg sm:text-2xl font-bold">
               ₿{formatBitcoin(users.reduce((sum, user) => sum + (user.btcAmount || 0), 0))}
             </div>
           </div>
 
           <div className="bg-zinc-800 rounded-xl p-4 sm:p-6 border border-zinc-800">
             <div className="flex items-center gap-3 mb-2">
-              <Shield className="text-white" size={20} />
-              <span className="text-zinc-400 text-sm">Admins</span>
+              <Shield className="text-purple-500" size={20} />
+              <span className="text-gray-400 text-sm">Admins</span>
             </div>
-            <div className="text-xl sm:text-2xl font-semibold">
+            <div className="text-xl sm:text-2xl font-bold">
               {users.filter(user => user.role === 'ADMIN').length}
             </div>
           </div>
@@ -304,7 +304,7 @@ export default function AdminDashboard() {
                           </div>
                           <div>
                             <div className="font-medium">{user.name}</div>
-                            <div className="text-sm text-zinc-400">{user.email}</div>
+                            <div className="text-sm text-gray-400">{user.email}</div>
                           </div>
                         </div>
                       </td>
@@ -316,19 +316,19 @@ export default function AdminDashboard() {
                         <div className="flex gap-2 justify-end">
                           <button
                             onClick={() => setShowBalanceModal(user)}
-                            className="bg-white hover:bg-zinc-200 text-black px-3 py-1 rounded text-sm font-medium transition-colors"
+                            className="bg-white hover:bg-gray-200 text-black px-3 py-1 rounded text-sm font-medium transition-colors"
                           >
                             Deposit
                           </button>
                           <button
                             onClick={() => setShowResetModal(user)}
-                            className="bg-white hover:bg-zinc-200 text-black px-3 py-1 rounded text-sm font-medium transition-colors"
+                            className="bg-white hover:bg-gray-200 text-black px-3 py-1 rounded text-sm font-medium transition-colors"
                           >
                             Reset
                           </button>
                           <button
                             onClick={() => setShowDeleteModal(user)}
-                            className="bg-white hover:bg-zinc-200 text-black px-3 py-1 rounded text-sm font-medium transition-colors"
+                            className="bg-white hover:bg-gray-200 text-black px-3 py-1 rounded text-sm font-medium transition-colors"
                           >
                             Delete
                           </button>
@@ -352,7 +352,7 @@ export default function AdminDashboard() {
                   </div>
                   <div>
                     <div className="font-semibold text-white">{user.name}</div>
-                    <div className="text-sm text-zinc-400">{user.email}</div>
+                    <div className="text-sm text-gray-400">{user.email}</div>
                   </div>
                 </div>
 
@@ -360,22 +360,22 @@ export default function AdminDashboard() {
                 <div className="grid grid-cols-2 gap-4 mb-4">
                   <div className="bg-zinc-800 rounded-lg p-3 border border-zinc-700">
                     <div className="flex items-center gap-2 mb-1">
-                      <Wallet size={14} className="text-white" />
-                      <span className="text-xs text-zinc-400">Cash Balance</span>
+                      <Wallet size={14} className="text-green-500" />
+                      <span className="text-xs text-gray-400">Cash Balance</span>
                     </div>
                     <div className="font-semibold text-white">₹{formatCash(user.balance || 0)}</div>
                   </div>
                   <div className="bg-zinc-800 rounded-lg p-3 border border-zinc-700">
                     <div className="flex items-center gap-2 mb-1">
-                      <TrendingUp size={14} className="text-white" />
-                      <span className="text-xs text-zinc-400">Bitcoin Balance</span>
+                      <TrendingUp size={14} className="text-orange-500" />
+                      <span className="text-xs text-gray-400">Bitcoin Balance</span>
                     </div>
                     <div className="font-semibold text-white">₿{formatBitcoin(user.btcAmount || 0)}</div>
                   </div>
                 </div>
 
                 {/* Stats Row */}
-                <div className="flex items-center justify-between text-sm text-zinc-400 mb-4">
+                <div className="flex items-center justify-between text-sm text-gray-400 mb-4">
                   <div className="flex items-center gap-1">
                     <TrendingUp size={14} />
                     <span>{user._count.trades} trades</span>
@@ -390,21 +390,21 @@ export default function AdminDashboard() {
                 <div className="grid grid-cols-3 gap-3">
                   <button
                     onClick={() => setShowBalanceModal(user)}
-                    className="bg-white hover:bg-zinc-200 text-black py-3 px-4 rounded-lg flex items-center justify-center gap-2 font-medium transition-colors text-sm"
+                    className="bg-white hover:bg-gray-200 text-black py-3 px-4 rounded-lg flex items-center justify-center gap-2 font-medium transition-colors text-sm"
                   >
                     <Landmark size={18} />
                     Deposit
                   </button>
                   <button
                     onClick={() => setShowResetModal(user)}
-                    className="bg-white hover:bg-zinc-200 text-black py-3 px-4 rounded-lg flex items-center justify-center gap-2 font-medium transition-colors text-sm"
+                    className="bg-white hover:bg-gray-200 text-black py-3 px-4 rounded-lg flex items-center justify-center gap-2 font-medium transition-colors text-sm"
                   >
                     <Key size={16} />
                     Reset
                   </button>
                   <button
                     onClick={() => setShowDeleteModal(user)}
-                    className="bg-white hover:bg-zinc-200 text-black py-3 px-4 rounded-lg flex items-center justify-center gap-2 font-medium transition-colors text-sm"
+                    className="bg-white hover:bg-gray-200 text-black py-3 px-4 rounded-lg flex items-center justify-center gap-2 font-medium transition-colors text-sm"
                   >
                     <Trash2 size={16} />
                     Delete
@@ -414,7 +414,7 @@ export default function AdminDashboard() {
             ))}
 
             {users.length === 0 && (
-              <div className="text-center py-12 text-zinc-400">
+              <div className="text-center py-12 text-gray-400">
                 <Users size={48} className="mx-auto mb-4 opacity-50" />
                 <p>No users found</p>
               </div>
@@ -435,10 +435,10 @@ export default function AdminDashboard() {
             {/* User Info */}
             <div className="bg-zinc-800 rounded-lg p-4 mb-4">
               <div className="flex items-center gap-3">
-                <User size={20} className="text-zinc-400" />
+                <User size={20} className="text-gray-400" />
                 <div>
                   <div className="font-semibold">{showBalanceModal.name}</div>
-                  <div className="text-sm text-zinc-400">
+                  <div className="text-sm text-gray-400">
                     Cash: ₹{formatCash(showBalanceModal.balance || 0)} | 
                     Bitcoin: ₿{formatBitcoin(showBalanceModal.btcAmount || 0)}
                   </div>
@@ -449,14 +449,14 @@ export default function AdminDashboard() {
             <div className="space-y-4">
               {/* Currency Selection */}
               <div>
-                <label className="block text-sm text-zinc-400 mb-2">Adjust Currency</label>
+                <label className="block text-sm text-gray-400 mb-2">Adjust Currency</label>
                 <div className="grid grid-cols-2 gap-2">
                   <button
                     onClick={() => setBalanceCurrency('INR')}
                     className={`py-3 px-4 rounded-lg font-medium transition-colors ${
                       balanceCurrency === 'INR' 
                         ? 'bg-white text-black' 
-                        : 'bg-zinc-800 text-zinc-400 hover:bg-zinc-700'
+                        : 'bg-zinc-800 text-gray-400 hover:bg-gray-700'
                     }`}
                   >
                     💰 Cash (INR)
@@ -466,7 +466,7 @@ export default function AdminDashboard() {
                     className={`py-3 px-4 rounded-lg font-medium transition-colors ${
                       balanceCurrency === 'BTC' 
                         ? 'bg-white text-black' 
-                        : 'bg-zinc-800 text-zinc-400 hover:bg-zinc-700'
+                        : 'bg-zinc-800 text-gray-400 hover:bg-gray-700'
                     }`}
                   >
                     ₿ Bitcoin
@@ -476,7 +476,7 @@ export default function AdminDashboard() {
 
               {/* Amount Input */}
               <div>
-                <label className="block text-sm text-zinc-400 mb-2">
+                <label className="block text-sm text-gray-400 mb-2">
                   Amount {balanceCurrency === 'INR' ? '(₹)' : '(₿)'}
                 </label>
                 <input
@@ -488,7 +488,7 @@ export default function AdminDashboard() {
                   placeholder={balanceCurrency === 'INR' ? 'Enter INR amount' : 'Enter BTC amount (e.g., 0.001)'}
                 />
                 {balanceCurrency === 'BTC' && (
-                  <div className="text-xs text-zinc-500 mt-1">
+                  <div className="text-xs text-gray-500 mt-1">
                     Use 8 decimal places for precision (e.g., 0.00001000)
                   </div>
                 )}
@@ -496,7 +496,7 @@ export default function AdminDashboard() {
 
               {/* Reason Input */}
               <div>
-                <label className="block text-sm text-zinc-400 mb-2">Reason (Optional)</label>
+                <label className="block text-sm text-gray-400 mb-2">Reason (Optional)</label>
                 <input
                   type="text"
                   value={balanceReason}
@@ -511,7 +511,7 @@ export default function AdminDashboard() {
                 <button
                   onClick={() => adjustBalance('CREDIT')}
                   disabled={!balanceAmount}
-                  className="bg-white hover:bg-zinc-200 text-black disabled:bg-zinc-300 disabled:text-zinc-500 py-3 rounded-lg flex items-center justify-center gap-1 font-medium transition-colors"
+                  className="bg-white hover:bg-gray-200 text-black disabled:bg-gray-300 disabled:text-gray-500 py-3 rounded-lg flex items-center justify-center gap-1 font-medium transition-colors"
                 >
                   <Plus size={16} />
                   Add
@@ -519,7 +519,7 @@ export default function AdminDashboard() {
                 <button
                   onClick={() => adjustBalance('DEBIT')}
                   disabled={!balanceAmount}
-                  className="bg-white hover:bg-zinc-200 text-black disabled:bg-zinc-300 disabled:text-zinc-500 py-3 rounded-lg flex items-center justify-center gap-1 font-medium transition-colors"
+                  className="bg-white hover:bg-gray-200 text-black disabled:bg-gray-300 disabled:text-gray-500 py-3 rounded-lg flex items-center justify-center gap-1 font-medium transition-colors"
                 >
                   <Minus size={16} />
                   Remove
@@ -531,7 +531,7 @@ export default function AdminDashboard() {
                     setBalanceReason('')
                     setBalanceCurrency('INR')
                   }}
-                  className="bg-white hover:bg-zinc-200 text-black py-3 rounded-lg font-medium transition-colors"
+                  className="bg-white hover:bg-gray-200 text-black py-3 rounded-lg font-medium transition-colors"
                 >
                   Cancel
                 </button>
@@ -551,16 +551,16 @@ export default function AdminDashboard() {
             </h3>
             <div className="bg-zinc-800 rounded-lg p-4 mb-4">
               <div className="flex items-center gap-3">
-                <User size={20} className="text-zinc-400" />
+                <User size={20} className="text-gray-400" />
                 <div>
                   <div className="font-semibold">{showResetModal.name}</div>
-                  <div className="text-sm text-zinc-400">{showResetModal.email}</div>
+                  <div className="text-sm text-gray-400">{showResetModal.email}</div>
                 </div>
               </div>
             </div>
             <div className="space-y-4">
               <div>
-                <label className="block text-sm text-zinc-400 mb-2">New 4-Digit PIN</label>
+                <label className="block text-sm text-gray-400 mb-2">New 4-Digit PIN</label>
                 <input
                   type="text"
                   maxLength={4}
@@ -571,7 +571,7 @@ export default function AdminDashboard() {
                 />
               </div>
               <div>
-                <label className="block text-sm text-zinc-400 mb-2">New Password</label>
+                <label className="block text-sm text-gray-400 mb-2">New Password</label>
                 <input
                   type="password"
                   value={newPassword}
@@ -583,7 +583,7 @@ export default function AdminDashboard() {
               <div className="grid grid-cols-2 gap-3">
                 <button
                   onClick={resetCredentials}
-                  className="bg-white hover:bg-zinc-200 text-black py-3 rounded-lg font-medium transition-colors"
+                  className="bg-white hover:bg-gray-200 text-black py-3 rounded-lg font-medium transition-colors"
                 >
                   Reset
                 </button>
@@ -593,7 +593,7 @@ export default function AdminDashboard() {
                     setNewPin('')
                     setNewPassword('')
                   }}
-                  className="bg-white hover:bg-zinc-200 text-black py-3 rounded-lg font-medium transition-colors"
+                  className="bg-white hover:bg-gray-200 text-black py-3 rounded-lg font-medium transition-colors"
                 >
                   Cancel
                 </button>
@@ -617,7 +617,7 @@ export default function AdminDashboard() {
                 <User size={20} className="text-white" />
                 <div>
                   <div className="font-semibold text-white">{showDeleteModal.name}</div>
-                  <div className="text-sm text-zinc-400">{showDeleteModal.email}</div>
+                  <div className="text-sm text-gray-400">{showDeleteModal.email}</div>
                   <div className="text-sm text-white">
                     Current balance: ₹{formatCash(showDeleteModal.balance || 0)} | 
                     ₿{formatBitcoin(showDeleteModal.btcAmount || 0)}
@@ -629,7 +629,7 @@ export default function AdminDashboard() {
             <div className="space-y-4">
               <div className="text-center">
                 <p className="text-white font-medium mb-2">⚠️ This action cannot be undone!</p>
-                <p className="text-zinc-300 text-sm">
+                <p className="text-gray-300 text-sm">
                   This will permanently delete the user and all their transaction history.
                   {(showDeleteModal.balance > 0 || showDeleteModal.btcAmount > 0) && (
                     <span className="block text-white mt-2">
@@ -643,14 +643,14 @@ export default function AdminDashboard() {
                 <button
                   onClick={deleteUser}
                   disabled={showDeleteModal.balance > 0 || showDeleteModal.btcAmount > 0}
-                  className="bg-white hover:bg-zinc-200 text-black disabled:bg-zinc-300 disabled:text-zinc-500 disabled:cursor-not-allowed py-3 rounded-lg flex items-center justify-center gap-2 font-medium transition-colors"
+                  className="bg-white hover:bg-gray-200 text-black disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed py-3 rounded-lg flex items-center justify-center gap-2 font-medium transition-colors"
                 >
                   <Trash2 size={16} />
                   Delete
                 </button>
                 <button
                   onClick={() => setShowDeleteModal(null)}
-                  className="bg-white hover:bg-zinc-200 text-black py-3 rounded-lg font-medium transition-colors"
+                  className="bg-white hover:bg-gray-200 text-black py-3 rounded-lg font-medium transition-colors"
                 >
                   Cancel
                 </button>
@@ -667,7 +667,7 @@ export default function AdminDashboard() {
             <h3 className="text-lg sm:text-xl font-semibold mb-4">Create New User</h3>
             <div className="space-y-4">
               <div>
-                <label className="block text-sm text-zinc-400 mb-2">Email</label>
+                <label className="block text-sm text-gray-400 mb-2">Email</label>
                 <input
                   type="email"
                   value={newUser.email}
@@ -677,7 +677,7 @@ export default function AdminDashboard() {
                 />
               </div>
               <div>
-                <label className="block text-sm text-zinc-400 mb-2">Name</label>
+                <label className="block text-sm text-gray-400 mb-2">Name</label>
                 <input
                   type="text"
                   value={newUser.name}
@@ -687,7 +687,7 @@ export default function AdminDashboard() {
                 />
               </div>
               <div>
-                <label className="block text-sm text-zinc-400 mb-2">Password</label>
+                <label className="block text-sm text-gray-400 mb-2">Password</label>
                 <input
                   type="password"
                   value={newUser.password}
@@ -700,7 +700,7 @@ export default function AdminDashboard() {
                 <button
                   onClick={createUser}
                   disabled={!newUser.email || !newUser.name || !newUser.password}
-                  className="bg-white hover:bg-zinc-200 text-black disabled:bg-zinc-300 disabled:text-zinc-500 py-3 rounded-lg font-medium transition-colors"
+                  className="bg-white hover:bg-gray-200 text-black disabled:bg-gray-300 disabled:text-gray-500 py-3 rounded-lg font-medium transition-colors"
                 >
                   Create User
                 </button>
@@ -709,7 +709,7 @@ export default function AdminDashboard() {
                     setShowCreateUser(false)
                     setNewUser({ email: '', name: '', password: '', role: 'USER' })
                   }}
-                  className="bg-white hover:bg-zinc-200 text-black py-3 rounded-lg font-medium transition-colors"
+                  className="bg-white hover:bg-gray-200 text-black py-3 rounded-lg font-medium transition-colors"
                 >
                   Cancel
                 </button>

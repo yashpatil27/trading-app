@@ -77,16 +77,16 @@ export default function PinInput({ value, onChange, isError = false, disabled = 
           onPaste={handlePaste}
           disabled={disabled}
           className={`
-            w-12 h-12 text-center text-xl font-semibold rounded-lg border-2 
+            w-12 h-12 text-center text-xl font-bold rounded-lg border-2 
             bg-zinc-800 text-white
             transition-all duration-200
             ${isError 
               ? 'border-red-500 bg-red-900/20' 
-              : 'border-zinc-600 focus:border-white'
+              : 'border-zinc-600 focus:border-orange-500'
             }
             ${disabled 
               ? 'opacity-50 cursor-not-allowed' 
-              : 'focus:outline-none focus:ring-2 focus:ring-white/50'
+              : 'focus:outline-none focus:ring-2 focus:ring-orange-500/50'
             }
           `}
           autoComplete="off"

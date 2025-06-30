@@ -4,7 +4,7 @@ import React from 'react'
 export const Skeleton = ({ className = '', ...props }: React.HTMLAttributes<HTMLDivElement>) => {
   return (
     <div 
-      className={`animate-pulse bg-zinc-200 rounded ${className}`} 
+      className={`animate-pulse bg-gray-200 rounded ${className}`} 
       {...props}
     />
   )
@@ -133,8 +133,8 @@ export const AdminUserRowSkeleton = () => (
 export const ModalLoadingSkeleton = () => (
   <div className="flex items-center justify-center p-6">
     <div className="flex items-center gap-3">
-      <div className="animate-spin h-6 w-6 border-2 border-zinc-300 border-t-blue-600 rounded-full"></div>
-      <span className="text-zinc-600">Processing...</span>
+      <div className="animate-spin h-6 w-6 border-2 border-gray-300 border-t-blue-600 rounded-full"></div>
+      <span className="text-gray-600">Processing...</span>
     </div>
   </div>
 )

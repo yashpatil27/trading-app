@@ -84,18 +84,18 @@ export default function PinConfirmationModal({
       <div className="bg-black rounded-lg p-6 w-full max-w-md mx-4 border border-zinc-800">
         {/* Header */}
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-xl font-semibold text-white">{title}</h2>
+          <h2 className="text-xl font-bold text-white">{title}</h2>
           <button
             onClick={handleCancel}
             disabled={isSubmitting}
-            className="bg-white text-black hover:bg-zinc-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed p-2 rounded-lg"
+            className="bg-white text-black hover:bg-gray-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed p-2 rounded-lg"
           >
             <X size={20} />
           </button>
         </div>
 
         {/* Description */}
-        <p className="text-zinc-400 text-center mb-6">
+        <p className="text-gray-400 text-center mb-6">
           {description}
         </p>
 
@@ -118,13 +118,13 @@ export default function PinConfirmationModal({
 
         {/* Loading State */}
         {(isSubmitting || isLoading) && (
-          <div className="text-center text-zinc-400 text-sm mb-4">
+          <div className="text-center text-gray-400 text-sm mb-4">
             Processing...
           </div>
         )}
 
         {/* Instructions */}
-        <div className="text-center text-zinc-500 text-xs">
+        <div className="text-center text-gray-500 text-xs">
           Enter your 4-digit trading PIN to confirm this transaction
         </div>
 
@@ -133,14 +133,14 @@ export default function PinConfirmationModal({
           <button
             onClick={handleCancel}
             disabled={isSubmitting || isLoading}
-            className="flex-1 px-4 py-2 bg-white text-black rounded-lg hover:bg-zinc-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-medium"
+            className="flex-1 px-4 py-2 bg-white text-black rounded-lg hover:bg-gray-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-medium"
           >
             Cancel
           </button>
           <button
             onClick={handleSubmit}
             disabled={pin.length !== 4 || isSubmitting || isLoading}
-            className="flex-1 px-4 py-2 bg-white text-black rounded-lg hover:bg-zinc-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-medium"
+            className="flex-1 px-4 py-2 bg-white text-black rounded-lg hover:bg-gray-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-medium"
           >
             {isSubmitting ? 'Confirming...' : 'Confirm'}
           </button>
