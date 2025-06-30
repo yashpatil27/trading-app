@@ -65,15 +65,15 @@ export default function TradeTransactionModal({
               <TrendingDown className="text-white" size={24} />
             )}
             <div>
-              <h2 className="text-lg sm:text-xl font-bold text-white">
+              <h2 className="text-lg sm:text-xl font-semibold text-white">
                 {transaction.type} Order
               </h2>
-              <div className="text-xs sm:text-sm text-gray-400">Transaction ID: {transaction.id.slice(-8)}</div>
+              <div className="text-xs sm:text-sm text-zinc-400">Transaction ID: {transaction.id.slice(-8)}</div>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-white"
+            className="text-zinc-400 hover:text-white"
           >
             <X size={24} />
           </button>
@@ -84,7 +84,7 @@ export default function TradeTransactionModal({
             <div className="flex items-center gap-3">
               <Bitcoin className="text-white" size={16} />
               <div>
-                <div className="text-xs text-gray-400">Bitcoin Amount</div>
+                <div className="text-xs text-zinc-400">Bitcoin Amount</div>
                 <div className="text-sm font-semibold text-white">{formatBtc(transaction.amount)}</div>
               </div>
             </div>
@@ -94,7 +94,7 @@ export default function TradeTransactionModal({
             <div className="flex items-center gap-3">
               <DollarSign className="text-white" size={20} />
               <div>
-                <div className="text-xs text-gray-400">Price per BTC</div>
+                <div className="text-xs text-zinc-400">Price per BTC</div>
                 <div className="text-sm font-semibold text-white">{formatInr(transaction.price)}</div>
               </div>
             </div>
@@ -104,7 +104,7 @@ export default function TradeTransactionModal({
             <div className="flex items-center gap-3">
               <DollarSign className="text-white" size={20} />
               <div>
-                <div className="text-xs text-gray-400">Total Amount</div>
+                <div className="text-xs text-zinc-400">Total Amount</div>
                 <div className="text-sm font-semibold text-white">{formatInr(transaction.total)}</div>
               </div>
             </div>
@@ -112,9 +112,9 @@ export default function TradeTransactionModal({
 
           <div className="flex items-center justify-between p-3 bg-zinc-800 rounded-lg">
             <div className="flex items-center gap-3">
-              <Calendar className="text-gray-500" size={20} />
+              <Calendar className="text-zinc-500" size={20} />
               <div>
-                <div className="text-xs sm:text-sm text-gray-400">Date & Time</div>
+                <div className="text-xs sm:text-sm text-zinc-400">Date & Time</div>
                 <div className="font-semibold text-white">{formatDate(transaction.createdAt)}</div>
               </div>
             </div>

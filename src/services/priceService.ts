@@ -81,9 +81,10 @@ class PriceService {
       // Convert to integer for storage
       const btcPriceInt = usdToInt(btcPrice)
 
-      // Store in database with both formats (dual-mode)
+      // Store in database with integer-first approach
       await prisma.btcPrice.create({
         data: { 
+          id: `price_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
           priceUsd: btcPrice,      // Keep for compatibility 
           priceUsdInt: btcPriceInt // New integer field
         }

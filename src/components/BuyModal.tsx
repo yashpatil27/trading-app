@@ -87,10 +87,10 @@ export default function BuyModal({
       <div className="bg-black rounded-t-3xl w-full max-w-md mx-4 mb-0 animate-slide-up">
         {/* Header */}
         <div className="flex justify-between items-center p-6 border-b border-zinc-800">
-          <h2 className="text-xl font-bold text-white">Buy Bitcoin</h2>
+          <h2 className="text-xl font-semibold text-white">Buy Bitcoin</h2>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-white"
+            className="text-zinc-400 hover:text-white"
             disabled={loading}
           >
             <X size={24} />
@@ -102,16 +102,16 @@ export default function BuyModal({
           <div className="flex items-center gap-3 p-4 bg-zinc-800 rounded-lg">
             <Wallet className="text-white" width={20} height={20} />
             <div>
-              <div className="text-sm text-gray-400">Available Balance</div>
+              <div className="text-sm text-zinc-400">Available Balance</div>
               <div className="font-semibold text-white">₹{formatCash(roundedBalance)}</div>
             </div>
           </div>
 
           {/* Current Price */}
           <div className="text-center p-4 bg-zinc-800 rounded-lg">
-            <div className="text-sm text-gray-400">Buy Rate</div>
-            <div className="text-lg font-bold text-white">₹{formatCash(buyRate)}</div>
-            <div className="text-xs text-gray-500">per ₿</div>
+            <div className="text-sm text-zinc-400">Buy Rate</div>
+            <div className="text-lg font-semibold text-white">₹{formatCash(buyRate)}</div>
+            <div className="text-xs text-zinc-500">per ₿</div>
             {countdown !== undefined && (
               <div className="flex items-center justify-center gap-2 mt-2">
                 <div className="bg-white px-2 py-1 rounded-full flex items-center gap-1">
@@ -124,7 +124,7 @@ export default function BuyModal({
 
           {/* Amount Input */}
           <div>
-            <label className="block text-sm text-gray-400 mb-2">Enter Amount (INR)</label>
+            <label className="block text-sm text-zinc-400 mb-2">Enter Amount (INR)</label>
             <input
               type="text"
               value={inrAmount}
@@ -134,7 +134,7 @@ export default function BuyModal({
               disabled={loading}
             />
             {inrAmount && (
-              <div className="text-sm text-gray-400 mt-2">
+              <div className="text-sm text-zinc-400 mt-2">
                 You will receive: <span className="text-white font-semibold">{formatBtc(btcAmount)}</span>
               </div>
             )}
@@ -171,7 +171,7 @@ export default function BuyModal({
           <button
             onClick={handleBuy}
             disabled={!isValidAmount || loading || roundedBalance === 0}
-            className="w-full bg-white hover:bg-gray-200 disabled:bg-gray-200 text-black font-bold py-4 rounded-lg transition-colors"
+            className="w-full bg-white hover:bg-gray-200 disabled:bg-gray-200 text-black font-semibold py-4 rounded-lg transition-colors"
           >
             {loading ? 'Processing...' : `Buy ₹${inrAmount ? formatCash(parseInt(inrAmount)) : '0'} worth of Bitcoin`}
           </button>

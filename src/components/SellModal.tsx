@@ -92,10 +92,10 @@ export default function SellModal({
       <div className="bg-black rounded-t-3xl w-full max-w-md mx-4 mb-0 animate-slide-up">
         {/* Header */}
         <div className="flex justify-between items-center p-6 border-b border-zinc-800">
-          <h2 className="text-xl font-bold text-white">Sell Bitcoin</h2>
+          <h2 className="text-xl font-semibold text-white">Sell Bitcoin</h2>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-white"
+            className="text-zinc-400 hover:text-white"
             disabled={loading}
           >
             <X size={24} />
@@ -107,16 +107,16 @@ export default function SellModal({
           <div className="flex items-center gap-3 p-4 bg-zinc-800 rounded-lg">
             <Bitcoin className="text-white" size={20} />
             <div>
-              <div className="text-sm text-gray-400">Available Bitcoin</div>
+              <div className="text-sm text-zinc-400">Available Bitcoin</div>
               <div className="font-semibold text-white">{formatBtc(availableBtc)}</div>
             </div>
           </div>
 
           {/* Current Price */}
           <div className="text-center p-4 bg-zinc-800 rounded-lg">
-            <div className="text-sm text-gray-400">Sell Rate</div>
-            <div className="text-lg font-bold text-white">₹{formatCash(sellRate)}</div>
-            <div className="text-xs text-gray-500">per ₿</div>
+            <div className="text-sm text-zinc-400">Sell Rate</div>
+            <div className="text-lg font-semibold text-white">₹{formatCash(sellRate)}</div>
+            <div className="text-xs text-zinc-500">per ₿</div>
             {countdown !== undefined && (
               <div className="flex items-center justify-center gap-2 mt-2">
                 <div className="bg-white px-2 py-1 rounded-full flex items-center gap-1">
@@ -129,7 +129,7 @@ export default function SellModal({
 
           {/* Amount Input */}
           <div>
-            <label className="block text-sm text-gray-400 mb-2">Enter Amount (₿)</label>
+            <label className="block text-sm text-zinc-400 mb-2">Enter Amount (₿)</label>
             <input
               type="text"
               value={btcAmount}
@@ -139,7 +139,7 @@ export default function SellModal({
               disabled={loading}
             />
             {btcAmount && (
-              <div className="text-sm text-gray-400 mt-2">
+              <div className="text-sm text-zinc-400 mt-2">
                 You will receive: <span className="text-white font-semibold">₹{formatCash(inrAmount)}</span>
               </div>
             )}
@@ -176,7 +176,7 @@ export default function SellModal({
           <button
             onClick={handleSell}
             disabled={!isValidAmount || loading || availableBtc === 0}
-            className="w-full bg-white hover:bg-gray-200 disabled:bg-gray-200 text-black font-bold py-4 rounded-lg transition-colors"
+            className="w-full bg-white hover:bg-gray-200 disabled:bg-gray-200 text-black font-semibold py-4 rounded-lg transition-colors"
           >
             {loading ? 'Processing...' : `Sell ₿${btcAmount || '0'}`}
           </button>

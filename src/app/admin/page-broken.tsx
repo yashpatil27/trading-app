@@ -286,11 +286,11 @@ export default function AdminDashboard() {
               <ArrowLeft size={20} />
             </button>
             <div>
-              <h1 className="text-2xl sm:text-3xl font-bold flex items-center gap-3">
+              <h1 className="text-2xl sm:text-3xl font-semibold flex items-center gap-3">
                 <Shield className="text-orange-500" size={28} />
                 Admin Panel
               </h1>
-              <p className="text-gray-400 text-sm sm:text-base">Manage users and system operations</p>
+              <p className="text-zinc-400 text-sm sm:text-base">Manage users and system operations</p>
             </div>
           </div>
           <button
@@ -314,22 +314,22 @@ export default function AdminDashboard() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Current Rates Display */}
               <div className="space-y-4">
-                <h3 className="text-sm font-medium text-gray-400 mb-3">Current Rates</h3>
+                <h3 className="text-sm font-medium text-zinc-400 mb-3">Current Rates</h3>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="bg-gray-800 rounded-lg p-4">
                     <div className="text-sm text-green-400 mb-1">User Sell Rate</div>
-                    <div className="text-xl font-bold">₹{currentRates.buy}</div>
+                    <div className="text-xl font-semibold">₹{currentRates.buy}</div>
                   </div>
                   <div className="bg-gray-800 rounded-lg p-4">
                     <div className="text-sm text-blue-400 mb-1">User Buy Rate</div>
-                    <div className="text-xl font-bold">₹{currentRates.sell}</div>
+                    <div className="text-xl font-semibold">₹{currentRates.sell}</div>
                   </div>
                 </div>
               </div>
 
               {/* Rate Update Form */}
               <div className="space-y-4">
-                <h3 className="text-sm font-medium text-gray-400 mb-3">Update Rates</h3>
+                <h3 className="text-sm font-medium text-zinc-400 mb-3">Update Rates</h3>
                 <div className="space-y-3">
                   <input
                     type="number"
@@ -374,17 +374,17 @@ export default function AdminDashboard() {
           <div className="bg-gray-900 rounded-xl p-4 sm:p-6 border border-gray-800">
             <div className="flex items-center gap-3 mb-2">
               <Users className="text-blue-500" size={20} />
-              <span className="text-gray-400 text-sm">Total Users</span>
+              <span className="text-zinc-400 text-sm">Total Users</span>
             </div>
-            <div className="text-xl sm:text-2xl font-bold">{users.length}</div>
+            <div className="text-xl sm:text-2xl font-semibold">{users.length}</div>
           </div>
           
           <div className="bg-gray-900 rounded-xl p-4 sm:p-6 border border-gray-800">
             <div className="flex items-center gap-3 mb-2">
               <Wallet className="text-green-500" size={20} />
-              <span className="text-gray-400 text-sm">Total Cash</span>
+              <span className="text-zinc-400 text-sm">Total Cash</span>
             </div>
-            <div className="text-lg sm:text-2xl font-bold">
+            <div className="text-lg sm:text-2xl font-semibold">
               ₹{formatCash(users.reduce((sum, user) => sum + (user.balance || 0), 0))}
             </div>
           </div>
@@ -392,9 +392,9 @@ export default function AdminDashboard() {
           <div className="bg-gray-900 rounded-xl p-4 sm:p-6 border border-gray-800">
             <div className="flex items-center gap-3 mb-2">
               <TrendingUp className="text-orange-500" size={20} />
-              <span className="text-gray-400 text-sm">Total Bitcoin</span>
+              <span className="text-zinc-400 text-sm">Total Bitcoin</span>
             </div>
-            <div className="text-lg sm:text-2xl font-bold">
+            <div className="text-lg sm:text-2xl font-semibold">
               ₿{formatBitcoin(users.reduce((sum, user) => sum + (user.btcAmount || 0), 0))}
             </div>
           </div>
@@ -402,9 +402,9 @@ export default function AdminDashboard() {
           <div className="bg-gray-900 rounded-xl p-4 sm:p-6 border border-gray-800">
             <div className="flex items-center gap-3 mb-2">
               <Shield className="text-purple-500" size={20} />
-              <span className="text-gray-400 text-sm">Admins</span>
+              <span className="text-zinc-400 text-sm">Admins</span>
             </div>
-            <div className="text-xl sm:text-2xl font-bold">
+            <div className="text-xl sm:text-2xl font-semibold">
               {users.filter(user => user.role === 'ADMIN').length}
             </div>
           </div>

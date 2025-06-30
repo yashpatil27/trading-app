@@ -22,10 +22,13 @@ async function main() {
   await prisma.transaction.create({
     data: {
       userId: admin.id,
-      type: 'ADMIN_CREDIT',
+      type: 'ADMIN',
       inrAmount: 0,
       inrBalanceAfter: 0,
       btcBalanceAfter: 0,
+      inrAmountInt: 0,
+      inrBalanceAfterInt: 0,
+      btcBalanceAfterSat: 0n,
       reason: 'Initial admin account setup'
     }
   })

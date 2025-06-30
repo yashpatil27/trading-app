@@ -84,7 +84,7 @@ export default function PinConfirmationModal({
       <div className="bg-black rounded-lg p-6 w-full max-w-md mx-4 border border-zinc-800">
         {/* Header */}
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-xl font-bold text-white">{title}</h2>
+          <h2 className="text-xl font-semibold text-white">{title}</h2>
           <button
             onClick={handleCancel}
             disabled={isSubmitting}
@@ -95,7 +95,7 @@ export default function PinConfirmationModal({
         </div>
 
         {/* Description */}
-        <p className="text-gray-400 text-center mb-6">
+        <p className="text-zinc-400 text-center mb-6">
           {description}
         </p>
 
@@ -118,13 +118,13 @@ export default function PinConfirmationModal({
 
         {/* Loading State */}
         {(isSubmitting || isLoading) && (
-          <div className="text-center text-gray-400 text-sm mb-4">
+          <div className="text-center text-zinc-400 text-sm mb-4">
             Processing...
           </div>
         )}
 
         {/* Instructions */}
-        <div className="text-center text-gray-500 text-xs">
+        <div className="text-center text-zinc-500 text-xs">
           Enter your 4-digit trading PIN to confirm this transaction
         </div>
 

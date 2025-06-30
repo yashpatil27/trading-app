@@ -53,7 +53,7 @@ const BitcoinPriceDisplay = React.memo(({ price, isConnected, error }: BitcoinPr
           </div>
           
           <div className="space-y-1">
-            <div className="text-2xl font-bold text-white">
+            <div className="text-2xl font-semibold text-white">
               ₹{price.btcUSD.toLocaleString('en-IN')}
             </div>
             <div className="bg-white text-black text-sm px-2 py-1 rounded inline-block">

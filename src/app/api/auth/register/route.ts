@@ -58,10 +58,13 @@ export async function POST(request: NextRequest) {
     await prisma.transaction.create({
       data: {
         userId: user.id,
-        type: 'ADMIN_CREDIT',
+        type: 'ADMIN',
         inrAmount: 0,
         inrBalanceAfter: 0,
         btcBalanceAfter: 0,
+        inrAmountInt: 0,
+        inrBalanceAfterInt: 0,
+        btcBalanceAfterSat: 0n,
         reason: 'Initial account setup - Welcome to ₿itTrade!'
       }
     })

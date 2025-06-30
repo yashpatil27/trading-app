@@ -73,10 +73,13 @@ export async function POST(request: NextRequest) {
     await prisma.transaction.create({
       data: {
         userId: userId,
-        type: 'ADMIN', // Reusing existing type for admin actions
+        type: 'ADMIN',
         inrAmount: 0,
         inrBalanceAfter: 0,
         btcBalanceAfter: 0,
+        inrAmountInt: 0,
+        inrBalanceAfterInt: 0,
+        btcBalanceAfterSat: 0n,
         reason: `Admin reset: ${changes.join(' and ')} updated by ${session.user.email}`
       }
     })

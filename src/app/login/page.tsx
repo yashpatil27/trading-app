@@ -145,8 +145,8 @@ export default function LoginPage() {
     <div className="min-h-screen bg-black flex items-center justify-center p-4">
       <div className="max-w-md w-full space-y-8">
         <div className="text-center">
-                <h1 className="text-4xl font-bold text-white mb-2">₿itTrade</h1>
-          <p className="text-gray-400">
+                <h1 className="text-4xl font-semibold text-white mb-2">₿itTrade</h1>
+          <p className="text-zinc-400">
             {isRegister ? 'Create your account' : 'Sign in to your account'}
           </p>
         </div>
@@ -217,7 +217,7 @@ export default function LoginPage() {
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white"
+                  className="absolute right-4 top-1/2 transform -translate-y-1/2 text-zinc-400 hover:text-white"
                 >
                   {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                 </button>
@@ -295,7 +295,7 @@ export default function LoginPage() {
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white"
+                  className="absolute right-4 top-1/2 transform -translate-y-1/2 text-zinc-400 hover:text-white"
                 >
                   {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                 </button>
@@ -323,7 +323,7 @@ export default function LoginPage() {
                 <button
                   type="button"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white"
+                  className="absolute right-4 top-1/2 transform -translate-y-1/2 text-zinc-400 hover:text-white"
                 >
                   {showConfirmPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                 </button>
@@ -344,7 +344,7 @@ export default function LoginPage() {
                   onChange={(pin) => setRegisterData({ ...registerData, tradingPin: pin })}
                 />
               </div>
-              <p className="text-gray-400 text-xs mt-2 text-center">
+              <p className="text-zinc-400 text-xs mt-2 text-center">
                 You'll use this PIN to confirm all trades
               </p>
             </div>

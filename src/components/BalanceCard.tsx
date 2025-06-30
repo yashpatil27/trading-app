@@ -38,7 +38,7 @@ const BalanceCard = React.memo(({ user, btcPrice }: BalanceCardProps) => {
         {/* INR Balance */}
         <div className="flex justify-between items-center">
           <span className="text-gray-600">INR Balance</span>
-          <span className="text-xl font-bold text-blue-600">
+          <span className="text-xl font-semibold text-blue-600">
             ₹{(user.balance || 0).toLocaleString('en-IN')}
           </span>
         </div>
@@ -65,7 +65,7 @@ const BalanceCard = React.memo(({ user, btcPrice }: BalanceCardProps) => {
               <TrendingUp className="h-4 w-4 text-green-600" />
               <span className="font-medium text-gray-900">Total Value</span>
             </div>
-            <span className="text-2xl font-bold text-green-600">
+            <span className="text-2xl font-semibold text-green-600">
               ₹{totalPortfolioValue.toLocaleString('en-IN')}
             </span>
           </div>

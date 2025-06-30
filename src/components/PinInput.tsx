@@ -77,7 +77,7 @@ export default function PinInput({ value, onChange, isError = false, disabled = 
           onPaste={handlePaste}
           disabled={disabled}
           className={`
-            w-12 h-12 text-center text-xl font-bold rounded-lg border-2 
+            w-12 h-12 text-center text-xl font-semibold rounded-lg border-2 
             bg-zinc-800 text-white
             transition-all duration-200
             ${isError 

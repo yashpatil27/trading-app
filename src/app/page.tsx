@@ -25,7 +25,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-black flex items-center justify-center">
       <div className="text-white text-center">
-        <h1 className="text-4xl font-bold text-center mb-8">Welcome to ₿itTrade</h1>
+        <h1 className="text-4xl font-semibold text-center mb-8">Welcome to ₿itTrade</h1>
         <p className="text-gray-400">Loading...</p>
       </div>
     </div>
