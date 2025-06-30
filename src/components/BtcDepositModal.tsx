@@ -1,7 +1,6 @@
 'use client'
 
 import { X, ArrowDownLeft, Calendar, User, DollarSign } from 'lucide-react'
-import { BitcoinIcon } from '@bitcoin-design/bitcoin-icons-react/filled'
 
 interface BtcDepositTransaction {
   id: string

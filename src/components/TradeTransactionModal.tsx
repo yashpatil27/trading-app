@@ -1,7 +1,6 @@
 'use client'
 
-import { X, TrendingUp, TrendingDown, Calendar, DollarSign } from 'lucide-react'
-import { BitcoinIcon } from '@bitcoin-design/bitcoin-icons-react/filled'
+import { X, TrendingUp, TrendingDown, Calendar, DollarSign, Bitcoin } from 'lucide-react'
 
 interface TradeTransaction {
   id: string
@@ -83,7 +82,7 @@ export default function TradeTransactionModal({
         <div className="p-4 space-y-3">
           <div className="flex items-center justify-between p-3 bg-zinc-800 rounded-lg">
             <div className="flex items-center gap-3">
-              <BitcoinIcon style={{ height: '16px', width: '16px', color: '#F7931A' }} />
+              <Bitcoin className="text-white" size={16} />
               <div>
                 <div className="text-xs text-gray-400">Bitcoin Amount</div>
                 <div className="text-sm font-semibold text-white">{formatBtc(transaction.amount)}</div>

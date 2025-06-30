@@ -13,14 +13,53 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-/* Remove tab-specific colors */
-.tab-active, .tab-inactive, .tab-active svg {
+/* Reset any text decoration and borders for all tab elements */
+.tab-active, .tab-inactive {
+  text-decoration: none !important;
+  border: none !important;
+  outline: none !important;
+}
+
+/* Tab styling - use pseudo-element for bottom border only on active tabs */
+.tab-active {
   color: var(--foreground);
-  border-bottom: 2px solid var(--grey-light);
+  position: relative;
+}
+
+/* Only active tabs get the bottom indicator */
+.tab-active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60%;
+  height: 2px;
+  background-color: var(--grey-light);
+  z-index: 1;
+}
+
+/* Ensure icons have no text decoration */
+.tab-active svg, .tab-inactive svg {
+  text-decoration: none !important;
+  border: none !important;
+}
+
+.tab-active svg {
+  color: var(--foreground);
+}
+
+.tab-inactive {
+  color: #6B7280; /* Gray color for inactive tabs */
 }
 
 .tab-inactive:hover {
   color: var(--grey-light);
+}
+
+/* Ensure inactive tabs have no pseudo-elements */
+.tab-inactive::after {
+  display: none;
 }
 
 /* Modal animations remain unchanged */

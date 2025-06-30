@@ -1,7 +1,6 @@
 'use client'
 
-import { X, ArrowDownLeft, ArrowUpRight, Calendar, DollarSign, User, Settings } from 'lucide-react'
-import { BitcoinIcon } from '@bitcoin-design/bitcoin-icons-react/filled'
+import { X, ArrowDownLeft, ArrowUpRight, Calendar, DollarSign, User, Settings, Bitcoin } from 'lucide-react'
 
 interface DepositTransaction {
   id: string
@@ -113,9 +112,7 @@ export default function DepositDetailModal({
             <div className="flex items-center justify-between p-3 bg-zinc-800 rounded-lg">
               <div className="flex items-center gap-3">
                 {isBitcoinTransaction ? (
-                  <div className="w-5 h-5 bg-orange-500 rounded-full flex items-center justify-center">
-                    <span className="text-xs font-bold text-black">₿</span>
-                  </div>
+                  <Bitcoin className="text-white" size={20} />
                 ) : (
                   <DollarSign className={isDeposit ? "text-white" : "text-white"} size={20} />
                 )}
@@ -132,9 +129,7 @@ export default function DepositDetailModal({
             <div className="flex items-center justify-between p-3 bg-zinc-800 rounded-lg">
               <div className="flex items-center gap-3">
                 {isBitcoinTransaction ? (
-                  <div className="w-5 h-5 bg-green-500 rounded-full flex items-center justify-center">
-                    <span className="text-xs font-bold text-black">₿</span>
-                  </div>
+                  <Bitcoin className="text-white" size={20} />
                 ) : (
                   <DollarSign className="text-white" size={20} />
                 )}

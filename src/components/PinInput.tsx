@@ -82,7 +82,7 @@ export default function PinInput({ value, onChange, isError = false, disabled = 
             transition-all duration-200
             ${isError 
               ? 'border-red-500 bg-red-900/20' 
-              : 'border-gray-600 focus:border-orange-500'
+              : 'border-zinc-600 focus:border-orange-500'
             }
             ${disabled 
               ? 'opacity-50 cursor-not-allowed' 

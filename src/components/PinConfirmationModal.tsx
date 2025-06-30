@@ -81,21 +81,21 @@ export default function PinConfirmationModal({
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-black rounded-lg p-6 w-full max-w-md mx-4 border border-gray-700">
+      <div className="bg-black rounded-lg p-6 w-full max-w-md mx-4 border border-zinc-800">
         {/* Header */}
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-xl font-bold text-white">{title}</h2>
           <button
             onClick={handleCancel}
             disabled={isSubmitting}
-            className="bg-white text-black hover:bg-gray-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="bg-white text-black hover:bg-gray-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed p-2 rounded-lg"
           >
-            <X size={24} />
+            <X size={20} />
           </button>
         </div>
 
         {/* Description */}
-        <p className="text-gray-300 text-center mb-6">
+        <p className="text-gray-400 text-center mb-6">
           {description}
         </p>
 
@@ -133,14 +133,14 @@ export default function PinConfirmationModal({
           <button
             onClick={handleCancel}
             disabled={isSubmitting || isLoading}
-            className="flex-1 px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex-1 px-4 py-2 bg-white text-black rounded-lg hover:bg-gray-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-medium"
           >
             Cancel
           </button>
           <button
             onClick={handleSubmit}
             disabled={pin.length !== 4 || isSubmitting || isLoading}
-            className="flex-1 px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex-1 px-4 py-2 bg-white text-black rounded-lg hover:bg-gray-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-medium"
           >
             {isSubmitting ? 'Confirming...' : 'Confirm'}
           </button>

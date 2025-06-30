@@ -3,8 +3,8 @@
 import { useSession } from 'next-auth/react'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { History, LogOut, Home, Plus, Minus, ArrowDownLeft, ArrowUpRight, ArrowUp, ArrowDown, Wallet, Settings, Clock, PieChart, TrendingUp, DollarSign, Target, Calendar, BarChart3, Award, Calculator, TrendingDownIcon, TrendingUpIcon } from 'lucide-react'
-import { BitcoinIcon } from '@bitcoin-design/bitcoin-icons-react/filled'
+import { History, LogOut, Home, Plus, Minus, ArrowDownLeft, ArrowUpRight, ArrowUp, ArrowDown, Wallet, Settings, Clock, PieChart, TrendingUp, DollarSign, Target, Calendar, BarChart3, Award, Calculator, TrendingDownIcon, TrendingUpIcon, Bitcoin } from 'lucide-react'
+
 import { signOut } from 'next-auth/react'
 import { useBitcoinPrice } from '@/hooks/useBitcoinPrice'
 import { PerformanceCalculator } from '@/lib/performanceCalculations'
@@ -48,6 +48,7 @@ interface PerformanceMetrics {
   totalTrades: number
   averageTradeSize: number
   winRate: number
+  totalInvestment: number
   monthlyStats: {
     trades: number
     volume: number
@@ -140,23 +141,15 @@ const PortfolioOverview = ({
 
   return (
     <>
-      {/* Portfolio Header */}
-      <div className="text-center">
-        <h2 className="text-2xl font-bold mb-2">Portfolio Overview</h2>
-        <p className="text-gray-400 text-sm">Your investment summary</p>
-      </div>
 
       {/* Total Portfolio Value Card */}
-      <div className="bg-gradient-to-r from-orange-600 to-red-600 rounded-2xl p-6 text-center">
+      <div className="bg-black rounded-2xl p-6 text-center">
         <div className="flex items-center justify-center gap-2 mb-2">
           <Wallet className="text-white" size={24} />
           <span className="text-white font-bold text-lg">Total Portfolio Value</span>
         </div>
         <div className="text-3xl font-bold text-white mb-2">
           ₹{portfolioStats ? formatCash(portfolioStats.totalValue) : '0'}
-        </div>
-        <div className="text-sm text-gray-300">
-          Cash + Bitcoin (at current sell rate)
         </div>
         {performanceMetrics && (
           <div className={`text-sm mt-2 ${performanceMetrics.totalReturn >= 0 ? 'text-white' : 'text-white'}`}>
@@ -185,7 +178,7 @@ const PortfolioOverview = ({
         {/* Bitcoin Holdings */}
         <div className="bg-zinc-800 rounded-2xl p-4">
           <div className="flex items-center gap-2 mb-3">
-            <BitcoinIcon style={{height: "20px", width: "20px", color: "#FFFFFF"}} />
+            <Bitcoin className="text-white" size={20} />
             <span className="text-white font-bold">Bitcoin</span>
           </div>
           <div className="text-xl font-bold mb-1">{formatBtc(user?.btcAmount || 0)}</div>
@@ -215,31 +208,31 @@ const PortfolioOverview = ({
             <span className="text-white font-bold">Performance</span>
           </div>
           <div className="grid grid-cols-2 gap-4">
-            <div className="text-center">
-              <div className={`text-2xl font-bold ${performanceMetrics?.totalRealizedPnL && performanceMetrics.totalRealizedPnL >= 0 ? 'text-white' : 'text-white'}`}>
+            <div className="text-center p-3 bg-zinc-800 rounded-lg">
+              <div className="text-lg font-bold text-gray-300">
                 ₹{performanceMetrics ? formatCash(performanceMetrics.totalRealizedPnL) : '0'}
               </div>
               <div className="text-xs text-gray-500">Realized P&L</div>
             </div>
-            <div className="text-center">
-              <div className={`text-2xl font-bold ${performanceMetrics?.unrealizedPnL && performanceMetrics.unrealizedPnL >= 0 ? 'text-white' : 'text-white'}`}>
+            <div className="text-center p-3 bg-zinc-800 rounded-lg">
+              <div className="text-lg font-bold text-gray-300">
                 ₹{performanceMetrics ? formatCash(performanceMetrics.unrealizedPnL) : '0'}
               </div>
               <div className="text-xs text-gray-500">Unrealized P&L</div>
             </div>
           </div>
           <div className="mt-4 grid grid-cols-2 gap-4">
-            <div className="text-center">
+            <div className="text-center p-3 bg-zinc-800 rounded-lg">
               <div className="text-lg font-bold text-gray-300">
                 {performanceMetrics ? formatPercentage(performanceMetrics.totalReturnPercentage) : '0%'}
               </div>
               <div className="text-xs text-gray-500">Total Return</div>
             </div>
-            <div className="text-center">
+            <div className="text-center p-3 bg-zinc-800 rounded-lg">
               <div className="text-lg font-bold text-gray-300">
-                {performanceMetrics ? formatPercentage(performanceMetrics.winRate) : '0%'}
+                ₹{performanceMetrics ? formatCash(performanceMetrics.totalInvestment) : '0'}
               </div>
-              <div className="text-xs text-gray-500">Win Rate</div>
+              <div className="text-xs text-gray-500">Total Investment</div>
             </div>
           </div>
         </div>
@@ -264,7 +257,7 @@ const PortfolioOverview = ({
               </div>
               <div className="w-full bg-gray-700 rounded-full h-2">
                 <div 
-                  className="bg-green-400 h-2 rounded-full" 
+                  className="bg-white h-2 rounded-full" 
                   style={{
                     width: portfolioStats && portfolioStats.totalValue > 0 
                       ? `${(portfolioStats.cashValue / portfolioStats.totalValue) * 100}%`
@@ -457,7 +450,7 @@ const TradingInterface = ({
         {/* Bitcoin Holdings */}
         <div className="bg-zinc-800 rounded-2xl p-4">
           <div className="flex items-center gap-2 mb-2">
-            <BitcoinIcon style={{height: "20px", width: "20px", color: "#FFFFFF"}} />
+            <Bitcoin className="text-white" size={20} />
             <span className="text-white font-bold">Bitcoin</span>
           </div>
           <div className="text-xl font-bold">{formatBtc(user?.btcAmount || 0)}</div>
@@ -532,7 +525,7 @@ const TradingInterface = ({
         <div className="space-y-3">
           {recentTransactions.length === 0 ? (
             <div className="text-gray-400 text-center py-8">
-              <BitcoinIcon style={{height: "48px", width: "48px", color: "#6B7280"}} />
+              <Bitcoin className="text-white" size={20} />
               <div>No activity yet</div>
               <div className="text-sm">Start trading to see your history</div>
             </div>
@@ -547,7 +540,7 @@ const TradingInterface = ({
                   {getTransactionIcon(transaction)}
                   <div>
                     <div className="flex items-center gap-2">
-                      <span className={`font-semibold ${getTransactionColor(transaction)}`}>
+                      <span className={`text-sm font-medium ${getTransactionColor(transaction)}`}>
                         {transaction.type === "BUY" ? `Buy ${formatBtc(transaction.amount)}` : transaction.type === "SELL" ? `Sell ${formatBtc(transaction.amount)}` : ({BUY: "Buy", SELL: "Sell", DEPOSIT_INR: "Cash Deposit", DEPOSIT_BTC: "BTC Deposit", WITHDRAWAL_INR: "Cash Withdrawal", WITHDRAWAL_BTC: "BTC Withdrawal", ADMIN: "Admin"}[transaction.type] || transaction.type)}
                       </span>
                     </div>
@@ -625,7 +618,7 @@ const TransactionHistory = ({
       <div className="space-y-3">
         {transactions.length === 0 ? (
           <div className="text-gray-400 text-center py-12">
-            <BitcoinIcon style={{height: "64px", width: "64px", color: "#6B7280"}} />
+            <Bitcoin className="text-white" size={20} />
             <div className="text-lg mb-2">No transactions yet</div>
             <div className="text-sm">Your transaction history will appear here</div>
             <button
@@ -646,7 +639,7 @@ const TransactionHistory = ({
                 {getTransactionIcon(transaction)}
                 <div>
                   <div className="flex items-center gap-2">
-                    <span className={`font-semibold ${getTransactionColor(transaction)}`}>
+                    <span className={`text-sm font-medium ${getTransactionColor(transaction)}`}>
                       {transaction.type === "BUY" ? `Buy ${formatBtc(transaction.amount)}` : transaction.type === "SELL" ? `Sell ${formatBtc(transaction.amount)}` : ({BUY: "Buy", SELL: "Sell", DEPOSIT_INR: "Cash Deposit", DEPOSIT_BTC: "BTC Deposit", WITHDRAWAL_INR: "Cash Withdrawal", WITHDRAWAL_BTC: "BTC Withdrawal", ADMIN: "Admin"}[transaction.type] || transaction.type)}
                     </span>
                   </div>
@@ -716,6 +709,19 @@ export default function Dashboard() {
 
   // PIN modal states
   const [showPinModal, setShowPinModal] = useState(false)
+
+  // Scroll tracking for persistent top bar
+  const [isScrolled, setIsScrolled] = useState(false)
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollTop = window.scrollY
+      setIsScrolled(scrollTop > 100) // Show after scrolling 100px
+    }
+
+    window.addEventListener("scroll", handleScroll)
+    return () => window.removeEventListener("scroll", handleScroll)
+  }, [])
   const [pendingTrade, setPendingTrade] = useState<{ type: 'BUY' | 'SELL', amount: number, btcAmount: number } | null>(null)
 
   useEffect(() => {
@@ -893,11 +899,11 @@ export default function Dashboard() {
       case 'DEPOSIT_INR':
         return <ArrowDownLeft className="text-white" size={20} />
       case 'DEPOSIT_BTC':
-        return <BitcoinIcon style={{height: "20px", width: "20px", color: "#FFFFFF"}} />
+        return <Bitcoin className="text-white" size={20} />
       case 'WITHDRAWAL_INR':
         return <ArrowUpRight className="text-white" size={20} />
       case 'WITHDRAWAL_BTC':
-        return <BitcoinIcon style={{height: "20px", width: "20px", color: "#FFFFFF"}} />
+        return <Bitcoin className="text-white" size={20} />
       case 'ADMIN':
         return <Settings className="text-white" size={20} />
       default:
@@ -985,8 +991,20 @@ export default function Dashboard() {
         </div>
       </div>
 
-      <div className="p-4 max-w-md mx-auto space-y-6">
-        {/* Connection Error */}
+      {/* Persistent Top Bar - Bitcoin Balance */}
+      <div className={`fixed top-0 left-0 right-0 bg-black border-b border-zinc-800 z-40 transition-transform duration-300 ${isScrolled ? "translate-y-0" : "-translate-y-full"}`}>
+        <div className="flex justify-center items-center py-3 px-4">
+          <div className="flex items-center gap-2">
+            <Bitcoin className="text-white" size={16} />
+            <span className="text-white font-bold text-sm">{formatBtc(user?.btcAmount || 0)}</span>
+            {btcPrice && (
+              <span className="text-gray-400 text-xs">≈ ₹{formatCash((user?.btcAmount || 0) * btcPrice.sellRate)}</span>
+            )}
+          </div>
+        </div>
+      </div>
+
+      <div className={`p-4 max-w-md mx-auto space-y-6 transition-all duration-300 ${isScrolled ? "pt-16" : "pt-4"}`}>
         {error && (
           <div className="bg-red-900/50 border border-red-500 text-white px-4 py-3 rounded-lg text-sm">
             {error}
@@ -1043,7 +1061,7 @@ export default function Dashboard() {
           <button
             onClick={() => setActiveTab("dashboard")}
             className={`flex-1 py-4 px-6 text-center font-medium transition-colors flex flex-col items-center gap-1 ${
-              activeTab === "dashboard" ? "tab-active" : "tab-inactive hover:text-white"
+              activeTab === "dashboard" ? "text-white border-b-2 border-gray-300" : "text-gray-500 hover:text-white"
             }`}
           >
             <Home size={20} />
@@ -1052,7 +1070,7 @@ export default function Dashboard() {
           <button
             onClick={() => setActiveTab("portfolio")}
             className={`flex-1 py-4 px-6 text-center font-medium transition-colors flex flex-col items-center gap-1 ${
-              activeTab === "portfolio" ? "tab-active" : "tab-inactive hover:text-white"
+              activeTab === "portfolio" ? "text-white border-b-2 border-gray-300" : "text-gray-500 hover:text-white"
             }`}
           >
             <PieChart size={20} />
@@ -1061,7 +1079,7 @@ export default function Dashboard() {
           <button
             onClick={() => setActiveTab("history")}
             className={`flex-1 py-4 px-6 text-center font-medium transition-colors flex flex-col items-center gap-1 ${
-              activeTab === "history" ? "tab-active" : "tab-inactive hover:text-white"
+              activeTab === "history" ? "text-white border-b-2 border-gray-300" : "text-gray-500 hover:text-white"
             }`}
           >
             <History size={20} />

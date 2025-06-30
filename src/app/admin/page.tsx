@@ -3,7 +3,7 @@
 import { useSession } from 'next-auth/react'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { Users, Plus, Minus, ArrowLeft, User, Wallet, Calendar, TrendingUp, Shield, Key, CreditCard, Phone, Trash2 } from 'lucide-react'
+import { Users, Plus, Minus, ArrowLeft, User, Wallet, Calendar, TrendingUp, Shield, Key, CreditCard, Phone, Trash2, Landmark } from 'lucide-react'
 
 interface User {
   id: string
@@ -209,13 +209,13 @@ export default function AdminDashboard() {
           <div className="flex items-center gap-4">
             <button
               onClick={() => router.push('/dashboard')}
-              className="bg-gray-800 hover:bg-gray-700 p-2 rounded-lg transition-colors"
+              className="bg-white hover:bg-gray-200 text-black p-2 rounded-lg transition-colors"
             >
               <ArrowLeft size={20} />
             </button>
             <div>
               <h1 className="text-2xl sm:text-3xl font-bold flex items-center gap-3">
-                <Shield className="text-orange-500" size={28} />
+                <Shield className="text-white" size={28} />
                 Admin Panel
               </h1>
               <p className="text-gray-400 text-sm sm:text-base">Manage users and system operations</p>
@@ -223,7 +223,7 @@ export default function AdminDashboard() {
           </div>
           <button
             onClick={() => setShowCreateUser(true)}
-            className="w-full sm:w-auto bg-orange-600 hover:bg-orange-700 px-4 py-3 sm:py-2 rounded-lg flex items-center justify-center gap-2 font-medium transition-colors"
+            className="w-full sm:w-auto bg-white hover:bg-gray-200 text-black px-4 py-3 sm:py-2 rounded-lg flex items-center justify-center gap-2 font-medium transition-colors"
           >
             <Plus size={16} />
             Create User
@@ -232,7 +232,7 @@ export default function AdminDashboard() {
 
         {/* Stats Cards */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6 sm:mb-8">
-          <div className="bg-gray-900 rounded-xl p-4 sm:p-6 border border-gray-800">
+          <div className="bg-zinc-800 rounded-xl p-4 sm:p-6 border border-zinc-800">
             <div className="flex items-center gap-3 mb-2">
               <Users className="text-blue-500" size={20} />
               <span className="text-gray-400 text-sm">Total Users</span>
@@ -240,7 +240,7 @@ export default function AdminDashboard() {
             <div className="text-xl sm:text-2xl font-bold">{users.length}</div>
           </div>
           
-          <div className="bg-gray-900 rounded-xl p-4 sm:p-6 border border-gray-800">
+          <div className="bg-zinc-800 rounded-xl p-4 sm:p-6 border border-zinc-800">
             <div className="flex items-center gap-3 mb-2">
               <Wallet className="text-green-500" size={20} />
               <span className="text-gray-400 text-sm">Total Cash</span>
@@ -250,7 +250,7 @@ export default function AdminDashboard() {
             </div>
           </div>
 
-          <div className="bg-gray-900 rounded-xl p-4 sm:p-6 border border-gray-800">
+          <div className="bg-zinc-800 rounded-xl p-4 sm:p-6 border border-zinc-800">
             <div className="flex items-center gap-3 mb-2">
               <TrendingUp className="text-orange-500" size={20} />
               <span className="text-gray-400 text-sm">Total Bitcoin</span>
@@ -260,7 +260,7 @@ export default function AdminDashboard() {
             </div>
           </div>
 
-          <div className="bg-gray-900 rounded-xl p-4 sm:p-6 border border-gray-800">
+          <div className="bg-zinc-800 rounded-xl p-4 sm:p-6 border border-zinc-800">
             <div className="flex items-center gap-3 mb-2">
               <Shield className="text-purple-500" size={20} />
               <span className="text-gray-400 text-sm">Admins</span>
@@ -272,8 +272,8 @@ export default function AdminDashboard() {
         </div>
 
         {/* Users Section */}
-        <div className="bg-gray-900 rounded-xl border border-gray-800 overflow-hidden">
-          <div className="p-4 sm:p-6 border-b border-gray-800">
+        <div className="bg-black rounded-xl border border-black overflow-hidden">
+          <div className="p-4 sm:p-6 border-b border-black">
             <h2 className="text-lg sm:text-xl font-semibold flex items-center gap-2">
               <Users size={20} />
               User Management
@@ -284,7 +284,7 @@ export default function AdminDashboard() {
           <div className="hidden lg:block">
             <div className="overflow-x-auto">
               <table className="w-full">
-                <thead className="bg-gray-800">
+                <thead className="bg-black">
                   <tr>
                     <th className="text-left p-4 font-medium">User</th>
                     <th className="text-left p-4 font-medium">Cash Balance</th>
@@ -296,11 +296,11 @@ export default function AdminDashboard() {
                 </thead>
                 <tbody>
                   {users.map((user) => (
-                    <tr key={user.id} className="border-b border-gray-800 hover:bg-gray-800/50">
+                    <tr key={user.id} className="border-b border-black hover:bg-zinc-700/50">
                       <td className="p-4">
                         <div className="flex items-center gap-3">
-                          <div className="bg-orange-600 rounded-full p-2">
-                            <User size={16} />
+                          <div className="bg-white rounded-full p-2">
+                            <User size={16} className="text-black" />
                           </div>
                           <div>
                             <div className="font-medium">{user.name}</div>
@@ -316,19 +316,19 @@ export default function AdminDashboard() {
                         <div className="flex gap-2 justify-end">
                           <button
                             onClick={() => setShowBalanceModal(user)}
-                            className="bg-gray-600 hover:bg-gray-700 px-3 py-1 rounded text-sm font-medium transition-colors"
+                            className="bg-white hover:bg-gray-200 text-black px-3 py-1 rounded text-sm font-medium transition-colors"
                           >
-                            Adjust Balance
+                            Deposit
                           </button>
                           <button
                             onClick={() => setShowResetModal(user)}
-                            className="bg-gray-600 hover:bg-gray-700 px-3 py-1 rounded text-sm font-medium transition-colors"
+                            className="bg-white hover:bg-gray-200 text-black px-3 py-1 rounded text-sm font-medium transition-colors"
                           >
                             Reset
                           </button>
                           <button
                             onClick={() => setShowDeleteModal(user)}
-                            className="bg-gray-600 hover:bg-gray-700 px-3 py-1 rounded text-sm font-medium transition-colors"
+                            className="bg-white hover:bg-gray-200 text-black px-3 py-1 rounded text-sm font-medium transition-colors"
                           >
                             Delete
                           </button>
@@ -344,11 +344,11 @@ export default function AdminDashboard() {
           {/* Mobile Card View */}
           <div className="lg:hidden p-4 space-y-4">
             {users.map((user) => (
-              <div key={user.id} className="bg-gray-800 rounded-lg p-4 border border-gray-700">
+              <div key={user.id} className="bg-black rounded-lg p-4 border border-zinc-700">
                 {/* User Header */}
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="bg-orange-600 rounded-full p-2">
-                    <User size={16} />
+                  <div className="bg-white rounded-full p-2">
+                    <User size={16} className="text-black" />
                   </div>
                   <div>
                     <div className="font-semibold text-white">{user.name}</div>
@@ -358,14 +358,14 @@ export default function AdminDashboard() {
 
                 {/* Balances Grid */}
                 <div className="grid grid-cols-2 gap-4 mb-4">
-                  <div className="bg-gray-900 rounded-lg p-3">
+                  <div className="bg-zinc-800 rounded-lg p-3 border border-zinc-700">
                     <div className="flex items-center gap-2 mb-1">
                       <Wallet size={14} className="text-green-500" />
                       <span className="text-xs text-gray-400">Cash Balance</span>
                     </div>
                     <div className="font-semibold text-white">₹{formatCash(user.balance || 0)}</div>
                   </div>
-                  <div className="bg-gray-900 rounded-lg p-3">
+                  <div className="bg-zinc-800 rounded-lg p-3 border border-zinc-700">
                     <div className="flex items-center gap-2 mb-1">
                       <TrendingUp size={14} className="text-orange-500" />
                       <span className="text-xs text-gray-400">Bitcoin Balance</span>
@@ -390,21 +390,21 @@ export default function AdminDashboard() {
                 <div className="grid grid-cols-3 gap-3">
                   <button
                     onClick={() => setShowBalanceModal(user)}
-                    className="bg-gray-600 hover:bg-gray-700 py-3 px-4 rounded-lg flex items-center justify-center gap-2 font-medium transition-colors text-sm"
+                    className="bg-white hover:bg-gray-200 text-black py-3 px-4 rounded-lg flex items-center justify-center gap-2 font-medium transition-colors text-sm"
                   >
-                    <Wallet size={16} />
-                    Adjust Balance
+                    <Landmark size={18} />
+                    Deposit
                   </button>
                   <button
                     onClick={() => setShowResetModal(user)}
-                    className="bg-gray-600 hover:bg-gray-700 py-3 px-4 rounded-lg flex items-center justify-center gap-2 font-medium transition-colors text-sm"
+                    className="bg-white hover:bg-gray-200 text-black py-3 px-4 rounded-lg flex items-center justify-center gap-2 font-medium transition-colors text-sm"
                   >
                     <Key size={16} />
                     Reset
                   </button>
                   <button
                     onClick={() => setShowDeleteModal(user)}
-                    className="bg-gray-600 hover:bg-gray-700 py-3 px-4 rounded-lg flex items-center justify-center gap-2 font-medium transition-colors text-sm"
+                    className="bg-white hover:bg-gray-200 text-black py-3 px-4 rounded-lg flex items-center justify-center gap-2 font-medium transition-colors text-sm"
                   >
                     <Trash2 size={16} />
                     Delete
@@ -426,14 +426,14 @@ export default function AdminDashboard() {
       {/* Enhanced Balance Adjustment Modal */}
       {showBalanceModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-gray-900 rounded-2xl p-4 sm:p-6 w-full max-w-md border border-gray-700">
+          <div className="bg-black rounded-2xl p-4 sm:p-6 w-full max-w-md border border-zinc-700">
             <h3 className="text-lg sm:text-xl font-semibold mb-4 flex items-center gap-2">
-              <Wallet size={20} />
-              Adjust Balance
+              <Landmark size={20} />
+              Deposit User
             </h3>
             
             {/* User Info */}
-            <div className="bg-gray-800 rounded-lg p-4 mb-4">
+            <div className="bg-zinc-800 rounded-lg p-4 mb-4">
               <div className="flex items-center gap-3">
                 <User size={20} className="text-gray-400" />
                 <div>
@@ -455,8 +455,8 @@ export default function AdminDashboard() {
                     onClick={() => setBalanceCurrency('INR')}
                     className={`py-3 px-4 rounded-lg font-medium transition-colors ${
                       balanceCurrency === 'INR' 
-                        ? 'bg-orange-600 text-white' 
-                        : 'bg-gray-800 text-gray-400 hover:bg-gray-700'
+                        ? 'bg-white text-black' 
+                        : 'bg-zinc-800 text-gray-400 hover:bg-gray-700'
                     }`}
                   >
                     💰 Cash (INR)
@@ -465,8 +465,8 @@ export default function AdminDashboard() {
                     onClick={() => setBalanceCurrency('BTC')}
                     className={`py-3 px-4 rounded-lg font-medium transition-colors ${
                       balanceCurrency === 'BTC' 
-                        ? 'bg-orange-600 text-white' 
-                        : 'bg-gray-800 text-gray-400 hover:bg-gray-700'
+                        ? 'bg-white text-black' 
+                        : 'bg-zinc-800 text-gray-400 hover:bg-gray-700'
                     }`}
                   >
                     ₿ Bitcoin
@@ -484,7 +484,7 @@ export default function AdminDashboard() {
                   step={balanceCurrency === 'INR' ? '0.01' : '0.00000001'}
                   value={balanceAmount}
                   onChange={(e) => setBalanceAmount(e.target.value)}
-                  className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-3 text-white focus:outline-none focus:ring-2 focus:ring-orange-500"
+                  className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-3 text-white focus:outline-none focus:ring-2 focus:ring-white"
                   placeholder={balanceCurrency === 'INR' ? 'Enter INR amount' : 'Enter BTC amount (e.g., 0.001)'}
                 />
                 {balanceCurrency === 'BTC' && (
@@ -501,7 +501,7 @@ export default function AdminDashboard() {
                   type="text"
                   value={balanceReason}
                   onChange={(e) => setBalanceReason(e.target.value)}
-                  className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-3 text-white focus:outline-none focus:ring-2 focus:ring-orange-500"
+                  className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-3 text-white focus:outline-none focus:ring-2 focus:ring-white"
                   placeholder={`Reason for ${balanceCurrency} adjustment`}
                 />
               </div>
@@ -511,7 +511,7 @@ export default function AdminDashboard() {
                 <button
                   onClick={() => adjustBalance('CREDIT')}
                   disabled={!balanceAmount}
-                  className="bg-gray-600 hover:bg-gray-700 disabled:bg-gray-600 py-3 rounded-lg flex items-center justify-center gap-1 font-medium transition-colors"
+                  className="bg-white hover:bg-gray-200 text-black disabled:bg-gray-300 disabled:text-gray-500 py-3 rounded-lg flex items-center justify-center gap-1 font-medium transition-colors"
                 >
                   <Plus size={16} />
                   Add
@@ -519,7 +519,7 @@ export default function AdminDashboard() {
                 <button
                   onClick={() => adjustBalance('DEBIT')}
                   disabled={!balanceAmount}
-                  className="bg-gray-600 hover:bg-gray-700 disabled:bg-gray-600 py-3 rounded-lg flex items-center justify-center gap-1 font-medium transition-colors"
+                  className="bg-white hover:bg-gray-200 text-black disabled:bg-gray-300 disabled:text-gray-500 py-3 rounded-lg flex items-center justify-center gap-1 font-medium transition-colors"
                 >
                   <Minus size={16} />
                   Remove
@@ -531,7 +531,7 @@ export default function AdminDashboard() {
                     setBalanceReason('')
                     setBalanceCurrency('INR')
                   }}
-                  className="bg-gray-600 hover:bg-gray-500 py-3 rounded-lg font-medium transition-colors"
+                  className="bg-white hover:bg-gray-200 text-black py-3 rounded-lg font-medium transition-colors"
                 >
                   Cancel
                 </button>
@@ -544,12 +544,12 @@ export default function AdminDashboard() {
       {/* Reset Modal */}
       {showResetModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-gray-900 rounded-2xl p-4 sm:p-6 w-full max-w-md border border-gray-700">
+          <div className="bg-black rounded-2xl p-4 sm:p-6 w-full max-w-md border border-zinc-700">
             <h3 className="text-lg sm:text-xl font-semibold mb-4 flex items-center gap-2">
               <Key size={20} />
-              Reset Credentials
+              Reset User
             </h3>
-            <div className="bg-gray-800 rounded-lg p-4 mb-4">
+            <div className="bg-zinc-800 rounded-lg p-4 mb-4">
               <div className="flex items-center gap-3">
                 <User size={20} className="text-gray-400" />
                 <div>
@@ -566,7 +566,7 @@ export default function AdminDashboard() {
                   maxLength={4}
                   value={newPin}
                   onChange={(e) => setNewPin(e.target.value.replace(/\D/g, ''))}
-                  className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-3 text-white focus:outline-none focus:ring-2 focus:ring-orange-500 text-center font-mono text-lg"
+                  className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-3 text-white focus:outline-none focus:ring-2 focus:ring-white text-center font-mono text-lg"
                   placeholder="0000"
                 />
               </div>
@@ -576,14 +576,14 @@ export default function AdminDashboard() {
                   type="password"
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
-                  className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-3 text-white focus:outline-none focus:ring-2 focus:ring-orange-500"
+                  className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-3 text-white focus:outline-none focus:ring-2 focus:ring-white"
                   placeholder="New Password"
                 />
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <button
                   onClick={resetCredentials}
-                  className="bg-gray-600 hover:bg-gray-700 py-3 rounded-lg font-medium transition-colors"
+                  className="bg-white hover:bg-gray-200 text-black py-3 rounded-lg font-medium transition-colors"
                 >
                   Reset
                 </button>
@@ -593,7 +593,7 @@ export default function AdminDashboard() {
                     setNewPin('')
                     setNewPassword('')
                   }}
-                  className="bg-gray-600 hover:bg-gray-500 py-3 rounded-lg font-medium transition-colors"
+                  className="bg-white hover:bg-gray-200 text-black py-3 rounded-lg font-medium transition-colors"
                 >
                   Cancel
                 </button>
@@ -606,7 +606,7 @@ export default function AdminDashboard() {
       {/* Delete User Confirmation Modal */}
       {showDeleteModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-gray-900 rounded-2xl p-4 sm:p-6 w-full max-w-md border border-gray-700">
+          <div className="bg-black rounded-2xl p-4 sm:p-6 w-full max-w-md border border-zinc-700">
             <h3 className="text-lg sm:text-xl font-semibold mb-4 flex items-center gap-2 text-white">
               <Trash2 size={20} />
               Delete User
@@ -643,14 +643,14 @@ export default function AdminDashboard() {
                 <button
                   onClick={deleteUser}
                   disabled={showDeleteModal.balance > 0 || showDeleteModal.btcAmount > 0}
-                  className="bg-gray-600 hover:bg-gray-700 disabled:bg-gray-600 disabled:cursor-not-allowed py-3 rounded-lg flex items-center justify-center gap-2 font-medium transition-colors"
+                  className="bg-white hover:bg-gray-200 text-black disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed py-3 rounded-lg flex items-center justify-center gap-2 font-medium transition-colors"
                 >
                   <Trash2 size={16} />
-                  Delete User
+                  Delete
                 </button>
                 <button
                   onClick={() => setShowDeleteModal(null)}
-                  className="bg-gray-600 hover:bg-gray-500 py-3 rounded-lg font-medium transition-colors"
+                  className="bg-white hover:bg-gray-200 text-black py-3 rounded-lg font-medium transition-colors"
                 >
                   Cancel
                 </button>
@@ -663,7 +663,7 @@ export default function AdminDashboard() {
       {/* Create User Modal */}
       {showCreateUser && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-gray-900 rounded-2xl p-4 sm:p-6 w-full max-w-md border border-gray-700">
+          <div className="bg-black rounded-2xl p-4 sm:p-6 w-full max-w-md border border-zinc-700">
             <h3 className="text-lg sm:text-xl font-semibold mb-4">Create New User</h3>
             <div className="space-y-4">
               <div>
@@ -672,7 +672,7 @@ export default function AdminDashboard() {
                   type="email"
                   value={newUser.email}
                   onChange={(e) => setNewUser({...newUser, email: e.target.value})}
-                  className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-3 text-white focus:outline-none focus:ring-2 focus:ring-orange-500"
+                  className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-3 text-white focus:outline-none focus:ring-2 focus:ring-white"
                   placeholder="user@example.com"
                 />
               </div>
@@ -682,7 +682,7 @@ export default function AdminDashboard() {
                   type="text"
                   value={newUser.name}
                   onChange={(e) => setNewUser({...newUser, name: e.target.value})}
-                  className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-3 text-white focus:outline-none focus:ring-2 focus:ring-orange-500"
+                  className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-3 text-white focus:outline-none focus:ring-2 focus:ring-white"
                   placeholder="Full Name"
                 />
               </div>
@@ -692,7 +692,7 @@ export default function AdminDashboard() {
                   type="password"
                   value={newUser.password}
                   onChange={(e) => setNewUser({...newUser, password: e.target.value})}
-                  className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-3 text-white focus:outline-none focus:ring-2 focus:ring-orange-500"
+                  className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-3 text-white focus:outline-none focus:ring-2 focus:ring-white"
                   placeholder="Password"
                 />
               </div>
@@ -700,7 +700,7 @@ export default function AdminDashboard() {
                 <button
                   onClick={createUser}
                   disabled={!newUser.email || !newUser.name || !newUser.password}
-                  className="bg-orange-600 hover:bg-orange-700 disabled:bg-gray-600 py-3 rounded-lg font-medium transition-colors"
+                  className="bg-white hover:bg-gray-200 text-black disabled:bg-gray-300 disabled:text-gray-500 py-3 rounded-lg font-medium transition-colors"
                 >
                   Create User
                 </button>
@@ -709,7 +709,7 @@ export default function AdminDashboard() {
                     setShowCreateUser(false)
                     setNewUser({ email: '', name: '', password: '', role: 'USER' })
                   }}
-                  className="bg-gray-600 hover:bg-gray-500 py-3 rounded-lg font-medium transition-colors"
+                  className="bg-white hover:bg-gray-200 text-black py-3 rounded-lg font-medium transition-colors"
                 >
                   Cancel
                 </button>

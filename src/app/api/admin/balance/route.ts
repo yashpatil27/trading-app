@@ -46,7 +46,7 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ error: 'Insufficient INR balance' }, { status: 400 })
       }
       
-      transactionType = type === 'CREDIT' ? 'DEPOSIT' : 'WITHDRAWAL'
+      transactionType = type === 'CREDIT' ? 'DEPOSIT_INR' : 'WITHDRAWAL_INR'
       transactionAmount = Math.abs(amount)
 
       // Create standard transaction for INR
@@ -101,18 +101,34 @@ export async function POST(request: NextRequest) {
         console.log(`💰 Admin BTC Credit: Recording as DEPOSIT_BTC at sell rate ₹${sellRateInr.toFixed(2)}/BTC for cost basis`)
 
       } else {
-        // BTC DEBIT: Record as standard withdrawal
+        // BTC DEBIT: Record as standard withdrawal with INR equivalent
+        const priceService = PriceService.getInstance()
+        const currentPrice = priceService.getCurrentPrice()
+        
+        if (!currentPrice) {
+          return NextResponse.json({ error: 'Bitcoin price not available' }, { status: 503 })
+        }
+
+        // Calculate sell rate for withdrawal (same rate user would get when selling)
+        const sellRateInr = currentPrice.btcUSD * 88
+        const inrEquivalent = Math.round(transactionAmount * sellRateInr)
+        
         transactionType = 'WITHDRAWAL'
         
         transactionData = createCompleteTransactionData({
           userId,
-          type: transactionType as any,
-          inrAmount: 0,
+          type: 'WITHDRAWAL_BTC',
           btcAmount: transactionAmount,
+          btcPriceUsd: currentPrice.btcUSD,
+          btcPriceInr: sellRateInr,
+          usdInrRate: 88,
+          inrAmount: inrEquivalent, // Now properly calculates INR equivalent
           inrBalanceAfter: newInrBalance,
           btcBalanceAfter: newBtcBalance,
           reason: reason || "BTC Withdrawal"
         })
+
+        console.log(`💸 Admin BTC Withdrawal: Recording WITHDRAWAL_BTC with INR equivalent ₹${inrEquivalent} at sell rate ₹${sellRateInr.toFixed(2)}/BTC`)
       }
 
     } else {

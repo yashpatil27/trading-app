@@ -114,7 +114,8 @@ export class PerformanceCalculator {
       costBasis,
       unrealizedPnL,
       totalReturn,
-      totalReturnPercentage
+      totalReturnPercentage,
+      totalInvestment: initialInvestment,
     }
   }
 
