@@ -234,7 +234,7 @@ export default function AdminDashboard() {
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6 sm:mb-8">
           <div className="bg-zinc-800 rounded-xl p-4 sm:p-6 border border-zinc-800">
             <div className="flex items-center gap-3 mb-2">
-              <Users className="text-blue-500" size={20} />
+              <Users className="text-white" size={20} />
               <span className="text-zinc-400 text-sm">Total Users</span>
             </div>
             <div className="text-xl sm:text-2xl font-semibold">{users.length}</div>
@@ -242,7 +242,7 @@ export default function AdminDashboard() {
           
           <div className="bg-zinc-800 rounded-xl p-4 sm:p-6 border border-zinc-800">
             <div className="flex items-center gap-3 mb-2">
-              <Wallet className="text-green-500" size={20} />
+              <Wallet className="text-white" size={20} />
               <span className="text-zinc-400 text-sm">Total Cash</span>
             </div>
             <div className="text-lg sm:text-2xl font-semibold">
@@ -262,7 +262,7 @@ export default function AdminDashboard() {
 
           <div className="bg-zinc-800 rounded-xl p-4 sm:p-6 border border-zinc-800">
             <div className="flex items-center gap-3 mb-2">
-              <Shield className="text-purple-500" size={20} />
+              <Shield className="text-white" size={20} />
               <span className="text-zinc-400 text-sm">Admins</span>
             </div>
             <div className="text-xl sm:text-2xl font-semibold">
@@ -360,7 +360,7 @@ export default function AdminDashboard() {
                 <div className="grid grid-cols-2 gap-4 mb-4">
                   <div className="bg-zinc-800 rounded-lg p-3 border border-zinc-700">
                     <div className="flex items-center gap-2 mb-1">
-                      <Wallet size={14} className="text-green-500" />
+                      <Wallet size={14} className="text-white" />
                       <span className="text-xs text-zinc-400">Cash Balance</span>
                     </div>
                     <div className="font-semibold text-white">₹{formatCash(user.balance || 0)}</div>
