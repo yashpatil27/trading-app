@@ -7,6 +7,16 @@ datasource db {
   url      = "file:./dev.db"
 }
 
+enum TransactionType {
+  BUY
+  SELL
+  DEPOSIT_INR
+  WITHDRAWAL_INR
+  DEPOSIT_BTC
+  WITHDRAWAL_BTC
+  ADMIN
+}
+
 model User {
   id           String        @id @default(cuid())
   email        String        @unique
@@ -24,9 +34,9 @@ model User {
 }
 
 model Transaction {
-  id                 String   @id @default(cuid())
+  id                 String          @id @default(cuid())
   userId             String
-  type               String
+  type               TransactionType
   btcAmount          Float?
   btcPriceUsd        Float?
   btcPriceInr        Float?
@@ -42,8 +52,8 @@ model Transaction {
   inrBalanceAfterInt Int?
   btcBalanceAfterSat BigInt?
   reason             String?
-  createdAt          DateTime @default(now())
-  user               User     @relation(fields: [userId], references: [id])
+  createdAt          DateTime        @default(now())
+  user               User            @relation(fields: [userId], references: [id])
 
   @@index([userId, createdAt])
   @@index([userId, type])

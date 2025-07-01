@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
-import { prisma } from '@/lib/prisma'
+import { prisma, TransactionType } from '@/lib/prisma'
 import { satoshiToBtc, formatBtc, formatInr } from '@/lib/currencyUtils'
 
 export async function GET() {
@@ -39,11 +39,11 @@ export async function GET() {
 
     // Transform to use integer fields primarily with proper formatting
     const allTransactions = transactions.map(transaction => {
-      const isTradeTransaction = ['BUY', 'SELL'].includes(transaction.type)
+      const isTradeTransaction = [TransactionType.BUY, TransactionType.SELL].includes(transaction.type)
       const isDepositTransaction = transaction.type.includes('DEPOSIT')
       const isWithdrawalTransaction = transaction.type.includes('WITHDRAWAL')
       const isBitcoinTransaction = transaction.type.includes('BTC')
-      const isAdminTransaction = transaction.type === 'ADMIN'
+      const isAdminTransaction = transaction.type === TransactionType.ADMIN
 
       // Prefer integer fields when available
       const usingIntegers = !!(transaction.inrAmountInt !== null && 

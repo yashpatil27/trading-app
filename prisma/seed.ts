@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient, TransactionType } from '@prisma/client'
 import bcrypt from 'bcryptjs'
 
 const prisma = new PrismaClient()
@@ -18,11 +18,11 @@ async function main() {
     }
   })
 
-  // Create admin initial setup transaction
+  // Create admin initial setup transaction using enum
   await prisma.transaction.create({
     data: {
       userId: admin.id,
-      type: 'ADMIN',
+      type: TransactionType.ADMIN,
       inrAmount: 0,
       inrBalanceAfter: 0,
       btcBalanceAfter: 0,

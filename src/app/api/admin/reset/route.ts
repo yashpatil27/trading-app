@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth/next'
 import { authOptions } from '@/lib/auth'
-import { prisma } from '@/lib/prisma'
+import { prisma, TransactionType } from '@/lib/prisma'
 import bcrypt from 'bcryptjs'
 
 export async function POST(request: NextRequest) {
@@ -73,7 +73,7 @@ export async function POST(request: NextRequest) {
     await prisma.transaction.create({
       data: {
         userId: userId,
-        type: 'ADMIN',
+        type: TransactionType.ADMIN,
         inrAmount: 0,
         inrBalanceAfter: 0,
         btcBalanceAfter: 0,

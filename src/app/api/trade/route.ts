@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
-import { prisma } from '@/lib/prisma'
+import { prisma, TransactionType } from '@/lib/prisma'
 import { BalanceCache } from '@/lib/balanceCache'
 import { 
   btcToSatoshi, 
@@ -43,7 +43,7 @@ export async function POST(request: NextRequest) {
     const currentBtcSatoshi = btcToSatoshi(currentBtcBalance)
     const btcPriceInt = usdToInt(btcPrice)
 
-    if (type === 'BUY') {
+    if (type === TransactionType.BUY) {
       // Amount is INR (whole rupees)
       const inrTotalInt = inrToInt(amount)
       const usdInrRateInt = usdInrRateToInt(91) // Buy rate 91.00 → 9100
@@ -103,7 +103,7 @@ export async function POST(request: NextRequest) {
         precision: 'integer'
       })
 
-    } else if (type === 'SELL') {
+    } else if (type === TransactionType.SELL) {
       // Amount is BTC amount - convert to satoshis for precise calculation
       const btcAmountDecimal = parseFloat(amount)
       const btcSatoshi = btcToSatoshi(btcAmountDecimal)
@@ -186,7 +186,7 @@ export async function GET() {
     const transactions = await prisma.transaction.findMany({
       where: { 
         userId: session.user.id,
-        type: { in: ['BUY', 'SELL'] }
+        type: { in: [TransactionType.BUY, TransactionType.SELL] }
       },
       orderBy: { createdAt: 'desc' },
       select: {

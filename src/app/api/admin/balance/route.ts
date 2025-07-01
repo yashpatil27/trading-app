@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
-import { prisma } from '@/lib/prisma'
+import { prisma, TransactionType } from '@/lib/prisma'
 import { BalanceCache } from '@/lib/balanceCache'
 import { createCompleteTransactionData, satoshiToBtc, btcToSatoshi } from '@/lib/currencyUtils'
 import PriceService from '@/services/priceService'
@@ -46,7 +46,7 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ error: 'Insufficient INR balance' }, { status: 400 })
       }
       
-      transactionType = type === 'CREDIT' ? 'DEPOSIT_INR' : 'WITHDRAWAL_INR'
+      transactionType = type === 'CREDIT' ? TransactionType.DEPOSIT_INR : TransactionType.WITHDRAWAL_INR
       transactionAmount = Math.abs(amount)
 
       // Create standard transaction for INR
@@ -87,7 +87,7 @@ export async function POST(request: NextRequest) {
         // Record as BUY transaction at sell rate
         transactionData = createCompleteTransactionData({
           userId,
-          type: 'DEPOSIT_BTC', // This makes it part of FIFO cost basis calculations
+          type: TransactionType.DEPOSIT_BTC, // This makes it part of FIFO cost basis calculations
           btcAmount: transactionAmount,
           btcPriceUsd: currentPrice.btcUSD,
           btcPriceInr: sellRateInr,
@@ -117,7 +117,7 @@ export async function POST(request: NextRequest) {
         
         transactionData = createCompleteTransactionData({
           userId,
-          type: 'WITHDRAWAL_BTC',
+          type: TransactionType.WITHDRAWAL_BTC,
           btcAmount: transactionAmount,
           btcPriceUsd: currentPrice.btcUSD,
           btcPriceInr: sellRateInr,
